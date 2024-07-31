@@ -1,7 +1,6 @@
 import React from 'react';
 import {getNoteById} from "@/utils/notes/get";
 import Viewer from "@/components/viewer/viewer";
-import ViewerHeader from "@/components/viewer/viewer-header";
 import {DatabaseSource} from "@/types/source.types";
 
 export default async function NotePage(
