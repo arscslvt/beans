@@ -9,7 +9,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {ClerkAPIErrorJSON} from "@clerk/types";
+import {toast} from "sonner";
+import {isClerkAPIResponseError} from "@clerk/nextjs/errors";
 
 const authSchema = z.object({
     email: z.string().email().min(1, {message: "Email is required"}),
@@ -18,7 +21,9 @@ const authSchema = z.object({
 
 export default function AuthPage() {
 
-    const { isLoaded, signIn } = useSignIn();
+    const { isLoaded, signIn, setActive } = useSignIn()
+    const [verifying, setVerifying] = React.useState(false)
+    const [code, setCode] = React.useState('')
 
     const form = useForm<z.infer<typeof authSchema>>({
         resolver: zodResolver(authSchema),
@@ -28,14 +33,49 @@ export default function AuthPage() {
         },
       });
 
-    function onSubmit(values: z.infer<typeof authSchema>) {
+    async function onSubmit(values: z.infer<typeof authSchema>) {
         console.log("Validated");
-        
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+        console.log(values)
+
+        if (!isLoaded) {
+            return console.error("Sign in not loaded")
+        }
+
+
+        try {
+            // Sign in with Clerk
+            const signInAttempt = await signIn?.create({
+                identifier: values.email,
+                password: values.password,
+                strategy: "password",
+            })
+
+            // If sign-in process is complete, set the created session as active
+            // and redirect the user
+            if (signInAttempt.status === 'complete') {
+                await setActive({ session: signInAttempt.createdSessionId })
+                console.log("Signed in")
+            } else {
+                // If the status is not complete, check why. User may need to
+                // complete further steps.
+                console.error(JSON.stringify(signInAttempt, null, 2))
+            }
+        } catch (e: any) {
+            const error = JSON.stringify(e, null, 2)
+            const errorJSON = (JSON.parse(error)).errors as ClerkAPIErrorJSON[]
+
+            console.error(errorJSON)
+
+            if(isClerkAPIResponseError(e))
+                errorJSON.map((err) => {
+                    toast.error(err.message, {
+                        description: err.long_message,
+                        position: "top-center"
+                    })
+                })
+        }
     }
-    
+
   return (
     <div className='grid place-content-center w-dvw h-dvh'>
         <Form {...form}>

@@ -16,8 +16,9 @@
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
-    --accent: 5 100% 60%; 
-    --accent-foreground: 0 0% 98%;
+    --accent: 246.24 100% 66.08%;
+    --accent-foreground: 232.5 44.44% 96.47%;
+    --accent-darker: 250.05 94.42% 57.84%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
@@ -65,5 +66,47 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .viewer-editor .codex-editor {
+    @apply max-w-full;
+    @apply px-14
+  }
+
+  .viewer-editor .ce-block__content {
+    @apply px-0;
+    @apply mx-0;
+    @apply max-w-full;
+  }
+
+  .viewer-editor .ce-toolbar {
+    @apply px-14;
+  }
+
+  .viewer-editor .ce-toolbar__content {
+    @apply max-w-full
+  }
+
+  .viewer-editor h1.ce-header {
+    @apply text-3xl font-bold;
+  }
+  .viewer-editor h2.ce-header {
+    @apply text-2xl font-bold;
+  }
+  .viewer-editor h3.ce-header {
+      @apply text-xl font-bold;
+  }
+  .viewer-editor h4.ce-header {
+      @apply text-lg font-bold;
+  }
+
+  .viewer-editor .cdx-block[data-placeholder-active]::before {
+    @apply text-muted-foreground;
+  }
+
+  .viewer-editor {
+    --color-background: theme('colors.accent-shades.100') !important;
   }
 }
