@@ -3,5 +3,4 @@ import {OutputData} from "@editorjs/editorjs";
 
 export type DatabaseSource = Database["public"]["Tables"]["sources"]["Row"] & {
     content: any;
-    editor: OutputData;
 }
