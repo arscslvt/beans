@@ -18,9 +18,10 @@ const sidebarLinkVariants = cva("px-3 py-2.5 text-sm flex justify-start select-n
 
 })
 
-interface SidebarLinkProps extends VariantProps<typeof sidebarLinkVariants>, HTMLAttributes<HTMLButtonElement>{
+interface SidebarLinkProps extends VariantProps<typeof sidebarLinkVariants>, HTMLAttributes<HTMLDivElement>{
     symbol?: string | React.ReactElement<IconProps>,
     href?: string,
+    trailing?: React.ReactNode
 }
 
 export const SidebarLink = ({variant, symbol, href, ...props} : SidebarLinkProps) => {
@@ -30,13 +31,18 @@ export const SidebarLink = ({variant, symbol, href, ...props} : SidebarLinkProps
     const isActive = useMemo(() => pathname === href, [href, pathname])
 
     return (
-        <button
-            className={cx(sidebarLinkVariants({variant: isActive ? "active" : "default"}))}
+        <div
+            className={cx(sidebarLinkVariants({variant: isActive ? "active" : "default"}), "group/sidebar-link flex justify-between items-center")}
             onClick={href ? () => router.push(href) : props.onClick}
+            data-active={isActive}
         >
-            {symbol ? typeof symbol === "string" ? <span className={"mr-0.5"}>{symbol}</span> : React.cloneElement(symbol as React.ReactElement<IconProps>, {height: "18", width: "18"}) : <></>}
-            <span className={"group-hover/default:translate-x-1 transition-transform leading-[13px]"}>{props.children || "Unknown bean"}</span>
-        </button>
+            <div className={"flex items-center gap-1"}>
+                {symbol ? typeof symbol === "string" ? <span>{symbol}</span> : React.cloneElement(symbol as React.ReactElement<IconProps>, {height: "18", width: "18"}) : <></>}
+                <span className={"group-hover/default:translate-x-1 transition-transform leading-[13px]"}>{props.children || "Unknown bean"}</span>
+            </div>
+
+            {props.trailing}
+        </div>
     )
 }
 

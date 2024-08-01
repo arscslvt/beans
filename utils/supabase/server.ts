@@ -3,7 +3,11 @@ import { cookies } from "next/headers";
 import { auth } from "@clerk/nextjs/server";
 import { Database } from "@/types/database.types";
 
-export const createClient = () => {
+interface Options {
+    tags?: string[];
+}
+
+export const createClient = ({tags}: Options = {}) => {
     const cookieStore = cookies();
 
     const {getToken} = auth()
@@ -16,7 +20,11 @@ export const createClient = () => {
                 autoRefreshToken: true,
             },
             global: {
-                fetch: async (url, options = {}) => {
+                fetch: async (url, options = {
+                    next: {
+                        tags
+                    }
+                }) => {
                     const clerkToken = await getToken({
                         template: 'supabase',
                     });

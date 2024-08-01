@@ -11,7 +11,9 @@ const getNotes = async (props?: GetProps) => {
     const limit = props?.limit ?? 10;
     const page = props?.page ?? 1;
 
-    const supabase = createClient();
+    const supabase = createClient({
+        tags: ["notes"]
+    });
 
     return await supabase.from("notes").select().limit(limit).range((page - 1) * limit, page * limit);
 }

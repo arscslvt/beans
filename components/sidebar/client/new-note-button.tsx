@@ -4,9 +4,9 @@ import React from 'react';
 import SidebarLink from "@/components/sidebar/sidebar-link";
 import Plus1 from "@/components/icons/plus-1";
 import {toast} from "sonner";
-import {createClient} from "@/utils/supabase/client";
 import {useAuth} from "@clerk/nextjs";
 import {useRouter} from "next/navigation";
+import {createNote} from "@/utils/notes/save";
 
 const NewNoteButton = () => {
     const {getToken} = useAuth();
@@ -14,27 +14,19 @@ const NewNoteButton = () => {
     const router = useRouter();
 
     const handleNewNote = async () => {
-        const token = await getToken({
-            template: "supabase"
-        });
-
-        if (!token) {
-            console.error("No token found. Not creating a new note.");
-            return toast.error("You need to be logged in to create a new note.");
-        }
-
-        const supabase = createClient(token);
-
-        const {data, error} = await supabase.from("notes").insert({}).select("id").single();
+        const {data: note, error} = await createNote({
+            title: "New Note",
+        })
 
         if (error) {
-            console.error("Error creating a new note: ", error);
-            return toast.error("Error creating a new note.");
+            console.error("Error creating note: ", error);
+            return toast.error("Error creating note.");
         }
 
-        toast.success("New note created.");
+        if(!note) return toast.error("Error creating note.");
 
-        return router.push(`/notes/${data.id}`);
+        toast.success("New note created.");
+        return router.push(`/notes/${note.id}`);
     }
 
     return (
