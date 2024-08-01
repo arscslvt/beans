@@ -8,7 +8,7 @@ interface GetProps {
 }
 
 const getNotes = async (props?: GetProps) => {
-    const limit = props?.limit ?? 10;
+    const limit = props?.limit ?? 30;
     const page = props?.page ?? 1;
 
     const supabase = createClient({
