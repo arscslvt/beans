@@ -7,7 +7,7 @@ export default function MainLayout({children}: { children: React.ReactNode }) {
     return (
         <>
             <SignedIn>
-                <div className='flex h-dvh max-h-dvh'>
+                <div className='flex h-dvh max-h-dvh overflow-y-auto'>
                     <Sidebar/>
                     <main className='flex-1 flex flex-col'>
                         {children}

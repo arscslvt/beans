@@ -3,12 +3,11 @@
 import React, {useEffect} from 'react';
 import {formatDistanceToNow} from "date-fns";
 import {Textarea} from "@/components/ui/textarea";
-import {createClient} from "@/utils/supabase/client";
-import {useAuth} from "@clerk/nextjs";
 import {toast} from "sonner";
 import {DatabaseNote} from "@/types/note.types";
 
 import loadash from "lodash";
+import {saveNote} from "@/utils/notes/save";
 
 interface ViewerHeaderProps {
     title: string;
@@ -22,33 +21,19 @@ interface ViewerHeaderProps {
 
 const ViewerHeader = ({note, title, description, lastEdited}: ViewerHeaderProps) => {
 
-    const [isSaving, setIsSaving] = React.useState(false);
     const [_title, setTitle] = React.useState(title);
 
-    const {getToken} = useAuth();
-
     const updateNote = async () => {
-        const token = await getToken({
-            template: "supabase"
+        const {data, error} = await saveNote(note.id, {
+            title: _title,
         })
 
-        if (!token) {
-            console.error("No token found. Not saving.");
-            toast.error("You need to be logged in to update your note.");
-            return;
+        if (error) {
+            console.error("Error saving note: ", error);
+            return toast.error("Error saving note.");
         }
 
-        const supabase = createClient(token);
-
-        setIsSaving(true);
-
-        const {data, error} = await supabase.from("notes").update({
-            title: _title
-        }).eq("id", note.id);
-
-        console.log("Updated note data: ", data, error);
-
-        setIsSaving(false);
+        console.log("Updated note: ", data);
     }
 
 
@@ -88,7 +73,7 @@ const ViewerHeader = ({note, title, description, lastEdited}: ViewerHeaderProps)
             </div>
 
             <div>
-                {lastEdited ? <p className={"text-xs text-muted-foreground"}>Last edited by <span className={"font-semibold"}>John Doe</span>
+                {lastEdited ? <p className={"text-xs text-muted-foreground"}>Last edited by <span className={"font-semibold"}>you</span>
                     {lastEdited ? ` — ${formatDistanceToNow(new Date(lastEdited), {addSuffix: true})}` : ""}
                 </p> : <p className={"text-xs text-muted-foreground"}>Not saved yet</p>}
             </div>

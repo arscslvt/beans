@@ -1,7 +1,6 @@
 import React from 'react';
 import {getNoteById} from "@/utils/notes/get";
 import Viewer from "@/components/viewer/viewer";
-import {DatabaseSource} from "@/types/source.types";
 
 export default async function NotePage(
     {
@@ -17,8 +16,6 @@ export default async function NotePage(
     const {note, sources, errors} = await getNoteById(id)
 
     console.log("Retrieved Note: ", note, sources, errors)
-
-    const handleEdit = (sources: DatabaseSource) => {}
 
     return (
         <div>

@@ -4,6 +4,7 @@ import React, {HTMLAttributes, useMemo} from "react";
 import {cva, cx, VariantProps} from "class-variance-authority";
 import IconProps from "@/types/icon.types";
 import {usePathname, useRouter} from "next/navigation";
+import {toast} from "sonner";
 
 const sidebarLinkVariants = cva("px-3 py-2.5 text-sm flex justify-start select-none items-center gap-1.5 rounded-md", {
     variants: {
@@ -22,19 +23,28 @@ const sidebarLinkVariants = cva("px-3 py-2.5 text-sm flex justify-start select-n
 interface SidebarLinkProps extends VariantProps<typeof sidebarLinkVariants>, HTMLAttributes<HTMLDivElement>{
     symbol?: string | React.ReactElement<IconProps>,
     href?: string,
-    trailing?: React.ReactNode
+    trailing?: React.ReactNode,
+    preview?: boolean,
 }
 
-export const SidebarLink = ({variant, symbol, href, ...props} : SidebarLinkProps) => {
+export const SidebarLink = ({variant, symbol, href, preview, ...props} : SidebarLinkProps) => {
     const router = useRouter();
     const pathname = usePathname();
 
     const isActive = useMemo(() => pathname === href, [href, pathname])
 
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (props.onClick) props.onClick(e);
+        if (preview) toast.info("Feature not available.", {
+            description: "We're currently building this feature. It will be available in the next version of Beans.",
+            duration: 6000
+        });
+    }
+
     return (
         <div
             className={cx(sidebarLinkVariants({variant: variant ? variant : isActive ? "active" : "default"}), "group/sidebar-link flex justify-between items-center relative overflow-clip")}
-            onClick={href ? () => router.push(href) : props.onClick}
+            onClick={href ? () => router.push(href) : handleClick}
             data-active={isActive}
         >
             <div className={"flex items-center gap-1"}>

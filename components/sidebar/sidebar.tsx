@@ -23,7 +23,7 @@ export default async function Sidebar() {
 
 
     return (
-        <div className={"flex flex-col h-dvh max-h-dvh border-r border-border min-w-64 w-64"}>
+        <div className={"flex flex-col sticky top-0 left-0 h-dvh max-h-dvh border-r border-border min-w-64 w-64"}>
             <div className={"flex flex-col flex-grow-0 flex-shrink-0 bg-background"}>
                 <div className={"pt-6 px-3 select-none"}>
                     <h1 className={"text-xl font-semibold"}>
@@ -32,8 +32,8 @@ export default async function Sidebar() {
                 </div>
                 <SidebarGroup>
                     <SidebarLink symbol={<House21/>} href={"/"}>Home</SidebarLink>
-                    <SidebarLink symbol={<InboxArrowDown1/>}>Inbox</SidebarLink>
-                    <SidebarLink symbol={<Gear21/>}>Settings</SidebarLink>
+                    <SidebarLink symbol={<InboxArrowDown1/>} preview>Inbox</SidebarLink>
+                    <SidebarLink symbol={<Gear21/>} preview>Settings</SidebarLink>
                 </SidebarGroup>
             </div>
 
@@ -82,7 +82,7 @@ export default async function Sidebar() {
             </div>
             <div className={"flex-1 flex flex-col flex-grow-0 flex-shrink-0 justify-end bg-background"}>
                 <SidebarGroup>
-                    <SidebarLink>
+                    <SidebarLink preview>
                         <div className={"flex items-center gap-2 justify-start text-left"}>
                             <Avatar className={"w-8 h-8"}>
                                 <AvatarImage src={user?.imageUrl || ""}

@@ -25,7 +25,9 @@ interface GetNoteByIdResponse {
 }
 
 const getNoteById = async (id: DatabaseNote["id"]):Promise<GetNoteByIdResponse> => {
-    const supabase = createClient();
+    const supabase = createClient({
+        tags: [`note-${id}`]
+    });
 
     const {data: note, error: note_error} = await supabase.from("notes").select().eq("id", id).limit(1).single();
 

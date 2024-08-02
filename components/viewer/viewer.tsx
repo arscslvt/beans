@@ -1,11 +1,10 @@
 "use client";
 
 import {DatabaseSource} from "@/types/source.types";
-import React, {useEffect, useRef} from "react";
+import React from "react";
 import Header from "@editorjs/header";
 import ViewerHeader from "@/components/viewer/viewer-header";
 import {DatabaseNote} from "@/types/note.types";
-import {createClient} from "@/utils/supabase/client";
 import {useAuth} from "@clerk/nextjs";
 import {toast} from "sonner";
 import NestedList from "@editorjs/nested-list";
@@ -14,6 +13,7 @@ import Table from '@editorjs/table';
 
 import { createReactEditorJS } from 'react-editor-js'
 import {EditorCore} from "@react-editor-js/core";
+import {createSource, saveSource} from "@/utils/notes/save";
 
 interface ViewerProps {
     note: DatabaseNote;
@@ -38,42 +38,19 @@ function Viewer({note, source}: ViewerProps) {
 
         const savedData = await editorCore.current.save();
 
-        try {
-            console.log("Editor data: ", savedData);
+        const {data, error} = source ?  await saveSource(source.id, {
+            content: savedData,
+        }) : await createSource({
+            content: savedData,
+            note_id: note.id,
+        });
 
-            const token = await getToken({
-                template: "supabase"
-            })
-
-            if (!token) {
-                console.error("No token found. Not saving.");
-                return toast.error("You need to be logged in to save your notes.");
-            }
-
-            const supabase = createClient(token, true);
-
-            if (!source) {
-                const {data, error} = await supabase.from("sources").insert({
-                    content: savedData as unknown as string,
-                    note_id: note.id
-                }).select().single();
-
-                console.log("Saved data: ", data, error);
-
-                return;
-            }
-
-            const {data, error} = await supabase.from("sources").update({
-                content: savedData as unknown as string
-            }).eq("id", source.id);
-
-            console.log("Saved data: ", data, error);
-        } catch (e) {
-            console.error("Error saving note: ", e);
-            toast.error("Oops! An error occurred while saving your note.");
+        if (error) {
+            console.error("Error saving source: ", error);
+            return toast.error("Error saving source.");
         }
 
-        return;
+        console.log("Saved note source: ", data);
     }
 
     return (
