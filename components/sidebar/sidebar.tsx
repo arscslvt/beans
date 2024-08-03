@@ -1,43 +1,48 @@
 import React from 'react'
+import Image from "next/image";
 
 import {currentUser} from "@clerk/nextjs/server";
+import {getNotes} from "@/utils/notes/get";
 
 import SidebarLink from "@/components/sidebar/sidebar-link";
 import SidebarGroup from "@/components/sidebar/sidebar-group";
-import House21 from "@/components/icons/house-2-1";
-import InboxArrowDown1 from "@/components/icons/inbox-arrow-down-1";
-import Gear21 from "@/components/icons/gear-2-1";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-
-import {getNotes} from "@/utils/notes/get";
 import NewNoteButton from "@/components/sidebar/client/new-note-button";
+
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {DropdownMenu, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
-import {EllipsisIcon} from "lucide-react";
-import NoteDropdown from "@/components/dropdowns/note-dropdown";
 import {Button} from "@/components/ui/button";
+
+import NoteDropdown from "@/components/dropdowns/note-dropdown";
+
 import Scribble1 from "@/components/icons/scribble-1";
+import Magnifier3 from "@/components/icons/magnifier-3";
+import {EllipsisIcon} from "lucide-react";
+import Gear21 from "@/components/icons/gear-2-1";
+import InboxArrowDown1 from "@/components/icons/inbox-arrow-down-1";
+import House21 from "@/components/icons/house-2-1";
+
+import BeansLogo from "@assets/logo/icon.svg";
+import {NOTE_ROUTE} from "@/utils/constants/routes";
 
 export default async function Sidebar() {
     const user = await currentUser();
     const {data: notes, error} = await getNotes();
 
-
     return (
         <div className={"flex flex-col sticky top-0 left-0 h-dvh max-h-dvh border-r border-border min-w-64 w-64"}>
             <div className={"flex flex-col flex-grow-0 flex-shrink-0 bg-background"}>
-                <div className={"pt-6 px-3 select-none"}>
-                    <h1 className={"text-xl font-semibold"}>
-                        Beans
-                    </h1>
+                <div className={"flex items-center justify-start gap-2 pt-6 px-6 select-none"}>
+                    <Image src={BeansLogo} alt={"Beans Logo"} width={28} height={28}/>
                 </div>
                 <SidebarGroup>
+                    <SidebarLink symbol={<Magnifier3/>} role={"button"} preview>Search</SidebarLink>
                     <SidebarLink symbol={<House21/>} href={"/"}>Home</SidebarLink>
                     <SidebarLink symbol={<InboxArrowDown1/>} preview>Inbox</SidebarLink>
                     <SidebarLink symbol={<Gear21/>} preview>Settings</SidebarLink>
                 </SidebarGroup>
             </div>
 
-            <SidebarGroup>
+            <SidebarGroup className={"!py-0"}>
                 <NewNoteButton shine={!notes?.length}/>
             </SidebarGroup>
 
@@ -60,7 +65,7 @@ export default async function Sidebar() {
                         <SidebarLink
                             symbol={note.emoji ?? undefined}
                             key={note.id}
-                            href={`/notes/${note.id}`}
+                            href={`${NOTE_ROUTE}/${note.id}`}
                             trailing={
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild

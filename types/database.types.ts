@@ -17,7 +17,6 @@ export type Database = {
           emoji: string | null
           icon: string | null
           id: number
-          source: string | null
           title: string
         }
         Insert: {
@@ -27,7 +26,6 @@ export type Database = {
           emoji?: string | null
           icon?: string | null
           id?: number
-          source?: string | null
           title?: string
         }
         Update: {
@@ -37,7 +35,6 @@ export type Database = {
           emoji?: string | null
           icon?: string | null
           id?: number
-          source?: string | null
           title?: string
         }
         Relationships: []
@@ -50,6 +47,7 @@ export type Database = {
           last_edited_at: string
           last_edited_by: string | null
           note_id: number | null
+          source_ref: number | null
           version_note: string | null
         }
         Insert: {
@@ -59,6 +57,7 @@ export type Database = {
           last_edited_at?: string
           last_edited_by?: string | null
           note_id?: number | null
+          source_ref?: number | null
           version_note?: string | null
         }
         Update: {
@@ -68,6 +67,7 @@ export type Database = {
           last_edited_at?: string
           last_edited_by?: string | null
           note_id?: number | null
+          source_ref?: number | null
           version_note?: string | null
         }
         Relationships: [
@@ -76,6 +76,13 @@ export type Database = {
             columns: ["note_id"]
             isOneToOne: false
             referencedRelation: "notes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sources_source_ref_fkey"
+            columns: ["source_ref"]
+            isOneToOne: false
+            referencedRelation: "sources"
             referencedColumns: ["id"]
           },
         ]

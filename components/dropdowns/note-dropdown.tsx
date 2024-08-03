@@ -22,6 +22,7 @@ const NoteDropdown = ({id} : DatabaseNote) => {
         }
 
         toast.success("Note deleted successfully.");
+        router.push("/");
     }
 
     return (

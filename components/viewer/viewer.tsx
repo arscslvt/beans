@@ -11,7 +11,7 @@ import NestedList from "@editorjs/nested-list";
 // @ts-ignore
 import Table from '@editorjs/table';
 
-import { createReactEditorJS } from 'react-editor-js'
+import {createReactEditorJS} from 'react-editor-js'
 import {EditorCore} from "@react-editor-js/core";
 import {createSource, saveSource} from "@/utils/notes/save";
 
@@ -21,7 +21,7 @@ interface ViewerProps {
 }
 
 function Viewer({note, source}: ViewerProps) {
-    const { getToken } = useAuth();
+    const {getToken} = useAuth();
 
     const ReactEditorJS = createReactEditorJS();
 
@@ -38,7 +38,7 @@ function Viewer({note, source}: ViewerProps) {
 
         const savedData = await editorCore.current.save();
 
-        const {data, error} = source ?  await saveSource(source.id, {
+        const {data, error} = source ? await saveSource(source.id, {
             content: savedData,
         }) : await createSource({
             content: savedData,
@@ -54,28 +54,28 @@ function Viewer({note, source}: ViewerProps) {
     }
 
     return (
-        <>
-        <ViewerHeader
-            title={note?.title || ""} description={note?.description ?? undefined}
-            lastEdited={source?.last_edited_at ? new Date(source.last_edited_at) : undefined}
-            note={note}
-        />
-
-        <div className={"px-2 viewer-editor"}>
-            <ReactEditorJS
-                onInitialize={handleInitialize}
-                onChange={handleSaving}
-                defaultValue={source?.content}
-                tools={{
-                    header: Header,
-                    list: NestedList,
-                    table: Table
-                }}
-                placeholder={"Start writing your note..."}
-                holder={"editorjs"}
+        <div>
+            <ViewerHeader
+                title={note?.title || ""} description={note?.description ?? undefined}
+                lastEdited={source?.last_edited_at ? new Date(source.last_edited_at) : undefined}
+                note={note}
             />
+
+            <div className={"px-2 viewer-editor"}>
+                <ReactEditorJS
+                    onInitialize={handleInitialize}
+                    onChange={handleSaving}
+                    defaultValue={source?.content}
+                    tools={{
+                        header: Header,
+                        list: NestedList,
+                        table: Table
+                    }}
+                    placeholder={"Start writing your note..."}
+                    holder={"editorjs"}
+                />
+            </div>
         </div>
-        </>
     );
 }
 

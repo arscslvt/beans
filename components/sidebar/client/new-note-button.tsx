@@ -8,10 +8,9 @@ import {useAuth} from "@clerk/nextjs";
 import {useRouter} from "next/navigation";
 import {createNote} from "@/utils/notes/save";
 import {cx} from "class-variance-authority";
+import {NOTE_ROUTE} from "@/utils/constants/routes";
 
 const NewNoteButton = ({shine} : {shine?: boolean}) => {
-    const {getToken} = useAuth();
-
     const router = useRouter();
 
     const handleNewNote = async () => {
@@ -27,7 +26,7 @@ const NewNoteButton = ({shine} : {shine?: boolean}) => {
         if(!note) return toast.error("Error creating note.");
 
         toast.success("New note created.");
-        return router.push(`/notes/${note.id}`);
+        return router.push(`${NOTE_ROUTE}/${note.id}`);
     }
 
     return (

@@ -43,9 +43,12 @@ export const SidebarLink = ({variant, symbol, href, preview, ...props} : Sidebar
 
     return (
         <div
+            data-href={href}
+            role={href ? "link" : "button"}
             className={cx(sidebarLinkVariants({variant: variant ? variant : isActive ? "active" : "default"}), "group/sidebar-link flex justify-between items-center relative overflow-clip")}
             onClick={href ? () => router.push(href) : handleClick}
             data-active={isActive}
+            {...props}
         >
             <div className={"flex items-center gap-1"}>
                 {symbol ? typeof symbol === "string" ? <span>{symbol}</span> : <span className={"relative z-20"}>{React.cloneElement(symbol as React.ReactElement<IconProps>, {
