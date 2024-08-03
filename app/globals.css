@@ -79,6 +79,13 @@
     @apply px-14
   }
 
+  @media (max-width: 512px) {
+    .viewer-editor .codex-editor {
+      @apply max-w-full;
+      @apply px-2;
+    }
+  }
+
   .viewer-editor .ce-block__content {
     @apply px-0;
     @apply mx-0;

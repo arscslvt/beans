@@ -35,6 +35,8 @@ export const SidebarLink = ({variant, symbol, href, preview, ...props} : Sidebar
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (props.onClick) props.onClick(e);
+        if (href) router.push(href);
+
         if (preview) toast.info("Feature not available.", {
             description: "We're currently building this feature. It will be available in the next version of Beans.",
             duration: 6000
@@ -46,7 +48,7 @@ export const SidebarLink = ({variant, symbol, href, preview, ...props} : Sidebar
             data-href={href}
             role={href ? "link" : "button"}
             className={cx(sidebarLinkVariants({variant: variant ? variant : isActive ? "active" : "default"}), "group/sidebar-link flex justify-between items-center relative overflow-clip")}
-            onClick={href ? () => router.push(href) : handleClick}
+            onClick={handleClick}
             data-active={isActive}
             {...props}
         >

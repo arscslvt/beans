@@ -10,7 +10,6 @@ export default function LoadingNote() {
                     Retrieving note...
                 </span>
             </div>
-
         </div>
     );
 }

@@ -15,7 +15,7 @@ export default async function Sources(
     const {sources} = await getSourcesByNote(id)
 
     return (
-        <div className={"border-l min-h-dvh h-dvh sticky top-0 right-0 min-w-52 max-w-52 overflow-y-auto"}>
+        <div className={"hidden lg:block border-l min-h-dvh h-dvh sticky top-0 right-0 min-w-52 max-w-52 overflow-y-auto"}>
             <SidebarGroup title={"Note versions"}>
                 {!sources?.length &&
                     <div className={"flex items-start gap-2 pt-2 px-1"}>

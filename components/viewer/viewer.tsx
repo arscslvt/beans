@@ -22,6 +22,9 @@ import Warning from '@editorjs/warning';
 
 import {createReactEditorJS} from 'react-editor-js'
 import {createSource, saveSource} from "@/utils/notes/save";
+import {useMediaQuery} from "usehooks-ts";
+import {MOBILE_MAX_WIDTH} from "@/components/screen-query";
+import {cx} from "class-variance-authority";
 
 interface ViewerProps {
     note: DatabaseNote;
@@ -29,6 +32,8 @@ interface ViewerProps {
 }
 
 function Viewer({note, source}: ViewerProps) {
+    const isMobile = useMediaQuery(`(max-width: ${MOBILE_MAX_WIDTH}px)`);
+
     const ReactEditorJS = createReactEditorJS();
 
     const editorCore = React.useRef<EditorCore | null>(null)
@@ -73,7 +78,7 @@ function Viewer({note, source}: ViewerProps) {
                 note={note}
             />
 
-            <div className={"px-2 viewer-editor"}>
+            <div className={cx("px-2 viewer-editor")}>
                 <ReactEditorJS
                     onInitialize={handleInitialize}
                     // onReady={handleReady}
