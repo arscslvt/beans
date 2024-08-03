@@ -10,9 +10,17 @@ import {toast} from "sonner";
 import NestedList from "@editorjs/nested-list";
 // @ts-ignore
 import Table from '@editorjs/table';
+// @ts-ignore
+import Marker from '@editorjs/marker';
+// @ts-ignore
+import Underline from '@editorjs/underline';
+import {EditorCore} from "@react-editor-js/core";
+// @ts-ignore
+import Quote from '@editorjs/quote';
+// @ts-ignore
+import Warning from '@editorjs/warning';
 
 import {createReactEditorJS} from 'react-editor-js'
-import {EditorCore} from "@react-editor-js/core";
 import {createSource, saveSource} from "@/utils/notes/save";
 
 interface ViewerProps {
@@ -21,8 +29,6 @@ interface ViewerProps {
 }
 
 function Viewer({note, source}: ViewerProps) {
-    const {getToken} = useAuth();
-
     const ReactEditorJS = createReactEditorJS();
 
     const editorCore = React.useRef<EditorCore | null>(null)
@@ -31,6 +37,12 @@ function Viewer({note, source}: ViewerProps) {
         instance: EditorCore
     ) => {
         editorCore.current = instance
+    }, [editorCore.current])
+
+    const handleReady = React.useCallback(() => {
+        if (!editorCore.current) return;
+        const editor = editorCore.current;
+
     }, [editorCore.current])
 
     const handleSaving = async () => {
@@ -64,12 +76,18 @@ function Viewer({note, source}: ViewerProps) {
             <div className={"px-2 viewer-editor"}>
                 <ReactEditorJS
                     onInitialize={handleInitialize}
+                    // onReady={handleReady}
                     onChange={handleSaving}
                     defaultValue={source?.content}
                     tools={{
                         header: Header,
                         list: NestedList,
-                        table: Table
+                        table: Table,
+                        quote: Quote,
+                        Marker: {
+                            class: Marker,
+                            shortcut: 'CMD+SHIFT+M',
+                        }
                     }}
                     placeholder={"Start writing your note..."}
                     holder={"editorjs"}

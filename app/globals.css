@@ -110,6 +110,30 @@
     @apply text-muted-foreground;
   }
 
+  .viewer-editor .cdx-input {
+    @apply border-0;
+    @apply bg-transparent;
+    @apply rounded-none;
+    @apply p-0;
+  }
+
+  .viewer-editor .cdx-input.cdx-quote__text {
+    @apply shadow-none;
+    @apply text-muted-foreground;
+    @apply border-l-2;
+    @apply border-border;
+    @apply px-2;
+    @apply py-1.5;
+    @apply min-h-4;
+  }
+
+  .viewer-editor .cdx-input.cdx-quote__caption {
+    @apply text-muted-foreground;
+    @apply text-sm;
+    @apply shadow-none;
+    @apply pl-2;
+  }
+
   .viewer-editor {
     --color-background: theme('colors.accent-shades.100') !important;
   }
