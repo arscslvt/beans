@@ -9,7 +9,7 @@ interface GetSourceByNoteResponse {
 
 const getSourcesByNote = async (noteId: DatabaseNote["id"]):Promise<GetSourceByNoteResponse>  => {
     const supabase = createClient({
-        tags: [`note-${noteId}`]
+        tags: [`note-sources-${noteId}`]
     });
 
     const {data: sources, error} = await supabase

@@ -23,6 +23,7 @@ import House21 from "@/components/icons/house-2-1";
 
 import BeansLogo from "@assets/logo/icon.svg";
 import {NOTE_ROUTE} from "@/utils/constants/routes";
+import Link from "next/link";
 
 export default async function Sidebar() {
     const user = await currentUser();
@@ -32,7 +33,9 @@ export default async function Sidebar() {
         <div className={"flex flex-col sticky top-0 left-0 h-dvh max-h-dvh border-r border-border min-w-64 w-64"}>
             <div className={"flex flex-col flex-grow-0 flex-shrink-0 bg-background"}>
                 <div className={"flex items-center justify-start gap-2 pt-6 px-6 select-none"}>
-                    <Image src={BeansLogo} alt={"Beans Logo"} width={28} height={28}/>
+                    <Link href={"/"} className={"hover:scale-105 active:scale-95 transition-transform"}>
+                        <Image src={BeansLogo} alt={"Beans Logo"} width={28} height={28} className={"pointer-events-none"}/>
+                    </Link>
                 </div>
                 <SidebarGroup>
                     <SidebarLink symbol={<Magnifier3/>} role={"button"} preview>Search</SidebarLink>
