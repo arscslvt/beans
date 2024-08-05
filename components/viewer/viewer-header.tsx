@@ -38,7 +38,7 @@ const ViewerHeader = ({note, title, description, lastEdited}: ViewerHeaderProps)
             return toast.error("Error saving note.");
         }
 
-        console.log("Updated note: ", data);
+        console.log("Updated note: ", data?.id, data?.title);
     }
 
 

@@ -6,6 +6,7 @@ import {
   ClerkProvider,
 } from '@clerk/nextjs'
 import {Toaster} from "@/components/ui/sonner";
+import {isMobileDevice} from "@/utils/device";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +25,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
         {children}
-        <Toaster />
+        <Toaster closeButton={!isMobileDevice()} />
         </body>
       </html>
     </ClerkProvider>

@@ -21,7 +21,7 @@ import Quote from '@editorjs/quote';
 import Warning from '@editorjs/warning';
 
 import {createReactEditorJS} from 'react-editor-js'
-import {createSource, saveSource} from "@/utils/notes/save";
+import {createSource, saveEdits, saveSource} from "@/utils/notes/save";
 import {useMediaQuery} from "usehooks-ts";
 import {MOBILE_MAX_WIDTH} from "@/components/screen-query";
 import {cx} from "class-variance-authority";
@@ -55,11 +55,8 @@ function Viewer({note, source}: ViewerProps) {
 
         const savedData = await editorCore.current.save();
 
-        const {data, error} = source ? await saveSource(source.id, {
+        const {data, error} = await saveEdits(note.id, {
             content: savedData,
-        }) : await createSource({
-            content: savedData,
-            note_id: note.id,
         });
 
         if (error) {

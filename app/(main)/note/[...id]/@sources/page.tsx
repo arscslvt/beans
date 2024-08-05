@@ -1,7 +1,7 @@
 import React from 'react';
 import {SidebarGroup, SidebarLink} from "@/components/sidebar/sidebar";
 import {getSourcesByNote} from "@/utils/sources/get";
-import {format} from "date-fns";
+import * as date from "date-fns";
 import {NOTE_ROUTE} from "@/utils/constants/routes";
 import Feather2 from "@/components/icons/feather-2";
 
@@ -32,9 +32,19 @@ export default async function Sources(
                 }
                 {
                     sources?.map((source, i) => (
-                        <SidebarLink key={source.id}
-                                     href={i ? `${NOTE_ROUTE}/${source.note_id}/${source.id}` : `${NOTE_ROUTE}/${source.note_id}`}>
-                            {format(source.created_at, "iii d, LLL")}
+                        <SidebarLink
+                            disabled={!!i}
+                            preview={!!i}
+                            key={source.id}
+                            href={i ? `${NOTE_ROUTE}/${source.note_id}/${source.id}` : `${NOTE_ROUTE}/${source.note_id}`}
+                        >
+                            {
+                                date.isToday(source.last_edited_at) ?
+                                    date.isThisMinute(source.last_edited_at) ?
+                                        "now"
+                                    : date.formatDistanceToNow(source.last_edited_at, {addSuffix: true})
+                                : date.format(source.created_at, "iii d, LLL")
+                            }
                         </SidebarLink>
                     ))
                 }
