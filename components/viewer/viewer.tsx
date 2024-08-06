@@ -55,6 +55,8 @@ function Viewer({note, source}: ViewerProps) {
 
         const savedData = await editorCore.current.save();
 
+        console.log("Editor data: ", savedData);
+
         const {data, error} = await saveEdits(note.id, {
             content: savedData,
         });
@@ -80,6 +82,7 @@ function Viewer({note, source}: ViewerProps) {
                     onInitialize={handleInitialize}
                     // onReady={handleReady}
                     onChange={handleSaving}
+
                     defaultValue={source?.content}
                     tools={{
                         header: Header,

@@ -66,7 +66,6 @@ const ViewerHeader = ({note, title, description, lastEdited}: ViewerHeaderProps)
                         onKeyDown={(e) => {
                             // deny enter key
                             if (e.key === "Enter") {
-                                console.log("Ciao")
                                 e.preventDefault();
                             }
                         }}

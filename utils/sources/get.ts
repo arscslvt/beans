@@ -23,6 +23,8 @@ const getSourcesByNote = async (noteId: DatabaseNote["id"]):Promise<GetSourceByN
         return {sources: null, errors: [error]};
     }
 
+    console.log("Note sources: ", sources)
+
     return {sources, errors: []};
 }
 

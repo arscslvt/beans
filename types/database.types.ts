@@ -39,6 +39,33 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          handle: string
+          user_id: string
+          visible: boolean
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          handle: string
+          user_id?: string
+          visible?: boolean
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          handle?: string
+          user_id?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       sources: {
         Row: {
           content: Json | null
@@ -83,6 +110,35 @@ export type Database = {
             columns: ["source_ref"]
             isOneToOne: false
             referencedRelation: "sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_notes: {
+        Row: {
+          created_at: string
+          id: number
+          note_id: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          note_id: number
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          note_id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_notes_note_id_fkey"
+            columns: ["note_id"]
+            isOneToOne: false
+            referencedRelation: "notes"
             referencedColumns: ["id"]
           },
         ]

@@ -4,6 +4,7 @@ import {getSourcesByNote} from "@/utils/sources/get";
 import * as date from "date-fns";
 import {NOTE_ROUTE} from "@/utils/constants/routes";
 import Feather2 from "@/components/icons/feather-2";
+import NoteActions from "@/components/sidebar/client/note-actions";
 
 export default async function Sources(
     {
@@ -16,6 +17,7 @@ export default async function Sources(
 
     return (
         <div className={"hidden lg:block border-l min-h-dvh h-dvh sticky top-0 right-0 min-w-52 max-w-52 overflow-y-auto"}>
+            <NoteActions noteId={id} />
             <SidebarGroup title={"Note versions"}>
                 {!sources?.length &&
                     <div className={"flex items-start gap-2 pt-2 px-1"}>

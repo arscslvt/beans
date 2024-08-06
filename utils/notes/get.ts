@@ -1,27 +1,60 @@
+"use server";
+
 import {DatabaseNote} from "@/types/note.types";
 import {DatabaseSource} from "@/types/source.types";
 import {createClient} from "@/utils/supabase/server";
+import {auth} from "@clerk/nextjs/server";
 
 interface GetProps {
     limit?: number;
     page?: number;
 }
 
-const getNotes = async (props?: GetProps) => {
+interface GetNotesResponse {
+    data: DatabaseNote[] | null;
+    error: any[] | null;
+}
+
+const getNotes = async (props?: GetProps): Promise<GetNotesResponse> => {
     const limit = props?.limit ?? 30;
     const page = props?.page ?? 1;
+
+    const {userId} = auth()
+
+    if (!userId) {
+        return {data: null, error: ["User not authenticated"]};
+    }
 
     const supabase = createClient({
         tags: ["notes"]
     });
 
-    return await supabase.from("notes").select().limit(limit).range((page - 1) * limit, page * limit);
+    const {data, error} = await supabase
+        .from("notes")
+        .select()
+        .eq("created_by", userId)
+        .limit(limit)
+        .range((page - 1) * limit, page * limit);
+
+
+    if (error) {
+        console.error("Error fetching notes: ", error);
+        return {data: null, error: [error]};
+    }
+
+    if (!data) {
+        return {data: null, error: []};
+    }
+
+    return {data, error};
 }
 
 interface GetNoteByIdResponse {
     note: DatabaseNote | null;
     sources: DatabaseSource[] | null;
     errors: any[];
+
+    isShared?: boolean;
 }
 
 const getNoteById = async (id: DatabaseNote["id"]):Promise<GetNoteByIdResponse> => {
@@ -48,7 +81,49 @@ const getNoteById = async (id: DatabaseNote["id"]):Promise<GetNoteByIdResponse> 
         errors.push(sources_error);
     }
 
-    return {note, sources, errors};
+    const isShared = note.created_by !== auth().userId;
+
+    return {note, sources, errors, isShared};
 }
 
-export {getNotes, getNoteById};
+interface GetSharedNotesResponse {
+    notes: DatabaseNote[] | null;
+    error: any[] | null;
+}
+
+const getSharedNotes = async (props?: GetProps): Promise<GetSharedNotesResponse> => {
+    const limit = props?.limit ?? 30;
+    const page = props?.page ?? 1;
+
+    const {userId} = auth()
+
+    if (!userId) {
+        return {notes: null, error: ["User not authenticated"]};
+    }
+
+    const supabase = createClient({
+        tags: ["shared-notes"]
+    });
+
+    const {data: notes, error} = await supabase
+        .from(`notes`)
+        .select()
+        .neq("created_by", userId)
+        .limit(limit)
+        .range((page - 1) * limit, page * limit);
+
+    // console.log("[SB] Shared Notes: ", notes, error);
+
+    if (error) {
+        console.error("Error fetching shared notes: ", error);
+        return {notes: null, error: [error]};
+    }
+
+    if (!notes) {
+        return {notes: null, error: []};
+    }
+
+    return {notes, error};
+}
+
+export {getNotes, getNoteById, getSharedNotes};

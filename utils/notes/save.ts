@@ -19,9 +19,13 @@ export interface SourceResponse {
 const createNote = async (fields: Partial<DatabaseNote>): Promise<NoteResponse> => {
     const supabase = createClient();
 
-    const {data, error} = await supabase.from("notes").insert({
+    const {data, error} = await supabase
+        .from("notes")
+        .insert({
         ...fields
-    }).select().single();
+        })
+        .select()
+        .single();
 
     revalidateTag("notes");
 
@@ -54,7 +58,7 @@ const saveEdits = async (id: DatabaseNote["id"], fields: Partial<DatabaseSource>
         .eq("note_id", id)
         .order("last_edited_at", {ascending: false})
         .limit(1)
-        .single();
+        .maybeSingle();
 
     if (lastSourceError) {
         console.error("Error fetching last source: ", lastSourceError);
@@ -62,7 +66,10 @@ const saveEdits = async (id: DatabaseNote["id"], fields: Partial<DatabaseSource>
     }
 
     if (!lastSource) {
-        return await createSource(fields);
+        return await createSource({
+            note_id: id,
+            ...fields
+        });
     }
 
     console.log("Found last source: ", lastSource);

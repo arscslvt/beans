@@ -7,7 +7,7 @@ import {MenubarItem} from './menubar-item';
 
 function Menubar() {
     return (
-        <div className={"fixed bottom-0 left-0 w-dvw h-20 flex justify-center py-3 z-50"}>
+        <div className={"fixed bottom-0 left-0 w-dvw h-20 flex justify-center py-3 z-30"}>
             <div className={"flex items-center rounded-full border border-accent/20 shadow h-14 px-2 gap-2 bg-background"}>
                 <Drawer>
                     <DrawerTrigger asChild>

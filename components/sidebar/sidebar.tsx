@@ -2,7 +2,7 @@ import React from 'react'
 import Image from "next/image";
 
 import {currentUser} from "@clerk/nextjs/server";
-import {getNotes} from "@/utils/notes/get";
+import {getNotes, getSharedNotes} from "@/utils/notes/get";
 
 import SidebarLink from "@/components/sidebar/sidebar-link";
 import SidebarGroup from "@/components/sidebar/sidebar-group";
@@ -28,6 +28,10 @@ import Link from "next/link";
 export default async function Sidebar() {
     const user = await currentUser();
     const {data: notes, error} = await getNotes();
+    const {notes: shared_notes, error: shared_notes_error} = await getSharedNotes();
+
+    // console.log("My own Notes: ", notes, error);
+    // console.log("Shared Notes: ", shared_notes, shared_notes_error);
 
     return (
         <div className={"flex flex-col sticky top-0 left-0 h-dvh max-h-dvh border-r border-border min-w-64 w-64"}>
@@ -50,6 +54,30 @@ export default async function Sidebar() {
             </SidebarGroup>
 
             <div className={"flex flex-col gap-2 relative flex-1 overflow-y-auto"}>
+                {!!shared_notes?.length && <SidebarGroup title={"Shared"}>
+                    {shared_notes?.map((note) => (
+                        <SidebarLink
+                            symbol={note.emoji ?? undefined}
+                            key={note.id}
+                            href={`${NOTE_ROUTE}/${note.id}`}
+                            trailing={
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild
+                                                         className={"opacity-0 group-hover/sidebar-link:opacity-100 group-focus/sidebar-link:opacity-100"}>
+                                        <Button variant={"outline"} size={"icon"}
+                                                className={"w-5 h-5 bg-background text-foreground group-data-[active=true]/sidebar-link:hover:bg-background group-data-[active=true]/sidebar-link:hover:text-foreground"}>
+                                            <EllipsisIcon className={"w-3 h-3"}/>
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <NoteDropdown {...note} />
+                                </DropdownMenu>
+                            }
+                        >
+                            {note.title}
+                        </SidebarLink>
+                    ))}
+                </SidebarGroup>}
+
                 <SidebarGroup title={"Recent"}>
                     {!notes?.length &&
                         <div className={"flex items-start gap-2 pt-2 px-1"}>

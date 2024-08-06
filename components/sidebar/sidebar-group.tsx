@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import SidebarLink from "@/components/sidebar/sidebar-link";
 import {cx} from "class-variance-authority";
