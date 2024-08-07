@@ -57,12 +57,12 @@ export const SidebarLink = ({variant, symbol, href, preview, disabled, ...props}
             data-active={isActive}
             {...props}
         >
-            <div className={"flex items-center gap-1"}>
+            <div className={"flex items-center gap-1 overflow-hidden whitespace-nowrap"}>
                 {symbol ? typeof symbol === "string" ? <span>{symbol}</span> : <span className={"relative z-20"}>{React.cloneElement(symbol as React.ReactElement<IconProps>, {
                     height: "18",
                     width: "18"
                 })}</span> : <></>}
-                <span className={"group-hover/default:translate-x-1 transition-transform leading-[13px]"}>{props.children || "Unknown bean"}</span>
+                <span className={"group-hover/default:translate-x-1 transition-transform leading-[13px] text-ellipsis overflow-hidden"}>{props.children || "Unknown bean"}</span>
             </div>
 
             {props.trailing}
