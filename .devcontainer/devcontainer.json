@@ -1,0 +1,47 @@
+{
+	"image": "mcr.microsoft.com/devcontainers/universal:2",
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {
+			"ppa": true,
+			"version": "os-provided"
+		},
+		"ghcr.io/devcontainers-contrib/features/corepack:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers-contrib/features/curl-apt-get:1": {},
+		"ghcr.io/devcontainers-contrib/features/curl-homebrew:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers-contrib/features/ffmpeg-apt-get:1": {},
+		"ghcr.io/devcontainers-contrib/features/ffmpeg-homebrew:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers-contrib/features/supabase-cli:1": {
+			"version": "latest"
+		},
+		"ghcr.io/stuartleeks/dev-container-features/dev-tunnels:0": {},
+		"ghcr.io/shyim/devcontainers-features/bun:0": {},
+		"ghcr.io/jsburckhardt/devcontainer-features/jnv:1": {},
+		"ghcr.io/withfig/features/fig:1": {
+			"version": "latest",
+			"channel": "stable",
+			"integrations": "dotfiles,ssh"
+		},
+		"ghcr.io/eliises/devcontainer-features/devcontainers-cli:1": {
+			"version": "latest",
+			"nodeVersion": "latest"
+		},
+		"ghcr.io/jckimble/devcontainer-features/ngrok:3": {
+			"version": "stable"
+		},
+		"ghcr.io/devcontainers-community/features/deno:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers-community/npm-features/prettier:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers-community/npm-features/typescript:1": {
+			"version": "latest"
+		}
+	}
+}
