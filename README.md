@@ -16,6 +16,8 @@ Beans is built with simplicity in mind, and it is perfect for anyone who wants a
 
 Beans is a web-based app, so there is no need to install anything. Simply visit the [Beans website](https://beans.salvatorearesco.com) to start using the app.
 
+> **Join the beta**: Beans is still in development. During the beta you should have a Beans account to use the app. If you want access to the beta, please contact me in DM.
+
 ## Feedback
 
 If you have any feedback or suggestions for Beans, please feel free to [contact me](mailto:salvatorearesco.work@gmail.com). I would love to hear from you!
