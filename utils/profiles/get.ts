@@ -1,47 +1,49 @@
 "use server";
 
-import {DatabaseProfile} from "@/types/profiles.types";
-import {createClient} from "@/utils/supabase/server";
-import {auth} from "@clerk/nextjs/server";
+import { DatabaseProfile } from "@/types/profiles.types";
+import { createClient } from "@/utils/supabase/server";
+import { auth } from "@clerk/nextjs/server";
 
 interface SearchProfileParams {
-    search: string;
+  search: string;
 }
 
 interface SearchProfileResponse {
-    profiles: DatabaseProfile[] | null;
-    errors: any[];
+  profiles: DatabaseProfile[] | null;
+  errors: any[];
 }
 
 const profilesClient = createClient({
-    tags: ["profiles-list"]
+  tags: ["profiles-list"],
 });
 
-const searchProfiles = async ({search}: SearchProfileParams): Promise<SearchProfileResponse> => {
-    const {userId} = auth()
+const searchProfiles = async (
+  { search }: SearchProfileParams,
+): Promise<SearchProfileResponse> => {
+  const { userId } = auth();
 
-    if (!userId) {
-        return {profiles: null, errors: ["User not authenticated"]};
-    }
-    
-    const {data, error} = await profilesClient
-        .from("profiles")
-        .select(`user_id, full_name, handle`)
-        .ilike("full_name", `%${search}%`)
-        .ilike("handle", `%${search}%`)
-        .neq("user_id", userId)
-        .limit(10)
+  if (!userId) {
+    return { profiles: null, errors: ["User not authenticated"] };
+  }
 
-    if (error) {
-        console.error("Error fetching profiles: ", error);
-        return {profiles: null, errors: [error]};
-    }
+  const { data, error } = await profilesClient
+    .from("profiles")
+    .select()
+    .ilike("full_name", `%${search}%`)
+    .ilike("handle", `%${search}%`)
+    .neq("user_id", userId)
+    .limit(10);
 
-    if (!data) {
-        return {profiles: null, errors: []};
-    }
+  if (error) {
+    console.error("Error fetching profiles: ", error);
+    return { profiles: null, errors: [error] };
+  }
 
-    return {profiles: data, errors: []};
-}
+  if (!data) {
+    return { profiles: null, errors: [] };
+  }
 
-export {searchProfiles}
+  return { profiles: data, errors: [] };
+};
+
+export { searchProfiles };
