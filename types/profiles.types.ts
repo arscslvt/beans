@@ -1,4 +1,5 @@
-import {Database} from "@/types/database.types";
+import { Database } from "@/types/database.types";
 
-export type DatabaseProfile = Partial<Database["public"]["Tables"]["profiles"]["Row"]> & {
-}
+export type DatabaseProfile =
+  & Database["public"]["Tables"]["profiles"]["Row"]
+  & {};

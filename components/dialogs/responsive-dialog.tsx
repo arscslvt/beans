@@ -25,7 +25,7 @@ import {
 import { useMediaQuery } from "usehooks-ts";
 
 interface ResponsiveDialogProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   asChild?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -55,6 +55,10 @@ export function ResponsiveDialog({
 }: ResponsiveDialogProps) {
   const [_open, setOpen] = React.useState(open ?? false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  React.useEffect(() => {
+    setOpen(open ?? false);
+  }, [open]);
 
   const handleOpenChange = (open: boolean) => {
     setOpen(open);
@@ -109,7 +113,7 @@ export function ResponsiveDialog({
               )}
             </DrawerHeader>
           ) : null}
-          {content}
+          <div className="px-4">{content}</div>
           {footer ?? (
             <DrawerFooter className="pt-2">
               <DrawerClose asChild>
