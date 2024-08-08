@@ -94,10 +94,11 @@ export default async function Sidebar() {
                         src={shared.sharedBy.avatar ?? ""}
                         fallback={{
                           display: shared.sharedBy.full_name?.[0] ?? "",
-                          className: "text-[9px]",
+                          className:
+                            "text-[9px] group-data-[active=true]/sidebar-link:bg-accent-foreground/20 group-data-[active=true]/sidebar-link:text-accent-foreground group-data-[active=true]/sidebar-link:border-accent-foreground/50",
                         }}
                       />
-                      <span className="text-muted-foreground font-medium">
+                      <span className="text-muted-foreground font-medium group-data-[active=true]/sidebar-link:text-accent-foreground/60 leading-[10px] pt-[0.7px]">
                         {shared.sharedBy.full_name ?? shared.sharedBy.handle}
                       </span>
                     </div>
