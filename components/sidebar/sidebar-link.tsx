@@ -84,7 +84,7 @@ export const SidebarLink = ({
     >
       <div
         className={
-          "flex flex-1 items-center gap-1 overflow-hidden whitespace-nowrap"
+          "flex flex-1 items-center gap-1.5 overflow-hidden whitespace-nowrap"
         }
       >
         {symbol ? (

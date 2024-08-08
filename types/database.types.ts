@@ -144,21 +144,31 @@ export type Database = {
       }
       user_notes: {
         Row: {
+          by: string | null
           created_at: string
           note_id: number
           user_id: string
         }
         Insert: {
+          by?: string | null
           created_at?: string
           note_id: number
           user_id?: string
         }
         Update: {
+          by?: string | null
           created_at?: string
           note_id?: number
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "fk_user_notes_by"
+            columns: ["by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
           {
             foreignKeyName: "user_notes_note_id_fkey"
             columns: ["note_id"]

@@ -79,7 +79,7 @@ function ShareNoteDialog({ noteId }: { noteId: DatabaseNote["id"] }) {
       return toast.error("Error sharing note. Please try again later.");
     }
 
-    toast.success(`${profile.handle} can now view this note`, {
+    toast.success(`@${profile.handle} can now view this note`, {
       description:
         "You can now collaborate with your friend to reach your goals together.",
     });

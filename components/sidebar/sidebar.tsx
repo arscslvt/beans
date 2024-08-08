@@ -1,20 +1,11 @@
 import React from "react";
 import Image from "next/image";
 
-import { currentUser } from "@clerk/nextjs/server";
 import { getNotes, getSharedNotes } from "@/utils/notes/get";
 
 import SidebarLink from "@/components/sidebar/sidebar-link";
 import SidebarGroup from "@/components/sidebar/sidebar-group";
 import NewNoteButton from "@/components/sidebar/client/new-note-button";
-
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-
-import NoteDropdown from "@/components/dropdowns/note-dropdown";
 
 import Scribble1 from "@/components/icons/scribble-1";
 import Magnifier3 from "@/components/icons/magnifier-3";
@@ -28,12 +19,15 @@ import { NOTE_ROUTE } from "@/utils/constants/routes";
 import Link from "next/link";
 import AuthUserButton from "./client/auth-user-button";
 import SidebarLinkDropdown from "./client/siderbar-link-dropdown";
+import UserAvatar from "../user/user_avatar";
 
 export default async function Sidebar() {
   const { data: notes } = await getNotes();
 
   const { notes: shared_notes, error: shared_notes_error } =
     await getSharedNotes();
+
+  console.log("Shared notes: ", shared_notes, shared_notes_error);
 
   return (
     <div
@@ -83,16 +77,33 @@ export default async function Sidebar() {
       <div className={"flex flex-col gap-2 relative flex-1 overflow-y-auto"}>
         {!!shared_notes?.length && (
           <SidebarGroup title={"Shared"}>
-            {shared_notes?.map((note) => (
-              <SidebarLink
-                symbol={note.emoji ?? undefined}
-                key={note.id}
-                href={`${NOTE_ROUTE}/${note.id}`}
-                trailing={<SidebarLinkDropdown note={note} />}
-              >
-                {note.title}
-              </SidebarLink>
-            ))}
+            {shared_notes
+              ?.filter((shared) => shared.note)
+              .map((shared, i) => (
+                <SidebarLink
+                  symbol={shared.note?.emoji ?? undefined}
+                  key={shared.note?.id}
+                  href={`${NOTE_ROUTE}/${shared.note?.id}`}
+                  trailing={<SidebarLinkDropdown note={shared.note!} />}
+                >
+                  {shared.note?.title}
+                  {shared.sharedBy && (
+                    <div className="text-xs flex items-center gap-0.5 mt-1">
+                      <UserAvatar
+                        className="w-4 h-4"
+                        src={shared.sharedBy.avatar ?? ""}
+                        fallback={{
+                          display: shared.sharedBy.full_name?.[0] ?? "",
+                          className: "text-[9px]",
+                        }}
+                      />
+                      <span className="text-muted-foreground font-medium">
+                        {shared.sharedBy.full_name ?? shared.sharedBy.handle}
+                      </span>
+                    </div>
+                  )}
+                </SidebarLink>
+              ))}
           </SidebarGroup>
         )}
 

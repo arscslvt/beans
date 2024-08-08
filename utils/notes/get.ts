@@ -1,6 +1,7 @@
 "use server";
 
 import { DatabaseNote } from "@/types/note.types";
+import { DatabaseProfile } from "@/types/profiles.types";
 import { DatabaseSource } from "@/types/source.types";
 import { createClient } from "@/utils/supabase/server";
 import { auth } from "@clerk/nextjs/server";
@@ -103,7 +104,11 @@ const getNoteById = async (
 };
 
 interface GetSharedNotesResponse {
-  notes: DatabaseNote[] | null;
+  notes: {
+    note: DatabaseNote | null;
+    sharedBy: DatabaseProfile | null;
+    isMine: boolean;
+  }[] | null;
   error: any[] | null;
 }
 
@@ -124,9 +129,9 @@ const getSharedNotes = async (
   });
 
   const { data: notes, error } = await supabase
-    .from(`notes`)
-    .select()
-    .neq("created_by", userId)
+    .from(`user_notes`)
+    .select(`note:notes(*), created_by:profiles(*)`)
+    .neq("by", userId)
     .limit(limit)
     .range((page - 1) * limit, page * limit);
 
@@ -138,10 +143,17 @@ const getSharedNotes = async (
   }
 
   if (!notes) {
-    return { notes: null, error: [] };
+    return { notes: null, error: null };
   }
 
-  return { notes: notes.map((d) => ({ ...d, isMine: false })), error };
+  return {
+    notes: notes.map((n) => ({
+      note: n.note,
+      sharedBy: n.created_by,
+      isMine: false,
+    })),
+    error,
+  };
 };
 
 export { getNoteById, getNotes, getSharedNotes };
