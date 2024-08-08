@@ -12,7 +12,7 @@ const sidebarLinkVariants = cva(
     variants: {
       variant: {
         default:
-          "group/default hover:bg-gradient-to-t hover:from-accent/10 border border-transparent hover:border-accent/20",
+          "group/default hover:bg-gradient-to-t hover:from-accent/10 border border-transparent hover:border-accent/20 transition-colors duration-100",
         active:
           "bg-gradient-to-b from-accent to-accent-darker text-accent-foreground font-medium shadow-white/20 shadow-inner border border-accent-darker",
         shine: "border border-accent/20",

@@ -7,6 +7,31 @@ export type Json =
   | Json[]
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          operationName?: string
+          query?: string
+          variables?: Json
+          extensions?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       notes: {
@@ -41,6 +66,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar: string | null
           created_at: string
           email: string | null
           full_name: string | null
@@ -49,6 +75,7 @@ export type Database = {
           visible: boolean
         }
         Insert: {
+          avatar?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
@@ -57,6 +84,7 @@ export type Database = {
           visible?: boolean
         }
         Update: {
+          avatar?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
@@ -117,19 +145,16 @@ export type Database = {
       user_notes: {
         Row: {
           created_at: string
-          id: number
           note_id: number
           user_id: string
         }
         Insert: {
           created_at?: string
-          id?: number
           note_id: number
           user_id?: string
         }
         Update: {
           created_at?: string
-          id?: number
           note_id?: number
           user_id?: string
         }
@@ -154,7 +179,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      invitation_status: "pending" | "refused" | "accepted"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -243,3 +268,4 @@ export type Enums<
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
     : never
+

@@ -16,20 +16,22 @@ export default function MainLayout({
   return (
     <>
       <SignedIn>
-        <div className="flex h-dvh max-h-dvh overflow-y-auto">
+        <div className="flex h-dvh max-h-dvh ">
           {isMobile ? <Menubar /> : <Sidebar />}
-          <main className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col sm:flex-row p-1 sm:p-3">
             {isMobile && (
               <div
                 className={
-                  "flex items-center justify-center gap-2 pt-4 px-4 select-none"
+                  "flex items-center justify-center gap-2 py-4 px-4 select-none"
                 }
               >
                 <BeansLogo />
               </div>
             )}
-            {children}
-          </main>
+            <main className="flex-1 flex flex-col rounded-md border shadow-lg overflow-clip">
+              {children}
+            </main>
+          </div>
         </div>
       </SignedIn>
 

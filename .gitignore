@@ -33,6 +33,7 @@ yarn-error.log*
 
 # supabase local
 # supabase
+supabase/migrations
 
 # typescript
 *.tsbuildinfo

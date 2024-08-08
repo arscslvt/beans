@@ -27,6 +27,7 @@ import BeansLogo from "@assets/logo/icon.svg";
 import { NOTE_ROUTE } from "@/utils/constants/routes";
 import Link from "next/link";
 import AuthUserButton from "./client/auth-user-button";
+import SidebarLinkDropdown from "./client/siderbar-link-dropdown";
 
 export default async function Sidebar() {
   const { data: notes } = await getNotes();
@@ -37,7 +38,7 @@ export default async function Sidebar() {
   return (
     <div
       className={
-        "flex flex-col sticky top-0 left-0 h-dvh max-h-dvh border-r border-border min-w-64 w-64 bg-background shadow-lg"
+        "flex flex-col sticky top-0 left-0 h-dvh max-h-dvh min-w-64 w-64 bg-background"
       }
     >
       <div className={"flex flex-col flex-grow-0 flex-shrink-0 bg-background"}>
@@ -87,27 +88,7 @@ export default async function Sidebar() {
                 symbol={note.emoji ?? undefined}
                 key={note.id}
                 href={`${NOTE_ROUTE}/${note.id}`}
-                trailing={
-                  <DropdownMenu>
-                    <DropdownMenuTrigger
-                      asChild
-                      className={
-                        "opacity-0 group-hover/sidebar-link:opacity-100 group-focus/sidebar-link:opacity-100"
-                      }
-                    >
-                      <Button
-                        variant={"outline"}
-                        size={"icon"}
-                        className={
-                          "w-5 h-5 bg-background text-foreground group-data-[active=true]/sidebar-link:hover:bg-background group-data-[active=true]/sidebar-link:hover:text-foreground"
-                        }
-                      >
-                        <EllipsisIcon className={"w-3 h-3"} />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <NoteDropdown {...note} />
-                  </DropdownMenu>
-                }
+                trailing={<SidebarLinkDropdown note={note} />}
               >
                 {note.title}
               </SidebarLink>
@@ -134,27 +115,7 @@ export default async function Sidebar() {
               symbol={note.emoji ?? undefined}
               key={note.id}
               href={`${NOTE_ROUTE}/${note.id}`}
-              trailing={
-                <DropdownMenu>
-                  <DropdownMenuTrigger
-                    asChild
-                    className={
-                      "opacity-0 group-hover/sidebar-link:opacity-100 group-focus/sidebar-link:opacity-100"
-                    }
-                  >
-                    <Button
-                      variant={"outline"}
-                      size={"icon"}
-                      className={
-                        "w-5 h-5 bg-background text-foreground group-data-[active=true]/sidebar-link:hover:bg-background group-data-[active=true]/sidebar-link:hover:text-foreground"
-                      }
-                    >
-                      <EllipsisIcon className={"w-3 h-3"} />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <NoteDropdown {...note} />
-                </DropdownMenu>
-              }
+              trailing={<SidebarLinkDropdown note={note} />}
             >
               {note.title}
             </SidebarLink>

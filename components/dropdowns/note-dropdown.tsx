@@ -65,7 +65,7 @@ const NoteDropdown = ({ id, isMine }: DatabaseNote) => {
       {isMine && (
         <DropdownMenuItem
           className={
-            "text-destructive hover:!bg-destructive hover:text-destructive-foreground"
+            "text-destructive hover:!bg-destructive hover:!text-destructive-foreground"
           }
           onClick={handleDeleteNote}
         >

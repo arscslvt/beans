@@ -18,7 +18,7 @@ export default async function Sources({
   return (
     <div
       className={
-        "hidden lg:block border-l min-h-dvh h-dvh sticky top-0 right-0 min-w-52 max-w-52 overflow-y-auto shadow-lg"
+        "hidden lg:block border-l min-h-full h-full self-start sticky top-0 right-0 min-w-52 max-w-52 overflow-y-auto shadow-md"
       }
     >
       {note && <NoteActions note={note} />}

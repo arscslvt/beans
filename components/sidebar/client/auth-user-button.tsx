@@ -17,9 +17,9 @@ export default function AuthUserButton() {
     <DropdownMenu>
       <AuthUserDropdown />
       <DropdownMenuTrigger className="outline-none">
-        <SidebarLink>
-          <div className={"flex items-center gap-2 justify-start text-left"}>
-            <Avatar className={"w-8 h-8"}>
+        <SidebarLink
+          symbol={
+            <Avatar className={"w-8 h-8 shadow-sm"}>
               <AvatarImage
                 src={user?.imageUrl || ""}
                 alt={`${user?.firstName ?? "User"} profile picture`}
@@ -28,7 +28,9 @@ export default function AuthUserButton() {
                 {user?.firstName?.charAt(0).toUpperCase() ?? "U"}
               </AvatarFallback>
             </Avatar>
-
+          }
+        >
+          <div className={"flex items-center pl-2 justify-start text-left"}>
             <div>
               <h4 className={"font-medium"}>{user?.firstName}</h4>
               <p className={"text-xs text-muted-foreground pt-0.5"}>

@@ -10,17 +10,27 @@ import {
   DropdownMenuLabel,
 } from "../ui/dropdown-menu";
 import { toast } from "sonner";
-import { ResponsiveDialog } from "../dialogs/responsive-dialog";
+import {
+  DynamicDialog,
+  DynamicDialogContent,
+  DynamicDialogDescription,
+  DynamicDialogFooter,
+  DynamicDialogHeader,
+  DynamicDialogTitle,
+} from "../dialogs/dynamic-dialog";
 import React from "react";
 import BetaTestingProgramDialog from "../dialogs/user/beta-testing-program-dialog";
 import Bug1 from "../icons/bug-1";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import SignOutDialog from "../dialogs/user/sign-out-dialog";
+import { Button } from "../ui/button";
 
 export default function AuthUserDropdown() {
   const { signOut } = useAuth();
 
   const [showBetaDialog, setShowBetaDialog] = React.useState(false);
+  const [showLogOutConfirmation, setLogOutConfirmation] = React.useState(false);
 
   const handleSignOut = () => {
     signOut({
@@ -31,13 +41,33 @@ export default function AuthUserDropdown() {
   };
   return (
     <>
-      <ResponsiveDialog
-        title="Beta Testing Program"
-        description="You are a part of the beta testing program. You can leave the program or send a feedback."
-        content={<BetaTestingProgramDialog />}
-        open={showBetaDialog}
-        onOpenChange={setShowBetaDialog}
-      />
+      <DynamicDialog open={showBetaDialog} onOpenChange={setShowBetaDialog}>
+        <DynamicDialogContent>
+          <DynamicDialogHeader>
+            <DynamicDialogTitle>{"Beta Testing Program"}</DynamicDialogTitle>
+            <DynamicDialogDescription>
+              You are a part of the beta testing program. You can leave the
+              program or send a feedback.
+            </DynamicDialogDescription>
+          </DynamicDialogHeader>
+          <DynamicDialogFooter>
+            <BetaTestingProgramDialog />
+          </DynamicDialogFooter>
+        </DynamicDialogContent>
+      </DynamicDialog>
+
+      {/* <DynamicDialog
+        title="You sure you want to log out?"
+        description="During the beta program you won't be able to recover your password. You will have to contact the support team."
+        footer={
+          <>
+            <Button>{"Yes, log out"}</Button>
+            <>{"Yes, log out"}</>
+          </>
+        }
+        open={showLogOutConfirmation}
+        onOpenChange={setLogOutConfirmation}
+      /> */}
 
       <DropdownMenuContent className="min-w-56">
         <Link href={"https://github.com/arscslvt/beans"} target="_blank">
@@ -56,7 +86,7 @@ export default function AuthUserDropdown() {
 
           <DropdownMenuItem
             className="focus:bg-destructive/10 focus:text-destructive"
-            onClick={handleSignOut}
+            onClick={() => setLogOutConfirmation(true)}
           >
             <ArrowDoorOut31 />
             Log out

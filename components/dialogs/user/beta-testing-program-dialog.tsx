@@ -10,20 +10,28 @@ export default function BetaTestingProgramDialog() {
         "The only way to use Beans is to be a part of the beta testing program. If you want to leave the program, please send a feedback.",
       position: "top-center",
       duration: 8000,
+      closeButton: false,
     });
   };
   return (
     <div className="flex flex-col pt-3">
-      <div className="flex justify-center sm:justify-end gap-2">
-        <Button variant={"destructive"} onClick={handleLeaveProgram}>
-          Leave the program
-        </Button>
+      <div className="flex gap-2">
         <Link
           href={"https://github.com/arscslvt/beans/labels/feedback"}
           target="_blank"
+          className="flex flex-1 sm:flex-auto"
         >
-          <Button>Send a feedback</Button>
+          <Button variant={"ghost"} className="flex-1">
+            Send a feedback
+          </Button>
         </Link>
+        <Button
+          variant={"destructive"}
+          onClick={handleLeaveProgram}
+          className="flex-1 sm:flex-auto"
+        >
+          Leave the program
+        </Button>
       </div>
     </div>
   );

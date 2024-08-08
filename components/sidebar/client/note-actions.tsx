@@ -8,7 +8,11 @@ import SidebarGroup, {
 import { Button } from "@/components/ui/button";
 import Handshake1 from "@/components/icons/handshake-1";
 import Trash1 from "@/components/icons/trash-1";
-import { ResponsiveDialog } from "@/components/dialogs/responsive-dialog";
+import {
+  DynamicDialog,
+  DynamicDialogContent,
+  DynamicDialogTrigger,
+} from "@/components/dialogs/dynamic-dialog";
 import ShareNoteDialog from "@/components/dialogs/note/share-note-dialog";
 import { deleteNote } from "@/utils/notes/delete";
 import { toast } from "sonner";
@@ -72,16 +76,15 @@ export default function NoteActions({ note }: NoteActionsProps) {
         }
       >
         {note.isMine && (
-          <ResponsiveDialog
-            asChild
-            content={<ShareNoteDialog noteId={note.id} />}
-            title={"Write with Me"}
-          >
-            <Button variant={"ghost"} className={"justify-start"}>
+          <DynamicDialog>
+            <DynamicDialogTrigger variant={"ghost"} className={"justify-start"}>
               <Handshake1 width={"18"} height={"18"} strokewidth={1.3} />
               Write with Me
-            </Button>
-          </ResponsiveDialog>
+            </DynamicDialogTrigger>
+            <DynamicDialogContent>
+              <ShareNoteDialog noteId={note.id} />
+            </DynamicDialogContent>
+          </DynamicDialog>
         )}
         {note.isMine && (
           <Button
