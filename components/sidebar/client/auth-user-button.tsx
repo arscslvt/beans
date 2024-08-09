@@ -9,9 +9,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import AuthUserDropdown from "@/components/dropdowns/auth-user-dropdown";
+import { useSidebar } from "../sidebar";
+import { motion } from "framer-motion";
 
 export default function AuthUserButton() {
   const { user } = useUser();
+
+  const { sidebarMode } = useSidebar();
+
+  const avatarAnimation = {
+    small: { width: 22, height: 22 },
+    large: { width: 32, height: 32 },
+  };
 
   return (
     <DropdownMenu>
@@ -19,15 +28,21 @@ export default function AuthUserButton() {
       <DropdownMenuTrigger className="outline-none">
         <SidebarLink
           symbol={
-            <Avatar className={"w-8 h-8 shadow-sm"}>
-              <AvatarImage
-                src={user?.imageUrl || ""}
-                alt={`${user?.firstName ?? "User"} profile picture`}
-              />
-              <AvatarFallback>
-                {user?.firstName?.charAt(0).toUpperCase() ?? "U"}
-              </AvatarFallback>
-            </Avatar>
+            <motion.div
+              variants={avatarAnimation}
+              initial={"large"}
+              animate={sidebarMode === "maximized" ? "large" : "small"}
+            >
+              <Avatar className={"w-full h-full shadow-sm"}>
+                <AvatarImage
+                  src={user?.imageUrl || ""}
+                  alt={`${user?.firstName ?? "User"} profile picture`}
+                />
+                <AvatarFallback>
+                  {user?.firstName?.charAt(0).toUpperCase() ?? "U"}
+                </AvatarFallback>
+              </Avatar>
+            </motion.div>
           }
         >
           <div className={"flex items-center pl-2 justify-start text-left"}>

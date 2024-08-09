@@ -27,8 +27,7 @@ const NoteDropdown = ({ id, isMine }: DatabaseNote) => {
     router.push("/");
   };
 
-  const handleDeleteNote = async (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleDeleteNote = async (e: Event) => {
     e.stopPropagation();
 
     toast("You sure?", {
@@ -67,7 +66,7 @@ const NoteDropdown = ({ id, isMine }: DatabaseNote) => {
           className={
             "text-destructive hover:!bg-destructive hover:!text-destructive-foreground"
           }
-          onClick={handleDeleteNote}
+          onSelect={handleDeleteNote}
         >
           Delete
         </DropdownMenuItem>

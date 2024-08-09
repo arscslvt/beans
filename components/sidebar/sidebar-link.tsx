@@ -5,6 +5,8 @@ import { cva, cx, VariantProps } from "class-variance-authority";
 import IconProps from "@/types/icon.types";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useSidebar } from "./sidebar";
+import { AnimatePresence, motion } from "framer-motion";
 
 const sidebarLinkVariants = cva(
   "px-3 py-2.5 text-sm flex justify-start select-none items-center gap-1.5 rounded-md",
@@ -48,6 +50,8 @@ export const SidebarLink = ({
 
   const isActive = useMemo(() => pathname === href, [href, pathname]);
 
+  const { sidebarMode } = useSidebar();
+
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (preview)
       toast.info("Feature not available.", {
@@ -60,6 +64,28 @@ export const SidebarLink = ({
 
     if (props.onClick) props.onClick(e);
     if (href) router.push(href);
+  };
+
+  const boxAnim = {
+    initial: { paddingLeft: 10, paddingRight: 10 },
+    open: {
+      paddingLeft: 10,
+      paddingRight: 10,
+      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+    },
+    closed: { paddingLeft: 14, paddingRight: 8 },
+  };
+
+  const spanAnim = {
+    initial: { width: 0, opacity: 0, display: "none", paddingLeft: 0 },
+    open: {
+      width: "auto",
+      opacity: 1,
+      display: "block",
+      paddingLeft: symbol ? 10 : 0,
+      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+    },
+    closed: { width: 0, opacity: 0, display: "none", paddingLeft: 0 },
   };
 
   return (
@@ -76,16 +102,20 @@ export const SidebarLink = ({
             ? "disabled"
             : "default",
         }),
-        "group/sidebar-link flex justify-between items-center relative overflow-clip"
+        "group/sidebar-link min-h-[2.7rem] flex justify-between items-center relative overflow-clip !px-0"
       )}
       onClick={handleClick}
       data-active={isActive}
       {...props}
     >
-      <div
-        className={
-          "flex flex-1 items-center gap-1.5 overflow-hidden whitespace-nowrap"
-        }
+      <motion.div
+        variants={boxAnim}
+        animate={sidebarMode === "maximized" ? "open" : "closed"}
+        initial={"initial"}
+        className={cx(
+          "flex flex-1 items-center overflow-hidden whitespace-nowrap",
+          sidebarMode === "maximized" ? "justify-start" : "justify-start"
+        )}
       >
         {symbol ? (
           typeof symbol === "string" ? (
@@ -101,16 +131,27 @@ export const SidebarLink = ({
         ) : (
           <></>
         )}
-        <span
-          className={
-            "group-hover/default:translate-x-1 transition-transform leading-[14px] py-[3px] text-ellipsis overflow-hidden flex-1"
+        <AnimatePresence>
+          {
+            <motion.span
+              variants={spanAnim}
+              initial={"open"}
+              animate={sidebarMode === "maximized" ? "open" : "closed"}
+              className={
+                "group-hover/default:translate-x-1 transition-transform leading-[14px] py-[3px] text-ellipsis overflow-hidden flex-1"
+              }
+            >
+              {props.children || "Unknown bean"}
+            </motion.span>
           }
-        >
-          {props.children || "Unknown bean"}
-        </span>
-      </div>
+        </AnimatePresence>
+      </motion.div>
 
-      {props.trailing}
+      {sidebarMode === "maximized" && props.trailing && (
+        <div className={"flex items-center justify-center pr-2"}>
+          {props.trailing}
+        </div>
+      )}
     </div>
   );
 };
