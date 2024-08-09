@@ -121,7 +121,11 @@ export const SidebarLink = ({
           typeof symbol === "string" ? (
             <span>{symbol}</span>
           ) : (
-            <span className={"relative z-20"}>
+            <span
+              className={
+                "relative z-20 group-hover/sidebar-link:text-accent transition-colors"
+              }
+            >
               {React.cloneElement(symbol as React.ReactElement<IconProps>, {
                 height: "18",
                 width: "18",

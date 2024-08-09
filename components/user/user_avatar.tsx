@@ -19,8 +19,9 @@ export default function UserAvatar({
   ...props
 }: UserAvatarProps) {
   return (
-    <Avatar {...props}>
-      <AvatarImage src={src} alt={alt} />
+    <Avatar {...props} className={cx("relative", props.className)}>
+      <div className="absolute z-10 top-0 left-0 w-full h-full border border-foreground/50 rounded-full mix-blend-overlay" />
+      <AvatarImage src={src} alt={alt} className="z-0 relative" />
       <AvatarFallback
         className={cx(
           "bg-accent/10 text-accent border border-accent/30",

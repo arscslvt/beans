@@ -11,6 +11,7 @@ import {
 import AuthUserDropdown from "@/components/dropdowns/auth-user-dropdown";
 import { useSidebar } from "../sidebar";
 import { motion } from "framer-motion";
+import UserAvatar from "@/components/user/user_avatar";
 
 export default function AuthUserButton() {
   const { user } = useUser();
@@ -33,15 +34,14 @@ export default function AuthUserButton() {
               initial={"large"}
               animate={sidebarMode === "maximized" ? "large" : "small"}
             >
-              <Avatar className={"w-full h-full shadow-sm"}>
-                <AvatarImage
-                  src={user?.imageUrl || ""}
-                  alt={`${user?.firstName ?? "User"} profile picture`}
-                />
-                <AvatarFallback>
-                  {user?.firstName?.charAt(0).toUpperCase() ?? "U"}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatar
+                className={"w-full h-full shadow-sm"}
+                fallback={{
+                  display: user?.firstName?.charAt(0).toUpperCase() ?? "U",
+                }}
+                src={user?.imageUrl || ""}
+                alt={`${user?.firstName ?? "User"} profile picture`}
+              />
             </motion.div>
           }
         >

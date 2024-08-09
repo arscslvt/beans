@@ -94,6 +94,65 @@ export type Database = {
         }
         Relationships: []
       }
+      source_comments: {
+        Row: {
+          comment_id: number | null
+          content: string
+          created_at: string
+          edited: boolean | null
+          id: number
+          profile_id: string
+          source_id: number
+        }
+        Insert: {
+          comment_id?: number | null
+          content: string
+          created_at?: string
+          edited?: boolean | null
+          id?: number
+          profile_id: string
+          source_id: number
+        }
+        Update: {
+          comment_id?: number | null
+          content?: string
+          created_at?: string
+          edited?: boolean | null
+          id?: number
+          profile_id?: string
+          source_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "note_comments_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "source_comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "note_comments_note_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "notes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "note_comments_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "source_comments_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sources: {
         Row: {
           content: Json | null

@@ -51,18 +51,14 @@ export default function Sidebar({ children }: { children?: React.ReactNode }) {
   return (
     <SidebarContext.Provider value={{ sidebarMode, toggleSidebarMode }}>
       <motion.div
-        className={cx(
-          "flex flex-col sticky top-0 left-0 h-dvh max-h-dvh bg-background"
-        )}
+        className={cx("flex flex-col z-0 sticky top-0 left-0 h-dvh max-h-dvh")}
         variants={sidebarAnimation}
         initial={"open"}
         animate={sidebarMode === "maximized" ? "open" : "closed"}
         exit={"exit"}
         transition={{ duration: 0.2 }}
       >
-        <div
-          className={"flex flex-col flex-grow-0 flex-shrink-0 bg-background"}
-        >
+        <div className={"flex flex-col flex-grow-0 flex-shrink-0"}>
           <div
             className={
               "flex items-center justify-between gap-2 pt-6 pl-4 pr-2 select-none"
@@ -142,7 +138,7 @@ export default function Sidebar({ children }: { children?: React.ReactNode }) {
         </div>
         <div
           className={
-            "flex-1 flex flex-col flex-grow-0 flex-shrink-0 justify-end bg-background"
+            "flex-1 flex flex-col flex-grow-0 flex-shrink-0 justify-end"
           }
         >
           <SidebarGroup>
