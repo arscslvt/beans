@@ -1,9 +1,5 @@
-"use client";
-
-import React from "react";
-import SidebarLink from "@/components/sidebar/sidebar-link";
+import React, { Suspense } from "react";
 import { cx } from "class-variance-authority";
-import Scribble1 from "../icons/scribble-1";
 
 interface SidebarGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string;
@@ -85,6 +81,28 @@ export const SidebarFallback = ({
       </div>
     </div>
   );
+};
+
+const SidebarLoadingFallback = () => {
+  return (
+    <div className="flex flex-col gap-2 px-2 py-3">
+      <div className="pb-1 pt-2">
+        <div className="h-4 w-20 bg-muted rounded-md animate-pulse" />
+      </div>
+      <div className="bg-muted rounded-md animate-pulse h-8 w-full"></div>
+      <div className="bg-muted rounded-md animate-pulse h-8 w-full"></div>
+      <div className="bg-muted rounded-md animate-pulse h-8 w-full"></div>
+      <div className="bg-muted rounded-md animate-pulse h-8 w-full"></div>
+    </div>
+  );
+};
+
+export const SidebarLoadingWrapper = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  return <Suspense fallback={<SidebarLoadingFallback />}>{children}</Suspense>;
 };
 
 export default SidebarGroup;
