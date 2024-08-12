@@ -8,11 +8,11 @@ interface CreateProfileProps extends Partial<DatabaseProfile> {
   handle: DatabaseProfile["handle"];
 }
 
-const profileHandler = createClient({
-  tags: ["profile"],
-});
-
 const createProfile = async (profile: CreateProfileProps) => {
+  const profileHandler = createClient({
+    tags: ["profile"],
+  });
+
   const { userId } = auth();
 
   if (!userId) {
@@ -27,7 +27,7 @@ const createProfile = async (profile: CreateProfileProps) => {
     throw new Error("User not found.");
   }
 
-  const { data, error } = await profileHandler.from("profiles").insert({
+  const { data, error } = await profileHandler.from("profiles").upsert({
     ...profile,
   }).select().single();
 
@@ -37,3 +37,5 @@ const createProfile = async (profile: CreateProfileProps) => {
 
   return data;
 };
+
+export { createProfile };

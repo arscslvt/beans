@@ -56,18 +56,23 @@ export default function AuthUserDropdown() {
         </DynamicDialogContent>
       </DynamicDialog>
 
-      {/* <DynamicDialog
-        title="You sure you want to log out?"
-        description="During the beta program you won't be able to recover your password. You will have to contact the support team."
-        footer={
-          <>
-            <Button>{"Yes, log out"}</Button>
-            <>{"Yes, log out"}</>
-          </>
-        }
+      <DynamicDialog
         open={showLogOutConfirmation}
         onOpenChange={setLogOutConfirmation}
-      /> */}
+      >
+        <DynamicDialogContent>
+          <DynamicDialogHeader>
+            <DynamicDialogTitle>{"Log out"}</DynamicDialogTitle>
+            <DynamicDialogDescription>
+              During the beta program you won't be able to recover your
+              password. You will have to contact the support team.
+            </DynamicDialogDescription>
+          </DynamicDialogHeader>
+          <DynamicDialogFooter>
+            <SignOutDialog />
+          </DynamicDialogFooter>
+        </DynamicDialogContent>
+      </DynamicDialog>
 
       <DropdownMenuContent className="min-w-56">
         <Link href={"https://github.com/arscslvt/beans"} target="_blank">
