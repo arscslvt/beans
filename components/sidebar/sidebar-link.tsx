@@ -122,9 +122,10 @@ export const SidebarLink = ({
             <span>{symbol}</span>
           ) : (
             <span
-              className={
-                "relative z-20 group-hover/sidebar-link:text-accent transition-colors"
-              }
+              className={cx(
+                "relative z-20 transition-colors",
+                !isActive && "group-hover/sidebar-link:text-accent"
+              )}
             >
               {React.cloneElement(symbol as React.ReactElement<IconProps>, {
                 height: "18",

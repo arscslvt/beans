@@ -68,7 +68,8 @@ const NewNoteButton = ({ shine }: { shine?: boolean }) => {
       <span
         className={cx(
           shine ? "text-accent" : "text-muted-foreground",
-          "relative z-10"
+          "relative z-10",
+          "group-hover/sidebar-link:text-accent"
         )}
       >
         New note
