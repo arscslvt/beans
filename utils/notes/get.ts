@@ -131,11 +131,11 @@ const getSharedNotes = async (
   const { data: notes, error } = await supabase
     .from(`user_notes`)
     .select(`note:notes(*), created_by:profiles(*)`)
-    .neq("by", userId)
+    .or(`by.is.null,by.neq.${userId}`)
     .limit(limit)
     .range((page - 1) * limit, page * limit);
 
-  // console.log("[SB] Shared Notes: ", notes, error);
+  console.log("[SB] Shared notes: ", notes);
 
   if (error) {
     console.error("Error fetching shared notes: ", error);

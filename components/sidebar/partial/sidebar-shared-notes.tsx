@@ -11,7 +11,9 @@ export default async function SidebarSharedNotes() {
   const { notes: shared_notes, error: shared_notes_error } =
     await getSharedNotes();
 
-  if (!shared_notes || !shared_notes_error?.length) {
+  console.log("Shared notes: ", shared_notes);
+
+  if (!shared_notes || !shared_notes?.length) {
     return <></>;
   }
 
