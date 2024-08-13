@@ -1,7 +1,8 @@
 import React, { Suspense } from "react";
 import { cx } from "class-variance-authority";
 
-interface SidebarGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface SidebarGroupProps
+  extends React.HTMLAttributes<HTMLDivElement> {
   title?: string;
   children?: React.ReactNode;
   disableSticky?: boolean;

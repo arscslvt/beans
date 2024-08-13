@@ -28,6 +28,7 @@ export default function AuthUserButton() {
       <AuthUserDropdown />
       <DropdownMenuTrigger className="outline-none">
         <SidebarLink
+          role="button"
           symbol={
             <motion.div
               variants={avatarAnimation}

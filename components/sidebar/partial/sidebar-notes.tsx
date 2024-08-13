@@ -2,17 +2,19 @@
 
 import { getNotes } from "@/utils/notes/get";
 import React from "react";
-import SidebarGroup from "../sidebar-group";
+import SidebarGroup, { SidebarGroupProps } from "../sidebar-group";
 import Scribble1 from "@/components/icons/scribble-1";
 import SidebarLink from "../sidebar-link";
 import { NOTE_ROUTE } from "@/utils/constants/routes";
 import SidebarLinkDropdown from "../client/siderbar-link-dropdown";
 
-export default async function SidebarNotes() {
+interface SidebarNotesProps extends SidebarGroupProps {}
+
+export default async function SidebarNotes({ ...props }: SidebarNotesProps) {
   const { data: notes } = await getNotes();
 
   return (
-    <SidebarGroup title={"Recent"}>
+    <SidebarGroup title={"Recent"} {...props}>
       {!notes?.length && (
         <div className={"flex items-start gap-2 pt-2 px-1"}>
           <span className={"text-accent"}>

@@ -3,6 +3,7 @@
 import { DatabaseNote } from "@/types/note.types";
 import { DatabaseProfile } from "@/types/profiles.types";
 import { createClient } from "@/utils/supabase/server";
+import { revalidateTag } from "next/cache";
 
 interface ShareNoteWithParams {
     noteId: DatabaseNote["id"];
@@ -29,6 +30,8 @@ const shareNoteWith = async (
         console.error("Error sharing note: ", error);
         return { error: [error] };
     }
+
+    revalidateTag("shared-with");
 
     return { error: null };
 };

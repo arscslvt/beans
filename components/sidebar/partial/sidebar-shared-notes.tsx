@@ -1,13 +1,17 @@
 "use server";
 import React from "react";
-import SidebarGroup from "../sidebar-group";
+import SidebarGroup, { SidebarGroupProps } from "../sidebar-group";
 import { getSharedNotes } from "@/utils/notes/get";
 import SidebarLink from "../sidebar-link";
 import { NOTE_ROUTE } from "@/utils/constants/routes";
 import SidebarLinkDropdown from "../client/siderbar-link-dropdown";
 import UserAvatar from "@/components/user/user_avatar";
 
-export default async function SidebarSharedNotes() {
+interface SidebarSharedNotesProps extends SidebarGroupProps {}
+
+export default async function SidebarSharedNotes({
+  ...props
+}: SidebarSharedNotesProps) {
   const { notes: shared_notes, error: shared_notes_error } =
     await getSharedNotes();
 
@@ -18,7 +22,7 @@ export default async function SidebarSharedNotes() {
   }
 
   return (
-    <SidebarGroup title={"Shared"}>
+    <SidebarGroup title={"Shared"} {...props}>
       {shared_notes
         ?.filter((shared) => shared.note)
         .map((shared, i) => (
@@ -30,7 +34,7 @@ export default async function SidebarSharedNotes() {
           >
             {shared.note?.title}
             {shared.sharedBy && (
-              <div className="text-xs flex items-center gap-0.5 mt-1">
+              <div className="text-xs flex items-center gap-1 mt-1">
                 <UserAvatar
                   className="w-4 h-4"
                   src={shared.sharedBy.avatar ?? ""}

@@ -6,6 +6,7 @@ import { NOTE_ROUTE } from "@/utils/constants/routes";
 import Feather2 from "@/components/icons/feather-2";
 import NoteActions from "@/components/sidebar/client/note-actions";
 import { getNoteById } from "@/utils/notes/get";
+import SharedWith from "@/components/sidebar/partial/shared-with";
 
 export default async function Sources({
   params: { id },
@@ -21,6 +22,7 @@ export default async function Sources({
         "hidden lg:block border-l min-h-full h-full self-start sticky top-0 right-0 min-w-52 max-w-52 overflow-y-auto shadow-md"
       }
     >
+      {note && <SharedWith noteId={note.id} />}
       {note && <NoteActions note={note} />}
       <SidebarGroup title={"Note versions"}>
         {!sources?.length && (

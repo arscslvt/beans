@@ -130,12 +130,14 @@ const getSharedNotes = async (
 
   const { data: notes, error } = await supabase
     .from(`user_notes`)
-    .select(`note:notes(*), created_by:profiles(*)`)
+    .select(
+      `invitedBy:profiles!fk_user_notes_by(*),
+      for:profiles!user_notes_user_id_fkey(*),
+      note:notes(*)`,
+    )
     .or(`by.is.null,by.neq.${userId}`)
     .limit(limit)
     .range((page - 1) * limit, page * limit);
-
-  console.log("[SB] Shared notes: ", notes);
 
   if (error) {
     console.error("Error fetching shared notes: ", error);
@@ -149,11 +151,46 @@ const getSharedNotes = async (
   return {
     notes: notes.map((n) => ({
       note: n.note,
-      sharedBy: n.created_by,
+      sharedBy: n.invitedBy,
       isMine: false,
     })),
     error,
   };
 };
 
-export { getNoteById, getNotes, getSharedNotes };
+interface GetSharedWithResponse {
+  profiles: DatabaseProfile[] | null;
+  error: any[] | null;
+}
+
+const getSharedWith = async (
+  noteId: DatabaseNote["id"],
+): Promise<GetSharedWithResponse> => {
+  const supabase = createClient({
+    tags: ["shared-with"],
+  });
+
+  const { userId } = auth();
+
+  const { data: profiles, error } = await supabase
+    .from("user_notes")
+    .select(`collaborator:profiles!user_notes_user_id_fkey(*)`)
+    .eq("note_id", noteId)
+    .or(`user_id.neq.${userId}`);
+
+  if (error) {
+    console.error("Error fetching shared with: ", error);
+    return { profiles: null, error: [error] };
+  }
+
+  if (!profiles) {
+    return { profiles: null, error: null };
+  }
+
+  return {
+    profiles: profiles.map((p) => p.collaborator as unknown as DatabaseProfile),
+    error,
+  };
+};
+
+export { getNoteById, getNotes, getSharedNotes, getSharedWith };

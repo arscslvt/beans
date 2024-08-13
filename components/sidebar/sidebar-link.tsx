@@ -91,7 +91,7 @@ export const SidebarLink = ({
   return (
     <div
       data-href={href}
-      role={href ? "link" : "button"}
+      role={href ? "link" : undefined}
       className={cx(
         sidebarLinkVariants({
           variant: variant
@@ -102,7 +102,8 @@ export const SidebarLink = ({
             ? "disabled"
             : "default",
         }),
-        "group/sidebar-link min-h-[2.7rem] flex justify-between items-center relative overflow-clip !px-0"
+        "group/sidebar-link min-h-[2.7rem] flex justify-between items-center text-left relative overflow-clip !px-0",
+        props.className
       )}
       onClick={handleClick}
       data-active={isActive}
