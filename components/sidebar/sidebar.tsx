@@ -13,8 +13,6 @@ import Gear21 from "@/components/icons/gear-2-1";
 import InboxArrowDown1 from "@/components/icons/inbox-arrow-down-1";
 import House21 from "@/components/icons/house-2-1";
 
-import BeansLogo from "@assets/logo/icon.svg";
-import Link from "next/link";
 import AuthUserButton from "./client/auth-user-button";
 import { Button } from "../ui/button";
 
@@ -23,6 +21,7 @@ import ChevronRight1 from "../icons/chevron-right-1";
 import { cx } from "class-variance-authority";
 
 import { AnimatePresence, motion } from "framer-motion";
+import BeansLogo from "./beans-logo";
 
 const SidebarContext = React.createContext<{
   sidebarMode: "minimized" | "maximized";
@@ -64,22 +63,7 @@ export default function Sidebar({ children }: { children?: React.ReactNode }) {
               "flex items-center justify-between gap-2 pt-6 pl-4 pr-2 select-none"
             }
           >
-            {sidebarMode === "maximized" && (
-              <Link
-                href={"/"}
-                className={
-                  "hover:scale-105 active:scale-95 transition-transform"
-                }
-              >
-                <Image
-                  src={BeansLogo}
-                  alt={"Beans Logo"}
-                  width={28}
-                  height={28}
-                  className={"pointer-events-none"}
-                />
-              </Link>
-            )}
+            {sidebarMode === "maximized" && <BeansLogo />}
 
             <div>
               <Button

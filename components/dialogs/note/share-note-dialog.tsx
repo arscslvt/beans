@@ -96,7 +96,7 @@ function ShareNoteDialog({ noteId }: { noteId: DatabaseNote["id"] }) {
       >
         <div className={"flex flex-col gap-3 justify-center"}>
           <h1 className={"font-bold text-2xl"}>Ready to collab?</h1>
-          <h4 className={"font-medium text-sm text-accent/70"}>
+          <h4 className={"text-sm text-accent/80"}>
             Collaborate with friends unlocks the power of teamwork and reaching
             your goals together 💪
           </h4>

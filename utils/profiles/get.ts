@@ -29,8 +29,7 @@ const searchProfiles = async (
   const { data, error } = await profilesClient
     .from("profiles")
     .select()
-    .ilike("full_name", `%${search}%`)
-    .ilike("handle", `%${search}%`)
+    .or(`full_name.ilike.%${search}%, handle.ilike.%${search}%`)
     .neq("user_id", userId)
     .limit(10);
 
@@ -42,6 +41,8 @@ const searchProfiles = async (
   if (!data) {
     return { profiles: null, errors: [] };
   }
+
+  console.log("Profiles: ", data);
 
   return { profiles: data, errors: [] };
 };
