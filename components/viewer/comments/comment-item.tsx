@@ -1,5 +1,5 @@
 import UserAvatar from "@/components/user/user_avatar";
-import { DatabaseSourceComments } from "@/types/sourc_comments.types";
+import { DatabaseSourceComments } from "@/types/source_comments.types";
 import React from "react";
 
 export default function CommentItem({
