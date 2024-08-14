@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 
 import SidebarLink from "@/components/sidebar/sidebar-link";
 import SidebarGroup from "@/components/sidebar/sidebar-group";
@@ -22,6 +21,7 @@ import { cx } from "class-variance-authority";
 
 import { AnimatePresence, motion } from "framer-motion";
 import BeansLogo from "./beans-logo";
+import { useCmdK } from "@/hooks/useCmdK";
 
 const SidebarContext = React.createContext<{
   sidebarMode: "minimized" | "maximized";
@@ -35,6 +35,8 @@ export default function Sidebar({ children }: { children?: React.ReactNode }) {
   const [sidebarMode, setSidebarMode] = React.useState<
     "minimized" | "maximized"
   >("maximized");
+
+  const { setIsOpen } = useCmdK();
 
   const toggleSidebarMode = () => {
     setSidebarMode((prev) =>
@@ -84,7 +86,11 @@ export default function Sidebar({ children }: { children?: React.ReactNode }) {
             </div>
           </div>
           <SidebarGroup>
-            <SidebarLink symbol={<Magnifier3 />} role={"button"} preview>
+            <SidebarLink
+              symbol={<Magnifier3 />}
+              role={"button"}
+              onClick={() => setIsOpen(true)}
+            >
               Search
             </SidebarLink>
             <SidebarLink symbol={<House21 />} href={"/"}>
