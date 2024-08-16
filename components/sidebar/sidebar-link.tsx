@@ -7,9 +7,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useSidebar } from "./sidebar";
 import { AnimatePresence, motion } from "framer-motion";
+import FileShape, { MultipleFileShape } from "../shapes/file-shape";
 
 const sidebarLinkVariants = cva(
-  "px-3 py-2.5 text-sm flex justify-start select-none items-center gap-1.5 rounded-md",
+  "px-3 text-sm flex justify-start select-none items-center gap-1.5 rounded-md",
   {
     variants: {
       variant: {
@@ -82,7 +83,7 @@ export const SidebarLink = ({
       width: "auto",
       opacity: 1,
       display: "block",
-      paddingLeft: symbol ? 10 : 0,
+      paddingLeft: 8,
       transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
     },
     closed: { width: 0, opacity: 0, display: "none", paddingLeft: 0 },
@@ -135,7 +136,7 @@ export const SidebarLink = ({
             </span>
           )
         ) : (
-          <></>
+          <MultipleFileShape active={isActive} />
         )}
         <AnimatePresence>
           {
