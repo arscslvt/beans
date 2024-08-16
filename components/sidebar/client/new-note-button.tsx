@@ -9,30 +9,15 @@ import { useRouter } from "next/navigation";
 import { createNote } from "@/utils/notes/save";
 import { cx } from "class-variance-authority";
 import { NOTE_ROUTE } from "@/utils/constants/routes";
+import { useNote } from "@/hooks/useNote";
 
 const NewNoteButton = ({ shine }: { shine?: boolean }) => {
-  const router = useRouter();
-
-  const handleNewNote = async () => {
-    const { data: note, error } = await createNote({
-      title: "New Note",
-    });
-
-    if (error) {
-      console.error("Error creating note: ", error);
-      return toast.error("Error creating note.");
-    }
-
-    if (!note) return toast.error("Error creating note.");
-
-    toast.success("New note created.");
-    return router.push(`${NOTE_ROUTE}/${note.id}`);
-  };
+  const { newNote } = useNote();
 
   return (
     <SidebarLink
       symbol={<Plus1 fill={shine ? "hsl(var(--accent))" : undefined} />}
-      onClick={handleNewNote}
+      onClick={newNote}
       variant={shine ? "shine" : "default"}
     >
       {shine && (

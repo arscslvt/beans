@@ -10,7 +10,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import FileShape, { MultipleFileShape } from "../shapes/file-shape";
 
 const sidebarLinkVariants = cva(
-  "px-3 text-sm flex justify-start select-none items-center gap-1.5 rounded-md",
+  "px-3 py-1.5 text-sm flex justify-start select-none items-center gap-1.5 rounded-md",
   {
     variants: {
       variant: {

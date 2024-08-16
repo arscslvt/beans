@@ -9,7 +9,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
 import { DatabaseNote } from "@/types/note.types";
 import { shareNoteWith } from "@/utils/notes/share";
 import { toast } from "sonner";
@@ -89,20 +88,6 @@ function ShareNoteDialog({ noteId }: { noteId: DatabaseNote["id"] }) {
 
   return (
     <div className="flex flex-col gap-2">
-      <div
-        className={
-          "flex items-center justify-center px-6 py-6 bg-gradient-to-t from-accent-darker/20 to-accent/10 border border-accent-darker/20 rounded-md shadow-lg shadow-accent/20 text-accent"
-        }
-      >
-        <div className={"flex flex-col gap-3 justify-center"}>
-          <h1 className={"font-bold text-2xl"}>Ready to collab?</h1>
-          <h4 className={"text-sm text-accent/80"}>
-            Collaborate with friends unlocks the power of teamwork and reaching
-            your goals together 💪
-          </h4>
-        </div>
-      </div>
-
       <div className={"relative"}>
         <Input
           placeholder={"Search for a friend in Beans"}

@@ -12,14 +12,16 @@ import {
 } from "../ui/command";
 import { getNotes, getSharedNotes } from "@/utils/notes/get";
 import { DatabaseNote } from "@/types/note.types";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { NOTE_ROUTE } from "@/utils/constants/routes";
+import { useNote } from "@/hooks/useNote";
 
 export default function Cmdk() {
   const { isOpen, setIsOpen } = useCmdK();
   const router = useRouter();
-  const { id: noteId } = useParams<{ id: string }>();
+
+  const { note, newNote, deleteNote, openWriteWithMeDialog } = useNote();
 
   const [notes, setNotes] = React.useState<DatabaseNote[]>([]);
 
@@ -37,18 +39,31 @@ export default function Cmdk() {
     setIsOpen(false);
   };
 
+  const handler = async (fn: () => void) => {
+    setIsOpen(false);
+    await fn();
+  };
+
   return (
     <CommandDialog open={isOpen} onOpenChange={setIsOpen}>
       <CommandInput placeholder="Type a command or search..." />
       <CommandList className="pb-1">
         <CommandEmpty>No results found.</CommandEmpty>
-        {noteId && (
+        {note && (
           <CommandGroup heading="This note">
-            <CommandItem>Invite to collaborate</CommandItem>
-            <CommandItem>Delete this note</CommandItem>
+            <CommandItem onSelect={() => handler(openWriteWithMeDialog)}>
+              Invite to collaborate
+            </CommandItem>
+            <CommandItem onSelect={() => handler(deleteNote)}>
+              Delete this note
+            </CommandItem>
           </CommandGroup>
         )}
+
         <CommandGroup heading="Suggestions">
+          <CommandItem onSelect={() => handler(newNote)}>
+            Create New Note
+          </CommandItem>
           <CommandItem
             onSelect={() => {
               router.push("/");

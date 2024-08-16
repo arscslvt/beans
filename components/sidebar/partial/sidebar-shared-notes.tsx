@@ -35,7 +35,7 @@ export default async function SidebarSharedNotes({
             {shared.note?.title}
             {shared.sharedBy && (
               <div className="text-xs flex items-center gap-1 mt-1">
-                <UserAvatar
+                {/* <UserAvatar
                   className="w-4 h-4"
                   src={shared.sharedBy.avatar ?? ""}
                   fallback={{
@@ -43,9 +43,9 @@ export default async function SidebarSharedNotes({
                     className:
                       "text-[9px] group-data-[active=true]/sidebar-link:bg-accent-foreground/20 group-data-[active=true]/sidebar-link:text-accent-foreground group-data-[active=true]/sidebar-link:border-accent-foreground/50",
                   }}
-                />
+                /> */}
                 <span className="text-muted-foreground font-medium group-data-[active=true]/sidebar-link:text-accent-foreground/60 leading-[10px] pt-[0.7px]">
-                  {shared.sharedBy.full_name ?? shared.sharedBy.handle}
+                  from {shared.sharedBy.full_name ?? shared.sharedBy.handle}
                 </span>
               </div>
             )}
