@@ -17,14 +17,19 @@ import { DynamicDialogHandlerProps } from "@/types/ui/dynamic-dialog.types";
 import ShareNoteDialog from "@/components/dialogs/note/share-note-dialog";
 
 import { NOTE_ROUTE } from "@/utils/constants/routes";
-import { deleteNote as deleteNoteAPI } from "@/utils/notes/delete";
+import {
+  deleteNote as deleteNoteAPI,
+  revokeCollaborating as revokeCollaboratingAPI,
+} from "@/utils/notes/delete";
 import { getNoteById as getNoteByIdAPI } from "@/utils/notes/get";
 import { createNote as createNoteAPI } from "@/utils/notes/save";
+import { DatabaseProfile } from "@/types/profiles.types";
 
 interface NoteContextProps {
   note: DatabaseNote | null;
   newNote: () => void;
   deleteNote: () => void;
+  revokeCollaboration: () => void;
   openWriteWithMeDialog: () => void;
 }
 
@@ -131,9 +136,58 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
     return router.push(`${NOTE_ROUTE}/${note.id}`);
   };
 
+  const revokeCollaboration = async (
+    user?: DatabaseProfile["user_id"],
+    direct?: boolean
+  ) => {
+    if (!note) return;
+
+    if (!direct) {
+      return toast("Are you sure?", {
+        classNames: {},
+        description: "You'll have to be re-invited to collaborate again.",
+        action: (
+          <Button
+            size={"sm"}
+            onClick={() => {
+              revokeCollaboration(user, true);
+              toast.dismiss();
+            }}
+          >
+            100% sure
+          </Button>
+        ),
+        cancel: (
+          <Button
+            size={"sm"}
+            variant={"secondary"}
+            onClick={() => toast.dismiss()}
+          >
+            Nevermind
+          </Button>
+        ),
+      });
+    }
+
+    const data = revokeCollaboratingAPI(note.id);
+
+    toast.promise(data, {
+      loading: "Revoking sharing...",
+      success: "Sharing revoked successfully.",
+      error: "Couldn't revoke sharing. Please try again later.",
+      duration: 4000,
+    });
+  };
+
   return (
     <NoteContext.Provider
-      value={{ note, newNote, deleteNote, openWriteWithMeDialog }}
+      value={{
+        note,
+        newNote,
+        deleteNote,
+        revokeCollaboration,
+        openWriteWithMeDialog,
+      }}
     >
       <DynamicDialog
         open={!!dialog}

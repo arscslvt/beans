@@ -8,15 +8,15 @@ import SidebarGroup, {
 import { Button } from "@/components/ui/button";
 import Handshake1 from "@/components/icons/handshake-1";
 import Trash1 from "@/components/icons/trash-1";
-import { useRouter } from "next/navigation";
 import { useNote } from "@/hooks/useNote";
+import ArrowDoorOut31 from "@/components/icons/arrow-door-out-3-1";
 
 interface NoteActionsProps {
   note: DatabaseNote;
 }
 
 export default function NoteActions({ note }: NoteActionsProps) {
-  const { deleteNote, openWriteWithMeDialog } = useNote();
+  const { deleteNote, openWriteWithMeDialog, revokeCollaboration } = useNote();
 
   return (
     <div>
@@ -28,6 +28,16 @@ export default function NoteActions({ note }: NoteActionsProps) {
           </SidebarFallback>
         }
       >
+        {!note.isMine && (
+          <Button
+            variant={"ghost"}
+            className="justify-start"
+            onClick={revokeCollaboration}
+          >
+            <ArrowDoorOut31 width={"18"} height={"18"} strokewidth={1.3} />
+            Stop collaborating
+          </Button>
+        )}
         {note.isMine && (
           <Button
             variant={"ghost"}
