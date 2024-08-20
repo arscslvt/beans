@@ -5,7 +5,6 @@ import React from "react";
 import Header from "@editorjs/header";
 import ViewerHeader from "@/components/viewer/viewer-header";
 import { DatabaseNote } from "@/types/note.types";
-import { useAuth } from "@clerk/nextjs";
 import { toast } from "sonner";
 import NestedList from "@editorjs/nested-list";
 // @ts-ignore
@@ -13,20 +12,18 @@ import Table from "@editorjs/table";
 // @ts-ignore
 import Marker from "@editorjs/marker";
 // @ts-ignore
-import Underline from "@editorjs/underline";
 import { EditorCore } from "@react-editor-js/core";
 // @ts-ignore
 import Quote from "@editorjs/quote";
-// @ts-ignore
-import Warning from "@editorjs/warning";
 
 import { createReactEditorJS } from "react-editor-js";
-import { createSource, saveEdits, saveSource } from "@/utils/notes/save";
+import { saveEdits } from "@/utils/notes/save";
 import { useMediaQuery } from "usehooks-ts";
 import { MOBILE_MAX_WIDTH } from "@/components/screen-query";
 import { cx } from "class-variance-authority";
 import TemplatesList from "./template/template-list";
 import { OutputData } from "@editorjs/editorjs";
+import Editor from "../editor/editor";
 
 interface ViewerProps {
   note: DatabaseNote;
@@ -98,29 +95,8 @@ function Viewer({ note, source }: ViewerProps) {
         </div>
       )}
 
-      <div className={cx("px-2 viewer-editor")}>
-        <ReactEditorJS
-          onInitialize={handleInitialize}
-          // onReady={handleReady}
-          onChange={handleSaving}
-          defaultValue={source?.content}
-          tools={{
-            header: Header,
-            list: NestedList,
-            table: Table,
-            quote: Quote,
-            Marker: {
-              class: Marker,
-              shortcut: "CMD+SHIFT+M",
-            },
-          }}
-          placeholder={
-            source
-              ? "Start writing your note..."
-              : "Select a template or start writing your note..."
-          }
-          holder={"editorjs"}
-        />
+      <div className={cx("px-4 md:px-12 viewer-editor")}>
+        <Editor />
       </div>
     </div>
   );
