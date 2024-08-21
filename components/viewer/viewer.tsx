@@ -23,7 +23,7 @@ import { MOBILE_MAX_WIDTH } from "@/components/screen-query";
 import { cx } from "class-variance-authority";
 import TemplatesList from "./template/template-list";
 import { OutputData } from "@editorjs/editorjs";
-import EditorImage from "../editor/tools/editor-image";
+import Editor from "../editor/editor";
 
 interface ViewerProps {
   note: DatabaseNote;
@@ -111,31 +111,8 @@ function Viewer({ note, source }: ViewerProps) {
         </CommentsGroup>
       </div> */}
 
-      <div className={cx("px-2 viewer-editor")}>
-        <ReactEditorJS
-          onInitialize={handleInitialize}
-          // onReady={handleReady}
-          onChange={handleSaving}
-          defaultValue={source?.content}
-          tools={{
-            image: EditorImage,
-            header: Header,
-            list: NestedList,
-            table: Table,
-            quote: Quote,
-            Marker: {
-              class: Marker,
-              shortcut: "CMD+SHIFT+M",
-            },
-          }}
-          autofocus
-          placeholder={
-            source
-              ? "Write something or press '/' for commands..."
-              : "Choose a template, start writing or press '/' for commands..."
-          }
-          holder={"editorjs"}
-        />
+      <div className={cx("px-4 md:px-12 viewer-editor")}>
+        <Editor />
       </div>
     </div>
   );
