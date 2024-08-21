@@ -1,11 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Command } from "cmdk";
 import React from "react";
 
+import "@/components/editor/styles/commands/commands.css";
+import { LucideIcon } from "lucide-react";
+
 export interface Command {
+  icon: LucideIcon;
   title: string;
-  icon: React.ReactElement;
+  description?: string;
 }
 
 export interface CommandMenu {
@@ -16,6 +20,8 @@ export interface CommandMenu {
 
 export default function Commands({ items, command, open }: CommandMenu) {
   const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
+  const [query, setQuery] = React.useState<string>("");
+
   const elementRef = React.useRef<HTMLDivElement>(null);
 
   const handleSelect = (item: Command) => {
@@ -83,23 +89,48 @@ export default function Commands({ items, command, open }: CommandMenu) {
   }, [handleKeyDown]);
 
   return (
-    <div
+    <Command
       ref={elementRef}
-      className="border rounded-lg flex flex-col p-1 shadow-md min-w-32"
-      onKeyDown={handleKeyDown}
+      className="border rounded-lg flex flex-col p-1 shadow-md min-w-32 bg-background"
+      onKeyDown={(e) => e.stopPropagation()}
+      id="slash-command-menu"
     >
-      {items.map((item, k) => (
-        <Button
-          variant={k === selectedIndex ? "default" : "ghost"}
-          key={k}
-          onClick={() => handleSelect(item)}
-          className="justify-start px-2"
-        >
-          {item.icon &&
-            React.cloneElement(item.icon, { className: "w-5 h-5 mr-1" })}
-          {item.title}
-        </Button>
-      ))}
-    </div>
+      <Command.Input
+        value={query}
+        onValueChange={setQuery}
+        style={{ display: "none" }}
+      />
+      <Command.List>
+        {items.map((item, index) => {
+          const Icon = item.icon
+            ? React.createElement(item.icon, {
+                className: "w-6 h-6",
+              })
+            : null;
+
+          return (
+            <Command.Item
+              key={index}
+              onSelect={() => handleSelect(item)}
+              className="flex gap-1.5 justify-start items-center px-1 py-1 min-h-10 aria-selected:bg-accent/20 aria-selected:text-accent rounded-md group/cm-item select-none"
+            >
+              {Icon ? (
+                <div className="w-10 h-10 rounded-md border grid place-content-center text-accent bg-background group-aria-selected/cm-item:border-accent/40">
+                  {Icon}
+                </div>
+              ) : undefined}
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">{item.title}</span>
+                {item.description && (
+                  <span className="text-xs text-muted-foreground group-aria-selected/cm-item:text-accent/60">
+                    {item.description}
+                  </span>
+                )}
+              </div>
+            </Command.Item>
+          );
+        })}
+      </Command.List>
+    </Command>
   );
 }

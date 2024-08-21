@@ -4,39 +4,50 @@ import tippy, {
     type Props,
 } from "tippy.js";
 import { Editor, ReactRenderer } from "@tiptap/react";
+import { Heading1, Heading2, Heading3, List, SquareCode } from "lucide-react";
 
-import Commands from "./commands";
+import Commands, { Command } from "./commands";
 import { RefObject } from "react";
 
 export default {
-    items: ({ query }: { query: string }) => {
+    items: ({ query }: { query: string }): Command[] => {
         return [
             {
+                icon: Heading1,
                 title: "Big title",
+                description: "The biggest title you can have",
                 command: ({ editor, range }: { editor: any; range: any }) => {
                     editor.chain().focus().setHeading({ level: 1 }).run();
                 },
             },
             {
+                icon: Heading2,
                 title: "Medium title",
+                description: "Best suitable for paragraph heading",
                 command: ({ editor, range }: { editor: any; range: any }) => {
                     editor.chain().focus().setHeading({ level: 2 }).run();
                 },
             },
             {
+                icon: Heading3,
                 title: "Small title",
+                description: "Minor content heading",
                 command: ({ editor, range }: { editor: any; range: any }) => {
                     editor.chain().focus().setHeading({ level: 3 }).run();
                 },
             },
             {
+                icon: List,
                 title: "Bulleted list",
+                description: "Unordered list",
                 command: ({ editor, range }: { editor: any; range: any }) => {
                     editor.chain().focus().toggleBulletList().run();
                 },
             },
             {
+                icon: SquareCode,
                 title: "Code block",
+                description: "Hightlighted piece of code",
                 command: ({ editor, range }: { editor: any; range: any }) => {
                     editor.chain().focus().setCodeBlock().run();
                 },

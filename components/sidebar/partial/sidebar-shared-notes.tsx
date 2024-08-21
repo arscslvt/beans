@@ -14,8 +14,6 @@ export default function SidebarSharedNotes({
 }: SidebarSharedNotesProps) {
   const { sharedNotes } = useNote();
 
-  console.log("Shared notes: ", sharedNotes);
-
   if (!sharedNotes?.list.length) {
     return <></>;
   }

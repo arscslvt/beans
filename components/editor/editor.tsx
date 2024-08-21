@@ -1,7 +1,12 @@
 "use client";
 
-import React from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
+import React, { forwardRef } from "react";
+import {
+  useEditor,
+  EditorContent,
+  ReactNodeViewRenderer,
+  JSONContent,
+} from "@tiptap/react";
 
 import "./styles/default.css";
 
@@ -12,7 +17,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Dropcursor from "@tiptap/extension-dropcursor";
 import BulletList from "@tiptap/extension-bullet-list";
 import ListItem from "@tiptap/extension-list-item";
-import CodeBlock from "@tiptap/extension-code-block-lowlight";
+import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 
 import css from "highlight.js/lib/languages/css";
 import js from "highlight.js/lib/languages/javascript";
@@ -35,10 +40,13 @@ import HardBreak from "@tiptap/extension-hard-break";
 
 import Command from "@/components/editor/extensions/features/command/commands.extension";
 import suggestion from "./extensions/features/command/suggestion";
+import BubbleMenu from "./extensions/features/bubble-menu/bubble-menu";
+import codeblock from "./components/codeblock";
+import { toast } from "sonner";
 
 interface EditorProps {
-  defaultContent?: string;
-  onChange?: (content: string) => void;
+  readonly defaultContent?: string;
+  readonly onChange?: (content: JSONContent) => void;
 }
 
 const lowlight = createLowlight(common);
@@ -48,62 +56,85 @@ lowlight.register("js", js);
 lowlight.register("ts", ts);
 lowlight.register("html", html);
 
-export default function Editor({ defaultContent, onChange }: EditorProps) {
-  const editor = useEditor({
-    extensions: [
-      Placeholder.configure({
-        placeholder: "Write something or press '/' for commands...",
-      }),
-      Document,
-      Dropcursor,
-      History,
-      TextAlign.configure({
-        types: ["heading", "paragraph"],
-      }),
-      Paragraph.configure({
-        HTMLAttributes: {
-          class: "mb-4",
-        },
-      }),
-      Heading.configure({
-        levels: [1, 2, 3, 4],
-      }),
-      Text.configure({
-        HTMLAttributes: {
-          class: "text-base",
-        },
-      }),
-      BulletList,
-      ListItem,
-      CodeBlock.configure({
-        lowlight,
-      }),
+export const Editor = forwardRef<HTMLDivElement, EditorProps>(
+  ({ defaultContent, onChange, ...rest }, ref) => {
+    const editor = useEditor({
+      extensions: [
+        Placeholder.configure({
+          placeholder: "Write something or press '/' for commands...",
+        }),
+        Document,
+        Dropcursor,
+        History,
+        TextAlign.configure({
+          types: ["heading", "paragraph"],
+        }),
+        Paragraph.configure({
+          HTMLAttributes: {
+            class: "mb-4",
+          },
+        }),
+        Heading.configure({
+          levels: [1, 2, 3, 4],
+        }),
+        Text.configure({
+          HTMLAttributes: {
+            class: "text-base",
+          },
+        }),
+        BulletList,
+        ListItem,
+        CodeBlockLowlight.extend({
+          addNodeView() {
+            return ReactNodeViewRenderer(codeblock);
+          },
+        }).configure({ lowlight }),
 
-      Typography,
-      Bold,
-      Italic,
-      Strike,
-      Underline,
-      Code,
-      Subscript,
-      Superscript,
-      HardBreak,
-      Command.configure({
-        suggestion,
-      }),
-    ],
-    editorProps: {
-      attributes: {
-        class:
-          "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none",
+        Typography,
+        Bold,
+        Italic,
+        Strike,
+        Underline,
+        Code,
+        Subscript,
+        Superscript,
+        HardBreak,
+        Command.configure({
+          suggestion,
+        }),
+      ],
+      editorProps: {
+        attributes: {
+          class:
+            "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none",
+        },
       },
-    },
-    content: defaultContent,
-    immediatelyRender: true,
-    autofocus: true,
-    editable: true,
-    injectCSS: false,
-  });
+      content: defaultContent,
+      autofocus: true,
+      editable: true,
+      injectCSS: false,
+      enableContentCheck: true,
+      onContentError: ({ error }) => {
+        toast.error("There was an error loading note content.", {
+          duration: 10000,
+          description:
+            "If you created this note before 22 August 2024, you may need to recreate it. Sorry for the inconvenience.",
+        });
+      },
+      onUpdate: ({ editor }) => {
+        onChange?.(editor.getJSON());
+      },
+    });
 
-  return <EditorContent editor={editor} />;
-}
+    if (!editor) return null;
+
+    return (
+      <>
+        <BubbleMenu editor={editor} />
+        <EditorContent editor={editor} ref={ref} />
+      </>
+    );
+  }
+);
+
+export default Editor;
