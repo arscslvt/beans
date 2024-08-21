@@ -1,35 +1,66 @@
 import React from "react";
 import { DrawerContent } from "@/components/ui/drawer";
-import { SidebarGroup } from "@/components/sidebar/sidebar";
-import { getNotes, getSharedNotes } from "@/utils/notes/get";
-import Scribble1 from "@/components/icons/scribble-1";
-import SidebarLink from "@/components/sidebar/sidebar-link";
-import { NOTE_ROUTE } from "@/utils/constants/routes";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { EllipsisIcon } from "lucide-react";
-import NoteDropdown from "@/components/dropdowns/note-dropdown";
+import { SidebarGroup, SidebarLink } from "@/components/sidebar/sidebar";
 import NewNoteButton from "@/components/sidebar/client/new-note-button";
-import SidebarNotes from "../sidebar/partial/sidebar-notes";
-import SidebarSharedNotes from "../sidebar/partial/sidebar-shared-notes";
+
+import { DatabaseNote } from "@/types/note.types";
+import { getNotes, getSharedNotes } from "@/utils/notes/get";
+import SidebarLinkDropdown from "../sidebar/client/siderbar-link-dropdown";
 
 interface NotesDrawerProps {
   children?: React.ReactNode;
   asChild?: boolean;
 }
 
-export default async function NotesDrawer({}: NotesDrawerProps) {
+export default function NotesDrawer({}: NotesDrawerProps) {
+  const [sharedNotes, setSharedNotes] = React.useState<DatabaseNote[]>([]);
+  const [notes, setNotes] = React.useState<DatabaseNote[]>([]);
+
+  React.useEffect(() => {
+    getNotes().then((notes) => {
+      setNotes(notes.data ?? []);
+    });
+
+    getSharedNotes().then((sharedNotes) => {
+      const _t =
+        sharedNotes.notes
+          ?.filter((note) => note.note !== null)
+          .map((note) => note.note) ?? [];
+      setSharedNotes(_t as DatabaseNote[]);
+    });
+  }, []);
+
   return (
     <DrawerContent className="pb-3">
       <SidebarGroup>
         <NewNoteButton />
       </SidebarGroup>
 
-      <SidebarSharedNotes className="py-0" />
-      <SidebarNotes className="py-0" />
+      {!!sharedNotes.length && (
+        <SidebarGroup title="Shared">
+          {sharedNotes.map((note) => (
+            <SidebarLink trailing={<SidebarLinkDropdown note={note} />}>
+              {note.title}
+            </SidebarLink>
+          ))}
+        </SidebarGroup>
+      )}
+
+      <SidebarGroup
+        title="Notes"
+        className="py-0"
+        fallback={
+          <span className="text-sm text-muted-foreground">
+            You don't have any notes yet. Click the button above to create one.
+          </span>
+        }
+      >
+        {notes.map((note) => (
+          <SidebarLink trailing={<SidebarLinkDropdown note={note} />}>
+            {note.title}
+          </SidebarLink>
+        ))}
+      </SidebarGroup>
     </DrawerContent>
   );
 }

@@ -1,29 +1,26 @@
-"use server";
+"use client";
+
 import React from "react";
 import SidebarGroup, { SidebarGroupProps } from "../sidebar-group";
-import { getSharedNotes } from "@/utils/notes/get";
 import SidebarLink from "../sidebar-link";
 import { NOTE_ROUTE } from "@/utils/constants/routes";
 import SidebarLinkDropdown from "../client/siderbar-link-dropdown";
-import UserAvatar from "@/components/user/user_avatar";
+import { useNote } from "@/hooks/useNote";
 
 interface SidebarSharedNotesProps extends SidebarGroupProps {}
 
-export default async function SidebarSharedNotes({
+export default function SidebarSharedNotes({
   ...props
 }: SidebarSharedNotesProps) {
-  const { notes: shared_notes, error: shared_notes_error } =
-    await getSharedNotes();
+  const { sharedNotes } = useNote();
 
-  console.log("Shared notes: ", shared_notes);
-
-  if (!shared_notes || !shared_notes?.length) {
+  if (!sharedNotes?.list.length) {
     return <></>;
   }
 
   return (
     <SidebarGroup title={"Shared"} {...props}>
-      {shared_notes
+      {sharedNotes.list
         ?.filter((shared) => shared.note)
         .map((shared, i) => (
           <SidebarLink
@@ -35,15 +32,6 @@ export default async function SidebarSharedNotes({
             {shared.note?.title}
             {shared.sharedBy && (
               <div className="text-xs flex items-center gap-1 mt-1">
-                {/* <UserAvatar
-                  className="w-4 h-4"
-                  src={shared.sharedBy.avatar ?? ""}
-                  fallback={{
-                    display: shared.sharedBy.full_name?.[0] ?? "",
-                    className:
-                      "text-[9px] group-data-[active=true]/sidebar-link:bg-accent-foreground/20 group-data-[active=true]/sidebar-link:text-accent-foreground group-data-[active=true]/sidebar-link:border-accent-foreground/50",
-                  }}
-                /> */}
                 <span className="text-muted-foreground font-medium group-data-[active=true]/sidebar-link:text-accent-foreground/60 leading-[10px] pt-[0.7px]">
                   from {shared.sharedBy.full_name ?? shared.sharedBy.handle}
                 </span>

@@ -4,7 +4,6 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import AuthPage from "@/app/auth/page";
 import { isMobileDevice } from "@/utils/device";
 import Menubar from "@/components/menubar/menubar";
-import BeansLogo from "@/components/sidebar/beans-logo";
 import SidebarNotes from "@/components/sidebar/partial/sidebar-notes";
 import SidebarSharedNotes from "@/components/sidebar/partial/sidebar-shared-notes";
 import { SidebarLoadingWrapper } from "@/components/sidebar/sidebar-group";
@@ -27,13 +26,13 @@ export default function MainLayout({
               <Menubar />
             ) : (
               <Sidebar>
-                <SidebarLoadingWrapper>
-                  <SidebarSharedNotes />
-                </SidebarLoadingWrapper>
+                {/* <SidebarLoadingWrapper> */}
+                <SidebarSharedNotes />
+                {/* </SidebarLoadingWrapper> */}
 
-                <SidebarLoadingWrapper>
-                  <SidebarNotes />
-                </SidebarLoadingWrapper>
+                {/* <SidebarLoadingWrapper> */}
+                <SidebarNotes />
+                {/* </SidebarLoadingWrapper> */}
               </Sidebar>
             )}
             <div className="flex-1 flex flex-col sm:flex-row p-0 sm:p-2 sm:pl-0">

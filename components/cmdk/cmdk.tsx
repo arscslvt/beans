@@ -21,18 +21,14 @@ export default function Cmdk() {
   const { isOpen, setIsOpen } = useCmdK();
   const router = useRouter();
 
-  const { note, newNote, deleteNote, openWriteWithMeDialog } = useNote();
-
-  const [notes, setNotes] = React.useState<DatabaseNote[]>([]);
-
-  const memoizedNotes = useMemo(() => getNotes(), []);
-  const memoizedSharedNotes = useMemo(() => getSharedNotes(), []);
-
-  React.useEffect(() => {
-    memoizedNotes.then((fetchedNotes) => {
-      setNotes(fetchedNotes?.data ?? []);
-    });
-  }, [memoizedNotes]);
+  const {
+    note,
+    notes,
+    sharedNotes,
+    newNote,
+    deleteNote,
+    openWriteWithMeDialog,
+  } = useNote();
 
   const openNote = (note: DatabaseNote) => {
     router.push(`${NOTE_ROUTE}/${note.id}`);
@@ -88,9 +84,24 @@ export default function Cmdk() {
         </CommandGroup>
 
         <CommandGroup heading="Notes">
-          {notes.map((note) => (
+          {notes.list.map((note) => (
             <CommandItem key={note.id} onSelect={() => openNote(note)}>
               {note.title}
+            </CommandItem>
+          ))}
+        </CommandGroup>
+
+        <CommandGroup heading="Shared Notes">
+          {sharedNotes.list.map((shared, i) => (
+            <CommandItem
+              key={i}
+              onSelect={() => shared.note && openNote(shared.note)}
+              className="flex flex-col items-start group/cm-item"
+            >
+              {shared.note?.title}
+              <span className="text-xs font-medium text-muted-foreground group-aria-selected/cm-item:text-accent-foreground/60">
+                with {shared.sharedBy?.full_name ?? shared.sharedBy?.handle}
+              </span>
             </CommandItem>
           ))}
         </CommandGroup>

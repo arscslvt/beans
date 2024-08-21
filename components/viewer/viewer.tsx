@@ -2,31 +2,17 @@
 
 import { DatabaseSource } from "@/types/source.types";
 import React from "react";
-import Header from "@editorjs/header";
 import ViewerHeader from "@/components/viewer/viewer-header";
 import { DatabaseNote } from "@/types/note.types";
-import { useAuth } from "@clerk/nextjs";
 import { toast } from "sonner";
-import NestedList from "@editorjs/nested-list";
-// @ts-ignore
-import Table from "@editorjs/table";
-// @ts-ignore
-import Marker from "@editorjs/marker";
-// @ts-ignore
-import Underline from "@editorjs/underline";
-import { EditorCore } from "@react-editor-js/core";
-// @ts-ignore
-import Quote from "@editorjs/quote";
-// @ts-ignore
-import Warning from "@editorjs/warning";
-
-import { createReactEditorJS } from "react-editor-js";
-import { createSource, saveEdits, saveSource } from "@/utils/notes/save";
+import { saveEdits } from "@/utils/notes/save";
 import { useMediaQuery } from "usehooks-ts";
 import { MOBILE_MAX_WIDTH } from "@/components/screen-query";
 import { cx } from "class-variance-authority";
 import TemplatesList from "./template/template-list";
-import { OutputData } from "@editorjs/editorjs";
+import Editor from "../editor/editor";
+import { JSONContent } from "@tiptap/react";
+import loadash from "lodash";
 
 interface ViewerProps {
   note: DatabaseNote;
@@ -35,32 +21,17 @@ interface ViewerProps {
 
 function Viewer({ note, source }: ViewerProps) {
   const isMobile = useMediaQuery(`(max-width: ${MOBILE_MAX_WIDTH}px)`);
+  const editorRef = React.useRef<HTMLDivElement>(null);
 
-  const ReactEditorJS = createReactEditorJS();
+  const [content, setContent] = React.useState<JSONContent>(source?.content);
 
-  const editorCore = React.useRef<EditorCore | null>(null);
+  const handleSaving = async (content: JSONContent) => {
+    if (!editorRef.current) return;
 
-  const handleInitialize = React.useCallback(
-    (instance: EditorCore) => {
-      editorCore.current = instance;
-    },
-    [editorCore.current]
-  );
-
-  const handleReady = React.useCallback(() => {
-    if (!editorCore.current) return;
-    const editor = editorCore.current;
-  }, [editorCore.current]);
-
-  const handleSaving = async () => {
-    if (!editorCore.current) return;
-
-    const savedData = await editorCore.current.save();
-
-    console.log("Editor data: ", savedData);
+    console.log("Editor data: ", content);
 
     const { data, error } = await saveEdits(note.id, {
-      content: savedData,
+      content: JSON.parse(JSON.stringify(content)),
     });
 
     if (error) {
@@ -71,18 +42,36 @@ function Viewer({ note, source }: ViewerProps) {
     console.log("Saved note source: ", data);
   };
 
-  const handleTemplate = async (data: OutputData) => {
-    if (!editorCore.current) return;
+  const handleTemplate = async (data: JSONContent) => {
+    if (!editorRef.current) return;
 
-    try {
-      await editorCore.current.clear();
-    } catch (e) {}
+    // try {
+    //   await editorRef.current.clear();
+    // } catch (e) {}
 
-    await editorCore.current.render(data);
+    // await editorCore.current.render(data);
   };
 
+  React.useEffect(() => {
+    if (source?.content) {
+      setContent(source.content);
+    }
+  }, [source]);
+
+  React.useEffect(() => {
+    if (content === source?.content) return;
+
+    const update = loadash.debounce(handleSaving, 1000);
+
+    const interval = setTimeout(() => {
+      update(content);
+    }, 800);
+
+    return () => clearTimeout(interval);
+  }, [content]);
+
   return (
-    <div>
+    <div className="relative z-30">
       <ViewerHeader
         title={note?.title || ""}
         description={note?.description ?? undefined}
@@ -98,28 +87,11 @@ function Viewer({ note, source }: ViewerProps) {
         </div>
       )}
 
-      <div className={cx("px-2 viewer-editor")}>
-        <ReactEditorJS
-          onInitialize={handleInitialize}
-          // onReady={handleReady}
-          onChange={handleSaving}
-          defaultValue={source?.content}
-          tools={{
-            header: Header,
-            list: NestedList,
-            table: Table,
-            quote: Quote,
-            Marker: {
-              class: Marker,
-              shortcut: "CMD+SHIFT+M",
-            },
-          }}
-          placeholder={
-            source
-              ? "Start writing your note..."
-              : "Select a template or start writing your note..."
-          }
-          holder={"editorjs"}
+      <div className={cx("px-4 md:px-12 viewer-editor")}>
+        <Editor
+          defaultContent={source?.content}
+          ref={editorRef}
+          onChange={(content) => setContent(content)}
         />
       </div>
     </div>

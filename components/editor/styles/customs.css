@@ -1,0 +1,7 @@
+@tailwind utilities;
+
+.cdx-block .image-block {
+  @apply flex;
+  @apply w-full;
+  @apply justify-center;
+}

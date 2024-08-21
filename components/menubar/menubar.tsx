@@ -1,11 +1,16 @@
+"use client";
+
 import React from "react";
-import StackPerspective3 from "@/components/icons/stack-perspective-3";
-import User3 from "@/components/icons/user-3";
+
 import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
 import NotesDrawer from "@/components/drawers/notes-drawer";
 import { MenubarItem } from "./menubar-item";
+import Magnifier1 from "../icons/magnifier-1";
+import StackPerspective1 from "../icons/stack-perspective-1";
+import { useCmdK } from "@/hooks/useCmdK";
 
 function Menubar() {
+  const { setIsOpen } = useCmdK();
   return (
     <div
       className={
@@ -20,13 +25,19 @@ function Menubar() {
         <Drawer>
           <DrawerTrigger asChild>
             <MenubarItem
-              icon={<StackPerspective3 />}
+              icon={<StackPerspective1 />}
               label={"Notes"}
               href={"/"}
             />
           </DrawerTrigger>
           <NotesDrawer />
         </Drawer>
+        <MenubarItem
+          icon={<Magnifier1 />}
+          label={"Search"}
+          href={"/"}
+          onClick={() => setIsOpen(true)}
+        />
       </div>
     </div>
   );

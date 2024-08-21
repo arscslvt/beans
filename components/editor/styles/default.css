@@ -1,0 +1,42 @@
+@tailwind utilities;
+
+.tiptap p.is-empty::before {
+  @apply text-muted-foreground;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap h1,
+.tiptap h2,
+.tiptap h3,
+.tiptap h4 {
+  @apply mt-2 mb-1;
+  @apply font-bold;
+}
+
+.tiptap h1 {
+  @apply text-2xl;
+}
+
+.tiptap h2 {
+  @apply text-xl;
+}
+
+.tiptap h3 {
+  @apply text-lg;
+}
+
+.tiptap h4 {
+  @apply text-base;
+}
+
+.tiptap ul {
+  @apply list-disc;
+  @apply ml-4 mb-4;
+}
+
+.tiptap ul li p {
+  @apply mb-1.5;
+}
