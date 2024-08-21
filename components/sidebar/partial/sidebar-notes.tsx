@@ -1,21 +1,28 @@
-"use server";
+"use client";
 
-import { getNotes } from "@/utils/notes/get";
 import React from "react";
-import SidebarGroup, { SidebarGroupProps } from "../sidebar-group";
+import SidebarGroup, {
+  SidebarGroupProps,
+  SidebarLoadingFallback,
+} from "../sidebar-group";
 import Scribble1 from "@/components/icons/scribble-1";
 import SidebarLink from "../sidebar-link";
-import { NOTE_ROUTE } from "@/utils/constants/routes";
 import SidebarLinkDropdown from "../client/siderbar-link-dropdown";
+import { useNote } from "@/hooks/useNote";
+import { NOTE_ROUTE } from "@/utils/constants/routes";
 
 interface SidebarNotesProps extends SidebarGroupProps {}
 
-export default async function SidebarNotes({ ...props }: SidebarNotesProps) {
-  const { data: notes } = await getNotes();
+export default function SidebarNotes({ ...props }: SidebarNotesProps) {
+  const { notes } = useNote();
+
+  if (notes.loading) {
+    return <SidebarLoadingFallback />;
+  }
 
   return (
     <SidebarGroup title={"Recent"} {...props}>
-      {!notes?.length && (
+      {!notes?.list.length && (
         <div className={"flex items-start gap-2 pt-2 px-1"}>
           <span className={"text-accent"}>
             <Scribble1 width={"1.3em"} height={"1.3em"} strokewidth={1.6} />
@@ -28,7 +35,7 @@ export default async function SidebarNotes({ ...props }: SidebarNotesProps) {
           </div>
         </div>
       )}
-      {notes?.map((note) => (
+      {notes?.list.map((note) => (
         <SidebarLink
           symbol={note.emoji ?? undefined}
           key={note.id}

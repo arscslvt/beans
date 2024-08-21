@@ -1,4 +1,5 @@
-import { Metadata } from "next";
+"use client";
+
 import React from "react";
 
 export default function Page() {

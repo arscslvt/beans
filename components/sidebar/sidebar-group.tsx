@@ -1,3 +1,5 @@
+"use client";
+
 import React, { Suspense } from "react";
 import { cx } from "class-variance-authority";
 
@@ -84,7 +86,7 @@ export const SidebarFallback = ({
   );
 };
 
-const SidebarLoadingFallback = () => {
+export const SidebarLoadingFallback = () => {
   return (
     <div className="flex flex-col gap-2 px-2 py-3">
       <div className="pb-1 pt-2">

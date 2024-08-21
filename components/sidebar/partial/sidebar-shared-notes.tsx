@@ -1,29 +1,28 @@
-"use server";
+"use client";
 
 import React from "react";
 import SidebarGroup, { SidebarGroupProps } from "../sidebar-group";
-import { getSharedNotes } from "@/utils/notes/get";
 import SidebarLink from "../sidebar-link";
 import { NOTE_ROUTE } from "@/utils/constants/routes";
 import SidebarLinkDropdown from "../client/siderbar-link-dropdown";
+import { useNote } from "@/hooks/useNote";
 
 interface SidebarSharedNotesProps extends SidebarGroupProps {}
 
-export default async function SidebarSharedNotes({
+export default function SidebarSharedNotes({
   ...props
 }: SidebarSharedNotesProps) {
-  const { notes: shared_notes, error: shared_notes_error } =
-    await getSharedNotes();
+  const { sharedNotes } = useNote();
 
-  console.log("Shared notes: ", shared_notes);
+  console.log("Shared notes: ", sharedNotes);
 
-  if (!shared_notes || !shared_notes?.length) {
+  if (!sharedNotes?.list.length) {
     return <></>;
   }
 
   return (
     <SidebarGroup title={"Shared"} {...props}>
-      {shared_notes
+      {sharedNotes.list
         ?.filter((shared) => shared.note)
         .map((shared, i) => (
           <SidebarLink

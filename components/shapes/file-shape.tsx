@@ -33,23 +33,23 @@ export default function FileShape({ active, ...props }: FileShapeProps) {
       <span
         className={cx(
           "h-5 min-w-4 bg-white border-[1px] rounded-[2px] flex flex-col pt-[2px] px-[2px] gap-[1px] transition-all",
-          active ? "border-accent/30" : "border-border"
+          active ? "border-accent/30" : "border-foreground/30"
         )}
       >
         <span
           className={cx(
             "w-full h-[1px] rounded-full",
-            active ? "bg-accent" : "bg-border"
+            active ? "bg-accent" : "bg-foreground/30"
           )}
         ></span>
         <span
           className={cx(
             "w-2/3 h-[1px] rounded-full",
-            active ? "bg-accent" : "bg-border"
+            active ? "bg-accent" : "bg-foreground/30"
           )}
         ></span>
-        <span className="w-full h-[1px] rounded-full bg-border mt-[2px]"></span>
-        <span className="w-1/3 h-[1px] rounded-full bg-border"></span>
+        <span className="w-full h-[1px] rounded-full bg-foreground/30 mt-[2px]"></span>
+        <span className="w-1/3 h-[1px] rounded-full bg-foreground/30"></span>
       </span>
     </span>
   );

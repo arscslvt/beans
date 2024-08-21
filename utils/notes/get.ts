@@ -35,7 +35,8 @@ const getNotes = async (props?: GetProps): Promise<GetNotesResponse> => {
     .select(`*`)
     .eq("created_by", userId)
     .limit(limit)
-    .range((page - 1) * limit, page * limit);
+    .range((page - 1) * limit, page * limit)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("Error fetching notes: ", error);
@@ -103,12 +104,14 @@ const getNoteById = async (
   };
 };
 
+export type SharedNoteResponse = {
+  note: DatabaseNote | null;
+  sharedBy: DatabaseProfile | null;
+  isMine: boolean;
+};
+
 interface GetSharedNotesResponse {
-  notes: {
-    note: DatabaseNote | null;
-    sharedBy: DatabaseProfile | null;
-    isMine: boolean;
-  }[] | null;
+  notes: SharedNoteResponse[];
   error: any[] | null;
 }
 
@@ -121,7 +124,7 @@ const getSharedNotes = async (
   const { userId } = auth();
 
   if (!userId) {
-    return { notes: null, error: ["User not authenticated"] };
+    return { notes: [], error: ["User not authenticated"] };
   }
 
   const supabase = createClient({
@@ -141,11 +144,11 @@ const getSharedNotes = async (
 
   if (error) {
     console.error("Error fetching shared notes: ", error);
-    return { notes: null, error: [error] };
+    return { notes: [], error: [error] };
   }
 
   if (!notes) {
-    return { notes: null, error: null };
+    return { notes: [], error: null };
   }
 
   return {

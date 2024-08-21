@@ -21,12 +21,29 @@ import {
   deleteNote as deleteNoteAPI,
   revokeCollaborating as revokeCollaboratingAPI,
 } from "@/utils/notes/delete";
-import { getNoteById as getNoteByIdAPI } from "@/utils/notes/get";
+import {
+  getNoteById as getNoteByIdAPI,
+  getNotes as getNotesAPI,
+  getSharedNotes,
+  SharedNoteResponse,
+} from "@/utils/notes/get";
 import { createNote as createNoteAPI } from "@/utils/notes/save";
 import { DatabaseProfile } from "@/types/profiles.types";
 
+type ContextNotes = {
+  list: DatabaseNote[];
+  loading: boolean;
+};
+
+type ContextSharedNotes = {
+  list: SharedNoteResponse[];
+  loading: boolean;
+};
+
 interface NoteContextProps {
   note: DatabaseNote | null;
+  notes: ContextNotes;
+  sharedNotes: ContextSharedNotes;
   newNote: () => void;
   deleteNote: () => void;
   revokeCollaboration: () => void;
@@ -38,7 +55,16 @@ export const NoteContext = React.createContext<NoteContextProps>(
 );
 
 function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
+  const [notes, setNotes] = React.useState<ContextNotes>({
+    list: [],
+    loading: true,
+  });
+  const [sharedNotes, setSharedNotes] = React.useState<ContextSharedNotes>({
+    list: [],
+    loading: true,
+  });
   const [note, setNote] = React.useState<DatabaseNote | null>(null);
+
   const [dialog, setDialog] = React.useState<DynamicDialogHandlerProps | null>(
     null
   );
@@ -52,11 +78,71 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
     setNote(note ?? null);
   };
 
+  /**
+   * Fetch all notes of authenticated user from the database
+   * @param page - Page number to fetch
+   * @param limit - Number of notes to fetch
+   * @returns {Promise<void>}
+   */
+  const fetchNotes = async ({
+    page = 1,
+    limit = 10,
+  }: {
+    page: number;
+    limit: number;
+  }): Promise<void> => {
+    const { data, error } = await getNotesAPI({ page, limit });
+
+    if (error) {
+      console.error("Error fetching notes: ", error);
+
+      toast.error("Error fetching notes.", {
+        description: "Please try again later or send a feedback.",
+      });
+
+      return setNotes({ list: [], loading: false });
+    }
+
+    return setNotes({ list: data ?? [], loading: false });
+  };
+
+  /**
+   * Fetch all shared notes of authenticated user from the database
+   * @param page - Page number to fetch
+   * @param limit - Number of notes to fetch
+   * @returns {Promise<void>}
+   */
+  const fetchSharedNotes = async ({
+    page = 1,
+    limit = 10,
+  }: {
+    page: number;
+    limit: number;
+  }): Promise<void> => {
+    const { notes, error } = await getSharedNotes();
+
+    if (error) {
+      console.error("Error fetching shared notes: ", error);
+
+      toast.error("Error fetching shared notes.", {
+        description: "Please try again later or send a feedback.",
+      });
+
+      return setSharedNotes({ list: [], loading: false });
+    }
+
+    return setSharedNotes({ list: notes, loading: false });
+  };
+
+  React.useEffect(() => {
+    fetchNotes({ page: 1, limit: 10 });
+    fetchSharedNotes({ page: 1, limit: 10 });
+  }, []);
+
   React.useEffect(() => {
     if (!noteId) {
       return setNote(null);
     }
-
     fetchNote();
   }, [noteId]);
 
@@ -99,6 +185,11 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
       duration: 4000,
     });
 
+    setNotes({
+      list: notes.list.filter((n) => n.id !== note.id),
+      loading: false,
+    });
+
     router.push("/");
   };
 
@@ -121,19 +212,21 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
   };
 
   const newNote = async () => {
-    const { data: note, error } = await createNoteAPI({
+    const { data: createdNote, error } = await createNoteAPI({
       title: "New Note",
     });
+
+    createdNote &&
+      setNotes({ list: [createdNote, ...notes.list], loading: false });
 
     if (error) {
       console.error("Error creating note: ", error);
       return toast.error("Error creating note.");
     }
 
-    if (!note) return toast.error("Error creating note.");
+    if (!createdNote) return toast.error("Error creating note.");
 
-    toast.success("New note created.");
-    return router.push(`${NOTE_ROUTE}/${note.id}`);
+    return router.push(`${NOTE_ROUTE}/${createdNote.id}`);
   };
 
   const revokeCollaboration = async (
@@ -183,6 +276,8 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
     <NoteContext.Provider
       value={{
         note,
+        notes,
+        sharedNotes,
         newNote,
         deleteNote,
         revokeCollaboration,
