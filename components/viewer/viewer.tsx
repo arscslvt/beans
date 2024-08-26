@@ -1,15 +1,13 @@
 "use client";
 
 import { DatabaseSource } from "@/types/source.types";
-import React, { useState } from "react";
+import React from "react";
 import ViewerHeader from "@/components/viewer/viewer-header";
 import { DatabaseNote } from "@/types/note.types";
-import { useMediaQuery } from "usehooks-ts";
-import { MOBILE_MAX_WIDTH } from "@/components/screen-query";
 import { cx } from "class-variance-authority";
 import TemplatesList from "./template/template-list";
 import Editor from "../editor/editor";
-import { JSONContent, useCurrentEditor } from "@tiptap/react";
+import { JSONContent } from "@tiptap/react";
 import loadash from "lodash";
 import { useNote } from "@/hooks/useNote";
 
