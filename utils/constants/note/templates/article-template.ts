@@ -1,171 +1,143 @@
-import { OutputData } from "@editorjs/editorjs";
+import { JSONContent } from "@tiptap/react";
 
-const articleTemplate: OutputData = {
-  blocks: [
-    {
-      "id": "1xAg9H5vOU",
-      "type": "header",
-      "data": {
-        "text": "[Article Title]",
-        "level": 2,
-      },
-    },
-    {
-      "id": "2bJkYI6twl",
-      "type": "header",
-      "data": {
-        "text": "Author: [Author's Name]",
-        "level": 4,
-      },
-    },
-    {
-      "id": "3cKqF0op5y",
-      "type": "header",
-      "data": {
-        "text": "Date: [Insert Date]",
-        "level": 4,
-      },
-    },
-    {
-      "id": "4dRyPKJ5hT",
-      "type": "header",
-      "data": {
-        "text": "1. Introduction",
-        "level": 2,
-      },
-    },
-    {
-      "id": "5eUiMK-29d",
-      "type": "paragraph",
-      "data": {
-        "text": "Briefly summarize the main idea or argument of the article.",
-      },
-    },
-    {
-      "id": "6fVkJ-Fc4M",
-      "type": "header",
-      "data": {
-        "text": "2. Key Points",
-        "level": 2,
-      },
-    },
-    {
-      "id": "7gWYKTakZw",
-      "type": "list",
-      "data": {
-        "style": "unordered",
-        "items": [
-          {
-            "content": "Key Point 1: [Summary]",
-            "items": [],
-          },
-          {
-            "content": "Key Point 2: [Summary]",
-            "items": [],
-          },
-          {
-            "content": "Key Point 3: [Summary]",
-            "items": [],
-          },
-        ],
-      },
-    },
-    {
-      "id": "8hXlNv9dRO",
-      "type": "header",
-      "data": {
-        "text": "3. Supporting Evidence",
-        "level": 2,
-      },
-    },
-    {
-      "id": "9iYLZI4tli",
-      "type": "header",
-      "data": {
-        "text": "Evidence 1:",
-        "level": 3,
-      },
-    },
-    {
-      "id": "10jZaLPI2iS",
-      "type": "paragraph",
-      "data": {
-        "text": "[Quote or Reference from the article]",
-      },
-    },
-    {
-      "id": "11kZfY9uJZw",
-      "type": "header",
-      "data": {
-        "text": "Evidence 2:",
-        "level": 3,
-      },
-    },
-    {
-      "id": "12lZrMI2iT",
-      "type": "paragraph",
-      "data": {
-        "text": "[Quote or Reference from the article]",
-      },
-    },
-    {
-      "id": "13mZsV4tkt",
-      "type": "header",
-      "data": {
-        "text": "4. Analysis",
-        "level": 2,
-      },
-    },
-    {
-      "id": "14nXbJ5trs",
-      "type": "paragraph",
-      "data": {
-        "text":
-          "Discuss the implications of the article's arguments and evidence. What do they mean? How do they support the main idea?",
-      },
-    },
-    {
-      "id": "15oYcV5rFK",
-      "type": "header",
-      "data": {
-        "text": "5. Conclusion",
-        "level": 2,
-      },
-    },
-    {
-      "id": "16pZbL7rMY",
-      "type": "paragraph",
-      "data": {
-        "text":
-          "Summarize the overall conclusions of the article and any final thoughts you have on the topic.",
-      },
-    },
-    {
-      "id": "17qAcm7ktqw",
-      "type": "header",
-      "data": {
-        "text": "6. Further Reading",
-        "level": 2,
-      },
-    },
-    {
-      "id": "18rCbN8rUT",
-      "type": "list",
-      "data": {
-        "style": "unordered",
-        "items": [
-          {
-            "content": "Reference 1: [Title/Author]",
-            "items": [],
-          },
-          {
-            "content": "Reference 2: [Title/Author]",
-            "items": [],
-          },
-        ],
-      },
-    },
-  ],
+const articleTemplate: JSONContent = {
+  "type": "doc",
+  "content": [{
+    "type": "heading",
+    "attrs": { "level": 2, "textAlign": "left" },
+    "content": [{ "text": "[Article Title]", "type": "text" }],
+  }, {
+    "type": "heading",
+    "attrs": { "level": 4, "textAlign": "left" },
+    "content": [{ "text": "Author: [Author's Name]", "type": "text" }],
+  }, {
+    "type": "heading",
+    "attrs": { "level": 4, "textAlign": "left" },
+    "content": [{ "text": "Date: [Insert Date]", "type": "text" }],
+  }, {
+    "type": "heading",
+    "attrs": { "level": 2, "textAlign": "left" },
+    "content": [{ "text": "1. Introduction", "type": "text" }],
+  }, {
+    "type": "paragraph",
+    "attrs": { "textAlign": "left" },
+    "content": [{
+      "text": "Briefly summarize the main idea or argument of the article.",
+      "type": "text",
+    }],
+  }, {
+    "type": "heading",
+    "attrs": { "level": 2, "textAlign": "left" },
+    "content": [{ "text": "2. Key Points", "type": "text" }],
+  }, {
+    "type": "paragraph",
+    "attrs": { "textAlign": "left" },
+    "content": [{ "text": "- ", "type": "text" }, {
+      "text": "Key Point 1:",
+      "type": "text",
+      "marks": [{ "type": "bold" }],
+    }, { "text": " [Summary of key point]", "type": "text" }],
+  }, {
+    "type": "paragraph",
+    "attrs": { "textAlign": "left" },
+    "content": [{ "text": "- ", "type": "text" }, {
+      "text": "Key Point 2:",
+      "type": "text",
+      "marks": [{ "type": "bold" }],
+    }, { "text": " [Summary of key point]", "type": "text" }],
+  }, {
+    "type": "paragraph",
+    "attrs": { "textAlign": "left" },
+    "content": [{ "text": "- ", "type": "text" }, {
+      "text": "Key Point 3:",
+      "type": "text",
+      "marks": [{ "type": "bold" }],
+    }, { "text": " [Summary of key point]", "type": "text" }],
+  }, {
+    "type": "heading",
+    "attrs": { "level": 2, "textAlign": "left" },
+    "content": [{ "text": "3. Supporting Evidence", "type": "text" }],
+  }, {
+    "type": "heading",
+    "attrs": { "level": 3, "textAlign": "left" },
+    "content": [{ "text": "Evidence 1:", "type": "text" }],
+  }, {
+    "type": "paragraph",
+    "attrs": { "textAlign": "left" },
+    "content": [{
+      "text": "- [Quote or reference from the article]",
+      "type": "text",
+    }],
+  }, {
+    "type": "paragraph",
+    "attrs": { "textAlign": "left" },
+    "content": [{
+      "text": "- Explanation: [Explain how this supports the key point]",
+      "type": "text",
+    }],
+  }, {
+    "type": "heading",
+    "attrs": { "level": 3, "textAlign": "left" },
+    "content": [{ "text": "Evidence 2:", "type": "text" }],
+  }, {
+    "type": "paragraph",
+    "attrs": { "textAlign": "left" },
+    "content": [{
+      "text": "- [Quote or reference from the article]",
+      "type": "text",
+    }],
+  }, {
+    "type": "paragraph",
+    "attrs": { "textAlign": "left" },
+    "content": [{
+      "text": "- Explanation: [Explain how this supports the key point]",
+      "type": "text",
+    }],
+  }, {
+    "type": "heading",
+    "attrs": { "level": 2, "textAlign": "left" },
+    "content": [{ "text": "4. Analysis", "type": "text" }],
+  }, {
+    "type": "paragraph",
+    "attrs": { "textAlign": "left" },
+    "content": [{
+      "text":
+        "Discuss the implications of the article's arguments and evidence. What do they mean? How do they support the main idea?",
+      "type": "text",
+    }],
+  }, {
+    "type": "heading",
+    "attrs": { "level": 2, "textAlign": "left" },
+    "content": [{ "text": "5. Conclusion", "type": "text" }],
+  }, {
+    "type": "paragraph",
+    "attrs": { "textAlign": "left" },
+    "content": [{
+      "text":
+        "Summarize the overall conclusions of the article and any final thoughts you have on the topic.",
+      "type": "text",
+    }],
+  }, {
+    "type": "heading",
+    "attrs": { "level": 2, "textAlign": "left" },
+    "content": [{ "text": "6. Further Reading", "type": "text" }],
+  }, {
+    "type": "paragraph",
+    "attrs": { "textAlign": "left" },
+    "content": [{ "text": "- ", "type": "text" }, {
+      "text": "Reference 1:",
+      "type": "text",
+      "marks": [{ "type": "bold" }],
+    }, { "text": " [Title/Author]", "type": "text" }],
+  }, {
+    "type": "paragraph",
+    "attrs": { "textAlign": "left" },
+    "content": [{ "text": "- ", "type": "text" }, {
+      "text": "Reference 2:",
+      "type": "text",
+      "marks": [{ "type": "bold" }],
+    }, { "text": " [Title/Author]", "type": "text" }],
+  }, { "type": "paragraph", "attrs": { "textAlign": "left" } }],
 };
 
 export default articleTemplate;

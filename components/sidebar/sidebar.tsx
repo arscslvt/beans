@@ -22,6 +22,7 @@ import { cx } from "class-variance-authority";
 import { AnimatePresence, motion } from "framer-motion";
 import BeansLogo from "./beans-logo";
 import { useCmdK } from "@/hooks/useCmdK";
+import { useNote } from "@/hooks/useNote";
 
 const SidebarContext = React.createContext<{
   sidebarMode: "minimized" | "maximized";
@@ -35,6 +36,8 @@ export default function Sidebar({ children }: { children?: React.ReactNode }) {
   const [sidebarMode, setSidebarMode] = React.useState<
     "minimized" | "maximized"
   >("maximized");
+
+  const { notes } = useNote();
 
   const { setIsOpen } = useCmdK();
 
@@ -106,7 +109,7 @@ export default function Sidebar({ children }: { children?: React.ReactNode }) {
         </div>
 
         <SidebarGroup className={"!py-0"}>
-          <NewNoteButton />
+          <NewNoteButton shine={!notes.list.length && !notes.loading} />
         </SidebarGroup>
 
         <div className={"flex flex-col gap-2 relative flex-1 overflow-y-auto"}>

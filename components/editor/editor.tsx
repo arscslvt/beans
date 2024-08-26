@@ -6,6 +6,7 @@ import {
   EditorContent,
   ReactNodeViewRenderer,
   JSONContent,
+  Content,
 } from "@tiptap/react";
 
 import "./styles/default.css";
@@ -41,7 +42,7 @@ import HardBreak from "@tiptap/extension-hard-break";
 import Command from "@/components/editor/extensions/features/command/commands.extension";
 import suggestion from "./extensions/features/command/suggestion";
 import BubbleMenu from "./extensions/features/bubble-menu/bubble-menu";
-import codeblock from "./components/codeblock";
+import codeblock from "@/components/editor/components/codeblock";
 import { toast } from "sonner";
 
 interface EditorProps {
@@ -128,10 +129,20 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(
 
     if (!editor) return null;
 
+    // React.useEffect(() => {
+    //   if (!editor) return;
+
+    //   if (defaultContent !== editor.getText()) return;
+
+    //   editor.setOptions({
+    //     content: defaultContent,
+    //   });
+    // }, [editor, defaultContent]);
+
     return (
       <>
         <BubbleMenu editor={editor} />
-        <EditorContent editor={editor} ref={ref} />
+        <EditorContent editor={editor} content={defaultContent} ref={ref} />
       </>
     );
   }

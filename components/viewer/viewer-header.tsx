@@ -47,8 +47,6 @@ const ViewerHeader = ({
   useEffect(() => {
     if (title.trim() === _title.trim()) return;
 
-    // "Mountain Trip" | "Mountain Trip Dog"
-
     const update = loadash.debounce(updateNote, 1000);
 
     const interval = setTimeout(() => {

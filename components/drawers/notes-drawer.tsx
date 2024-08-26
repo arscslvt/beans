@@ -1,11 +1,12 @@
+"use client";
+
 import React from "react";
 import { DrawerContent } from "@/components/ui/drawer";
 import { SidebarGroup, SidebarLink } from "@/components/sidebar/sidebar";
 import NewNoteButton from "@/components/sidebar/client/new-note-button";
 
-import { DatabaseNote } from "@/types/note.types";
-import { getNotes, getSharedNotes } from "@/utils/notes/get";
 import SidebarLinkDropdown from "../sidebar/client/siderbar-link-dropdown";
+import { useNote } from "@/hooks/useNote";
 
 interface NotesDrawerProps {
   children?: React.ReactNode;
@@ -13,22 +14,7 @@ interface NotesDrawerProps {
 }
 
 export default function NotesDrawer({}: NotesDrawerProps) {
-  const [sharedNotes, setSharedNotes] = React.useState<DatabaseNote[]>([]);
-  const [notes, setNotes] = React.useState<DatabaseNote[]>([]);
-
-  React.useEffect(() => {
-    getNotes().then((notes) => {
-      setNotes(notes.data ?? []);
-    });
-
-    getSharedNotes().then((sharedNotes) => {
-      const _t =
-        sharedNotes.notes
-          ?.filter((note) => note.note !== null)
-          .map((note) => note.note) ?? [];
-      setSharedNotes(_t as DatabaseNote[]);
-    });
-  }, []);
+  const { notes, sharedNotes } = useNote();
 
   return (
     <DrawerContent className="pb-3">
@@ -36,11 +22,11 @@ export default function NotesDrawer({}: NotesDrawerProps) {
         <NewNoteButton />
       </SidebarGroup>
 
-      {!!sharedNotes.length && (
+      {!!sharedNotes.list.length && (
         <SidebarGroup title="Shared">
-          {sharedNotes.map((note) => (
-            <SidebarLink trailing={<SidebarLinkDropdown note={note} />}>
-              {note.title}
+          {sharedNotes.list.map((note) => (
+            <SidebarLink trailing={<SidebarLinkDropdown note={note.note!} />}>
+              {note?.note?.title}
             </SidebarLink>
           ))}
         </SidebarGroup>
@@ -55,7 +41,7 @@ export default function NotesDrawer({}: NotesDrawerProps) {
           </span>
         }
       >
-        {notes.map((note) => (
+        {notes.list.map((note) => (
           <SidebarLink trailing={<SidebarLinkDropdown note={note} />}>
             {note.title}
           </SidebarLink>

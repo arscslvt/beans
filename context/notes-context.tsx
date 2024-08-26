@@ -27,8 +27,10 @@ import {
   getSharedNotes,
   SharedNoteResponse,
 } from "@/utils/notes/get";
-import { createNote as createNoteAPI } from "@/utils/notes/save";
+import { createNote as createNoteAPI, saveEdits } from "@/utils/notes/save";
 import { DatabaseProfile } from "@/types/profiles.types";
+import { JSONContent } from "@tiptap/react";
+import { DatabaseSource } from "@/types/source.types";
 
 type ContextNotes = {
   list: DatabaseNote[];
@@ -44,8 +46,10 @@ interface NoteContextProps {
   note: DatabaseNote | null;
   notes: ContextNotes;
   sharedNotes: ContextSharedNotes;
+  isSaving: boolean;
   newNote: () => void;
-  deleteNote: () => void;
+  saveNote: (content: JSONContent) => Promise<void>;
+  deleteNote: (id?: DatabaseNote["id"]) => void;
   revokeCollaboration: () => void;
   openWriteWithMeDialog: () => void;
 }
@@ -63,6 +67,9 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
     list: [],
     loading: true,
   });
+
+  const [isSaving, setIsSaving] = React.useState(false);
+
   const [note, setNote] = React.useState<DatabaseNote | null>(null);
 
   const [dialog, setDialog] = React.useState<DynamicDialogHandlerProps | null>(
@@ -146,7 +153,27 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
     fetchNote();
   }, [noteId]);
 
-  const deleteNote = async () => {
+  const saveNote = async (content: JSONContent): Promise<void> => {
+    if (!note) throw new Error("No note found.");
+
+    setIsSaving(true);
+
+    const { error } = await saveEdits(note.id, {
+      content: JSON.parse(JSON.stringify(content)),
+    });
+
+    if (error) {
+      console.error("Error saving source: ", error);
+      toast.error("Error saving source.");
+
+      setIsSaving(false);
+      throw new Error("Error saving source.");
+    }
+
+    setIsSaving(false);
+  };
+
+  const deleteNote = async (id?: DatabaseNote["id"]) => {
     toast("You sure?", {
       classNames: {},
       description: "This action is irreversible.",
@@ -173,10 +200,10 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
     });
   };
 
-  const requestDeleteNote = async () => {
+  const requestDeleteNote = async (id?: DatabaseNote["id"]) => {
     if (!note) return;
 
-    const data = deleteNoteAPI(note.id);
+    const data = deleteNoteAPI(id ?? note.id);
 
     toast.promise(data, {
       loading: "Deleting note...",
@@ -278,7 +305,9 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
         note,
         notes,
         sharedNotes,
+        isSaving,
         newNote,
+        saveNote,
         deleteNote,
         revokeCollaboration,
         openWriteWithMeDialog,

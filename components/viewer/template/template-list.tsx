@@ -4,18 +4,18 @@ import TemplateButton from "./template-button";
 import BookOpen1 from "@/components/icons/book-open-1";
 import Map1 from "@/components/icons/map-1";
 import PenNib31 from "@/components/icons/pen-nib-3-1";
-import { OutputData } from "@editorjs/editorjs";
 
 import lessonTemplate from "@/utils/constants/note/templates/lesson-template";
 import tripTemplate from "@/utils/constants/note/templates/trip-template";
 import articleTemplate from "@/utils/constants/note/templates/article-template";
+import { JSONContent } from "@tiptap/react";
 
 interface TemplatesListProps {
-  onOuput: (template: OutputData) => void;
+  onOuput: (template: JSONContent) => void;
 }
 
 export default function TemplatesList({ onOuput }: TemplatesListProps) {
-  const handleOutput = (template: OutputData) => {
+  const handleOutput = (template: JSONContent) => {
     onOuput(template);
   };
 

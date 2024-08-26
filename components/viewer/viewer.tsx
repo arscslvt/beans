@@ -1,18 +1,17 @@
 "use client";
 
 import { DatabaseSource } from "@/types/source.types";
-import React from "react";
+import React, { useState } from "react";
 import ViewerHeader from "@/components/viewer/viewer-header";
 import { DatabaseNote } from "@/types/note.types";
-import { toast } from "sonner";
-import { saveEdits } from "@/utils/notes/save";
 import { useMediaQuery } from "usehooks-ts";
 import { MOBILE_MAX_WIDTH } from "@/components/screen-query";
 import { cx } from "class-variance-authority";
 import TemplatesList from "./template/template-list";
 import Editor from "../editor/editor";
-import { JSONContent } from "@tiptap/react";
+import { JSONContent, useCurrentEditor } from "@tiptap/react";
 import loadash from "lodash";
+import { useNote } from "@/hooks/useNote";
 
 interface ViewerProps {
   note: DatabaseNote;
@@ -23,21 +22,18 @@ function Viewer({ note, source }: ViewerProps) {
   const isMobile = useMediaQuery(`(max-width: ${MOBILE_MAX_WIDTH}px)`);
   const editorRef = React.useRef<HTMLDivElement>(null);
 
-  const [content, setContent] = React.useState<JSONContent>(source?.content);
+  const currentEditor = useCurrentEditor();
+
+  const [content, setContent] = React.useState<JSONContent>(
+    source?.content as JSONContent
+  );
+
+  const { saveNote } = useNote();
 
   const handleSaving = async (content: JSONContent) => {
     if (!editorRef.current) return;
 
-    console.log("Editor data: ", content);
-
-    const { data, error } = await saveEdits(note.id, {
-      content: JSON.parse(JSON.stringify(content)),
-    });
-
-    if (error) {
-      console.error("Error saving source: ", error);
-      return toast.error("Error saving source.");
-    }
+    const data = await saveNote(content);
 
     console.log("Saved note source: ", data);
   };
@@ -45,16 +41,16 @@ function Viewer({ note, source }: ViewerProps) {
   const handleTemplate = async (data: JSONContent) => {
     if (!editorRef.current) return;
 
-    // try {
-    //   await editorRef.current.clear();
-    // } catch (e) {}
+    console.log("Current editor: ", currentEditor);
 
-    // await editorCore.current.render(data);
+    currentEditor.editor?.setOptions({
+      content: data,
+    });
   };
 
   React.useEffect(() => {
     if (source?.content) {
-      setContent(source.content);
+      setContent(source.content as JSONContent);
     }
   }, [source]);
 
@@ -89,7 +85,7 @@ function Viewer({ note, source }: ViewerProps) {
 
       <div className={cx("px-4 md:px-12 viewer-editor")}>
         <Editor
-          defaultContent={source?.content}
+          defaultContent={content as unknown as string}
           ref={editorRef}
           onChange={(content) => setContent(content)}
         />

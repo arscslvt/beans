@@ -10,51 +10,12 @@ import { deleteNote, revokeCollaborating } from "@/utils/notes/delete";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
+import { useNote } from "@/hooks/useNote";
 
 const NoteDropdown = ({ id, isMine }: DatabaseNote) => {
   const router = useRouter();
 
-  const requestDeleteNote = async () => {
-    const data = deleteNote(id);
-
-    toast.promise(data, {
-      loading: "Deleting note...",
-      success: "Note deleted successfully.",
-      error: "Couldn't delete note. Please try again later.",
-      duration: 4000,
-    });
-
-    router.push("/");
-  };
-
-  const handleDeleteNote = async (e: Event) => {
-    e.stopPropagation();
-
-    toast("You sure?", {
-      classNames: {},
-      description: "This action is irreversible.",
-      action: (
-        <Button
-          size={"sm"}
-          onClick={() => {
-            requestDeleteNote();
-            toast.dismiss();
-          }}
-        >
-          100% sure
-        </Button>
-      ),
-      cancel: (
-        <Button
-          size={"sm"}
-          variant={"secondary"}
-          onClick={() => toast.dismiss()}
-        >
-          Nevermind
-        </Button>
-      ),
-    });
-  };
+  const { deleteNote } = useNote();
 
   const handleRevokeCollaboration = async (direct?: boolean) => {
     if (!direct) {
@@ -111,7 +72,7 @@ const NoteDropdown = ({ id, isMine }: DatabaseNote) => {
           className={
             "text-destructive hover:!bg-destructive hover:!text-destructive-foreground"
           }
-          onSelect={handleDeleteNote}
+          onSelect={() => deleteNote(id)}
         >
           Delete
         </DropdownMenuItem>

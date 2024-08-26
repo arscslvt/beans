@@ -3,12 +3,7 @@
 import React from "react";
 import SidebarLink from "@/components/sidebar/sidebar-link";
 import Plus1 from "@/components/icons/plus-1";
-import { toast } from "sonner";
-import { useAuth } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
-import { createNote } from "@/utils/notes/save";
 import { cx } from "class-variance-authority";
-import { NOTE_ROUTE } from "@/utils/constants/routes";
 import { useNote } from "@/hooks/useNote";
 
 const NewNoteButton = ({ shine }: { shine?: boolean }) => {
@@ -28,7 +23,7 @@ const NewNoteButton = ({ shine }: { shine?: boolean }) => {
         >
           <div
             className={
-              "z-0 h-52 w-[30px] bg-gradient-to-r from-transparent to-accent animate-spin"
+              "z-0 h-52 w-[20px] bg-gradient-to-r from-transparent to-accent animate-spin"
             }
             style={{
               animationDuration: "3s",
@@ -37,7 +32,7 @@ const NewNoteButton = ({ shine }: { shine?: boolean }) => {
           <div className={"absolute z-10 top-0 left-0 w-full h-full p-[1px]"}>
             <div
               className={
-                "relative z-10 w-full h-full bg-background rounded-md overflow-clip"
+                "relative z-10 w-full h-full bg-background rounded-[4px] overflow-clip"
               }
             >
               <div

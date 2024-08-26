@@ -37,7 +37,7 @@ export default function MainLayout({
             )}
             <div className="flex-1 flex flex-col sm:flex-row p-0 sm:p-2 sm:pl-0">
               {isMobile && <MenubarTop />}
-              <main className="flex-1 flex flex-col rounded-3xl rounded-b-none sm:rounded-md border border-b-0 sm:border shadow-lg overflow-clip bg-background">
+              <main className="flex-1 flex flex-col rounded-3xl rounded-b-none sm:rounded-md border border-b-0 sm:border shadow-inner sm:shadow-lg overflow-clip bg-background">
                 {children}
               </main>
             </div>

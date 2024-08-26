@@ -1,333 +1,230 @@
-import { OutputData } from "@editorjs/editorjs";
+import { JSONContent } from "@tiptap/react";
 
-const lessonTemplate: OutputData = {
-  blocks: [
+const lessonTemplate: JSONContent = {
+  "type": "doc",
+  "content": [
     {
-      "id": "2sFh6v6dOK",
-      "type": "header",
-      "data": {
-        "text": "[Course Title]: [Lesson Topic]",
-        "level": 2,
-      },
+      "type": "heading",
+      "attrs": { "level": 2, "textAlign": "left" },
+      "content": [{ "text": "[Course Title]: [Lesson Topic]", "type": "text" }],
     },
     {
-      "id": "3TIhYI6stj",
-      "type": "header",
-      "data": {
-        "text": "Date: [Insert Date]",
-        "level": 4,
-      },
+      "type": "heading",
+      "attrs": { "level": 4, "textAlign": "left" },
+      "content": [{ "text": "Date: [Insert Date]", "type": "text" }],
+    },
+    { "type": "paragraph", "attrs": { "textAlign": "left" } },
+    {
+      "type": "heading",
+      "attrs": { "level": 2, "textAlign": "left" },
+      "content": [{ "text": "1. Introduction", "type": "text" }],
     },
     {
-      "id": "8XfqF0op4c",
-      "type": "header",
-      "data": {
-        "text": "1. Introduction",
-        "level": 2,
-      },
+      "type": "heading",
+      "attrs": { "level": 3, "textAlign": "left" },
+      "content": [{ "text": "Overview:", "type": "text" }],
     },
     {
-      "id": "hqPYpKE5hY",
-      "type": "header",
-      "data": {
-        "text": "Overview:",
-        "level": 3,
-      },
-    },
-    {
-      "id": "Pc0tri-29d",
       "type": "paragraph",
-      "data": {
+      "attrs": { "textAlign": "left" },
+      "content": [{
         "text": "Briefly summarize the lesson topic.",
-      },
+        "type": "text",
+      }],
     },
     {
-      "id": "LcHkK-Fa4U",
-      "type": "header",
-      "data": {
-        "text": "Objectives:",
-        "level": 3,
-      },
+      "type": "heading",
+      "attrs": { "level": 1, "textAlign": "left" },
+      "content": [{ "text": "Objectives:", "type": "text" }],
     },
     {
-      "id": "LfTYLTFkZw",
-      "type": "list",
-      "data": {
-        "style": "unordered",
-        "items": [
-          {
-            "content": "[Objective 1]",
-            "items": [],
-          },
-          {
-            "content": "[Objective 2]",
-            "items": [],
-          },
-          {
-            "content": "[Objective 3]",
-            "items": [],
-          },
-        ],
-      },
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "- [Objective 1]", "type": "text" }],
     },
     {
-      "id": "4xFh8v9dPO",
-      "type": "header",
-      "data": {
-        "text": "2. Key Concepts",
-        "level": 2,
-      },
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "- [Objective 2]", "type": "text" }],
     },
     {
-      "id": "YhIX9I4tkr",
-      "type": "header",
-      "data": {
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "- [Objective 3]", "type": "text" }],
+    },
+    {
+      "type": "heading",
+      "attrs": { "level": 2, "textAlign": "left" },
+      "content": [{ "text": "2. Key Concepts", "type": "text" }],
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "- ", "type": "text" }, {
         "text": "Concept 1:",
-        "level": 3,
-      },
+        "type": "text",
+        "marks": [{ "type": "bold" }],
+      }, { "text": " ", "type": "text" }],
     },
     {
-      "id": "doHfKPI2jS",
       "type": "paragraph",
-      "data": {
-        "text": "Explanation or definition.",
-      },
-    },
-    {
-      "id": "ekHd7Z4tks",
-      "type": "paragraph",
-      "data": {
-        "text": "Example/Note: [Detail]",
-      },
-    },
-    {
-      "id": "ZhLkIY9sfk",
-      "type": "header",
-      "data": {
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "- ", "type": "text" }, {
         "text": "Concept 2:",
-        "level": 3,
-      },
+        "type": "text",
+        "marks": [{ "type": "bold" }],
+      }, { "text": " ", "type": "text" }],
     },
     {
-      "id": "joGfKQI1jT",
       "type": "paragraph",
-      "data": {
-        "text": "Explanation or definition.",
-      },
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "- ", "type": "text" }, {
+        "text": "Concept 3:",
+        "type": "text",
+        "marks": [{ "type": "bold" }],
+      }, { "text": " ", "type": "text" }],
     },
     {
-      "id": "jkHd8Z5tps",
+      "type": "heading",
+      "attrs": { "level": 2, "textAlign": "left" },
+      "content": [{ "text": "3. Detailed Notes", "type": "text" }],
+    },
+    {
+      "type": "heading",
+      "attrs": { "level": 3, "textAlign": "left" },
+      "content": [{ "text": "Topic 1:", "type": "text" }],
+    },
+    {
       "type": "paragraph",
-      "data": {
-        "text": "Example/Note: [Detail]",
-      },
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "[Add detailed notes here.]", "type": "text" }],
     },
     {
-      "id": "LiY4cU2rPK",
-      "type": "header",
-      "data": {
-        "text": "3. Detailed Notes",
-        "level": 2,
-      },
+      "type": "heading",
+      "attrs": { "level": 3, "textAlign": "left" },
+      "content": [{ "text": "Topic 2:", "type": "text" }],
     },
     {
-      "id": "huFG3I6uLY",
-      "type": "header",
-      "data": {
-        "text": "Section/Subtopic 1:",
-        "level": 3,
-      },
-    },
-    {
-      "id": "koRHI7ktpw",
-      "type": "list",
-      "data": {
-        "style": "unordered",
-        "items": [
-          {
-            "content": "Important points:",
-            "items": [
-              {
-                "content": "[Point 1]",
-                "items": [],
-              },
-              {
-                "content": "[Point 2]",
-                "items": [],
-              },
-            ],
-          },
-          {
-            "content": "Example/Case Study:",
-            "items": [
-              {
-                "content": "[Description]",
-                "items": [],
-              },
-              {
-                "content": "[Outcome]",
-                "items": [],
-              },
-            ],
-          },
-        ],
-      },
-    },
-    {
-      "id": "PiY3fU3tNK",
-      "type": "header",
-      "data": {
-        "text": "4. Diagrams/Visuals",
-        "level": 2,
-      },
-    },
-    {
-      "id": "tuFG4J7vRY",
-      "type": "header",
-      "data": {
-        "text": "[Diagram/Visual 1]:",
-        "level": 3,
-      },
-    },
-    {
-      "id": "qoTHJ9ytqB",
       "type": "paragraph",
-      "data": {
-        "text": "[Description/Explanation]",
-      },
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "[Add detailed notes here.]", "type": "text" }],
     },
     {
-      "id": "UrHQ1I6rZY",
-      "type": "header",
-      "data": {
-        "text": "5. Key Takeaways",
-        "level": 2,
-      },
+      "type": "heading",
+      "attrs": { "level": 2, "textAlign": "left" },
+      "content": [{ "text": "4. Examples", "type": "text" }],
     },
     {
-      "id": "QqTZY9uJWw",
-      "type": "list",
-      "data": {
-        "style": "unordered",
-        "items": [
-          {
-            "content": "Main Takeaway 1: Summary of the key lesson learned.",
-            "items": [],
-          },
-          {
-            "content": "Main Takeaway 2: Summary of the key lesson learned.",
-            "items": [],
-          },
-          {
-            "content": "Main Takeaway 3: Summary of the key lesson learned.",
-            "items": [],
-          },
-        ],
-      },
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "- ", "type": "text" }, {
+        "text": "Example 1:",
+        "type": "text",
+        "marks": [{ "type": "bold" }],
+      }, { "text": " ", "type": "text" }],
     },
     {
-      "id": "hrJK5M8vKY",
-      "type": "header",
-      "data": {
-        "text": "6. Questions & Discussion",
-        "level": 2,
-      },
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{
+        "text": "  - Description: [Brief explanation of the example.]",
+        "type": "text",
+      }],
     },
     {
-      "id": "qqFPY7vOwC",
-      "type": "list",
-      "data": {
-        "style": "unordered",
-        "items": [
-          {
-            "content": "Question 1: Discussion point or query.",
-            "items": [],
-          },
-          {
-            "content": "Question 2: Discussion point or query.",
-            "items": [],
-          },
-        ],
-      },
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "  - Steps:", "type": "text" }],
     },
     {
-      "id": "UqFK8M2qTY",
-      "type": "header",
-      "data": {
-        "text": "7. Additional Resources",
-        "level": 2,
-      },
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "    1. [Step 1]", "type": "text" }],
     },
     {
-      "id": "ztVJK5N8rUZ",
-      "type": "list",
-      "data": {
-        "style": "unordered",
-        "items": [
-          {
-            "content":
-              "Reading 1: Title: [Title of the resource] Link: [Link to resource] Summary: [Brief summary]",
-            "items": [],
-          },
-          {
-            "content":
-              "Reading 2: Title: [Title of the resource] Link: [Link to resource] Summary: [Brief summary]",
-            "items": [],
-          },
-        ],
-      },
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "    2. [Step 2]", "type": "text" }],
     },
     {
-      "id": "zqTLH5M7oQY",
-      "type": "header",
-      "data": {
-        "text": "8. Homework/Assignments",
-        "level": 2,
-      },
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "  ", "type": "text" }],
     },
     {
-      "id": "kvGKP8QvLM",
-      "type": "list",
-      "data": {
-        "style": "unordered",
-        "items": [
-          {
-            "content": "Task 1: Description: [Details of the assignment]",
-            "items": [],
-          },
-          {
-            "content": "Task 2: Description: [Details of the assignment]",
-            "items": [],
-          },
-        ],
-      },
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "- ", "type": "text" }, {
+        "text": "Example 2:",
+        "type": "text",
+        "marks": [{ "type": "bold" }],
+      }, { "text": " ", "type": "text" }],
     },
     {
-      "id": "wuGHJ7yMOZ",
-      "type": "header",
-      "data": {
-        "text": "9. Reflection",
-        "level": 2,
-      },
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{
+        "text": "  - Description: [Brief explanation of the example.]",
+        "type": "text",
+      }],
     },
     {
-      "id": "dvGPY9vOUW",
-      "type": "list",
-      "data": {
-        "style": "unordered",
-        "items": [
-          {
-            "content":
-              "What did I learn today? [Your personal reflections on the lesson]",
-            "items": [],
-          },
-          {
-            "content":
-              "What questions do I still have? [Unresolved queries or areas needing clarification]",
-            "items": [],
-          },
-        ],
-      },
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "  - Steps:", "type": "text" }],
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "    1. [Step 1]", "type": "text" }],
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "    2. [Step 2]", "type": "text" }],
+    },
+    {
+      "type": "heading",
+      "attrs": { "level": 2, "textAlign": "left" },
+      "content": [{ "text": "5. Summary", "type": "text" }],
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{
+        "text": "- Recap the key points discussed in the lesson.",
+        "type": "text",
+      }],
+    },
+    {
+      "type": "heading",
+      "attrs": { "level": 2, "textAlign": "left" },
+      "content": [{ "text": "6. Assignments/Exercises", "type": "text" }],
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "- [Assignment/Exercise 1]", "type": "text" }],
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "- [Assignment/Exercise 2]", "type": "text" }],
+    },
+    {
+      "type": "heading",
+      "attrs": { "level": 2, "textAlign": "left" },
+      "content": [{ "text": "7. Additional Resources", "type": "text" }],
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "- [Resource 1 - Title/Link]", "type": "text" }],
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": "left" },
+      "content": [{ "text": "- [Resource 2 - Title/Link]", "type": "text" }],
     },
   ],
 };

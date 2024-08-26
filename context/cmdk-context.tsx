@@ -33,9 +33,8 @@ export default function CmdKProvider({
 
   return (
     <CmdKContext.Provider value={{ isOpen, setIsOpen }}>
-      {children}
-
       <Cmdk />
+      {children}
     </CmdKContext.Provider>
   );
 }

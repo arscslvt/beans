@@ -27,7 +27,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           {children}
-          <Toaster closeButton={!isMobileDevice()} />
+          <Toaster closeButton={!isMobileDevice()} className="z-[9999]" />
         </body>
       </html>
     </ClerkProvider>
