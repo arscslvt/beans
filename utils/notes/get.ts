@@ -98,7 +98,7 @@ const getNoteById = async (
       ...note,
       isMine: !isShared,
     },
-    sources,
+    sources: sources as DatabaseSource[] ?? [],
     errors,
     isShared,
   };
