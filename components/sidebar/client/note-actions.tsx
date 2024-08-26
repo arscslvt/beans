@@ -52,7 +52,7 @@ export default function NoteActions({ note }: NoteActionsProps) {
           <Button
             variant={"ghost"}
             className={"justify-start"}
-            onClick={deleteNote}
+            onClick={() => deleteNote(note.id)}
           >
             <Trash1 width={"18"} height={"18"} strokewidth={1.3} />
             Delete note
