@@ -8,15 +8,15 @@ import PenNib31 from "@/components/icons/pen-nib-3-1";
 import lessonTemplate from "@/utils/constants/note/templates/lesson-template";
 import tripTemplate from "@/utils/constants/note/templates/trip-template";
 import articleTemplate from "@/utils/constants/note/templates/article-template";
-import { JSONContent } from "@tiptap/react";
+import { JSONContent, useCurrentEditor } from "@tiptap/react";
 
-interface TemplatesListProps {
-  onOuput: (template: JSONContent) => void;
-}
+interface TemplatesListProps {}
 
-export default function TemplatesList({ onOuput }: TemplatesListProps) {
+export default function TemplatesList({}: TemplatesListProps) {
+  const { editor } = useCurrentEditor();
+
   const handleOutput = (template: JSONContent) => {
-    onOuput(template);
+    editor?.commands.setContent(template);
   };
 
   return (

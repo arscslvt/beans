@@ -1,12 +1,14 @@
 "use client";
 
-import React, { forwardRef } from "react";
+import React, { forwardRef, useMemo } from "react";
 import {
   useEditor,
   EditorContent,
   ReactNodeViewRenderer,
   JSONContent,
   Content,
+  EditorProvider,
+  Editor as EditorType,
 } from "@tiptap/react";
 
 import "./styles/default.css";
@@ -43,9 +45,17 @@ import Command from "@/components/editor/extensions/features/command/commands.ex
 import suggestion from "./extensions/features/command/suggestion";
 import BubbleMenu from "./extensions/features/bubble-menu/bubble-menu";
 import codeblock from "@/components/editor/components/codeblock";
+
+import Collaboration from "@tiptap/extension-collaboration";
+import * as Y from "yjs";
+
 import { toast } from "sonner";
+import Collaborate from "./tools/collaborate";
+import { useNote } from "@/hooks/useNote";
 
 interface EditorProps {
+  readonly leading?: React.ReactNode;
+  readonly trailing?: React.ReactNode;
   readonly defaultContent?: string;
   readonly onChange?: (content: JSONContent) => void;
 }
@@ -57,93 +67,97 @@ lowlight.register("js", js);
 lowlight.register("ts", ts);
 lowlight.register("html", html);
 
+const extensions = [
+  Placeholder.configure({
+    placeholder: "Write something or press '/' for commands...",
+  }),
+  Document,
+  Dropcursor,
+  // History,
+  TextAlign.configure({
+    types: ["heading", "paragraph"],
+  }),
+  Paragraph.configure({
+    HTMLAttributes: {
+      class: "mb-4",
+    },
+  }),
+  Heading.configure({
+    levels: [1, 2, 3, 4],
+  }),
+  Text.configure({
+    HTMLAttributes: {
+      class: "text-base",
+    },
+  }),
+  BulletList,
+  ListItem,
+  CodeBlockLowlight.extend({
+    addNodeView() {
+      return ReactNodeViewRenderer(codeblock);
+    },
+  }).configure({ lowlight }),
+
+  Typography,
+  Bold,
+  Italic,
+  Strike,
+  Underline,
+  Code,
+  Subscript,
+  Superscript,
+  HardBreak,
+  Command.configure({
+    suggestion,
+  }),
+];
+
 export const Editor = forwardRef<HTMLDivElement, EditorProps>(
-  ({ defaultContent, onChange, ...rest }, ref) => {
-    const editor = useEditor({
-      extensions: [
-        Placeholder.configure({
-          placeholder: "Write something or press '/' for commands...",
-        }),
-        Document,
-        Dropcursor,
-        History,
-        TextAlign.configure({
-          types: ["heading", "paragraph"],
-        }),
-        Paragraph.configure({
-          HTMLAttributes: {
-            class: "mb-4",
-          },
-        }),
-        Heading.configure({
-          levels: [1, 2, 3, 4],
-        }),
-        Text.configure({
-          HTMLAttributes: {
-            class: "text-base",
-          },
-        }),
-        BulletList,
-        ListItem,
-        CodeBlockLowlight.extend({
-          addNodeView() {
-            return ReactNodeViewRenderer(codeblock);
-          },
-        }).configure({ lowlight }),
+  ({ defaultContent, onChange, leading, trailing, ...rest }, ref) => {
+    const { note } = useNote();
 
-        Typography,
-        Bold,
-        Italic,
-        Strike,
-        Underline,
-        Code,
-        Subscript,
-        Superscript,
-        HardBreak,
-        Command.configure({
-          suggestion,
-        }),
-      ],
-      editorProps: {
-        attributes: {
-          class:
-            "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none",
-        },
-      },
-      content: defaultContent,
-      autofocus: true,
-      editable: true,
-      injectCSS: false,
-      enableContentCheck: true,
-      onContentError: ({ error }) => {
-        toast.error("There was an error loading note content.", {
-          duration: 10000,
-          description:
-            "If you created this note before 22 August 2024, you may need to recreate it. Sorry for the inconvenience.",
-        });
-      },
-      onUpdate: ({ editor }) => {
-        onChange?.(editor.getJSON());
-      },
-    });
+    if (!note) {
+      return null;
+    }
 
-    if (!editor) return null;
-
-    // React.useEffect(() => {
-    //   if (!editor) return;
-
-    //   if (defaultContent !== editor.getText()) return;
-
-    //   editor.setOptions({
-    //     content: defaultContent,
-    //   });
-    // }, [editor, defaultContent]);
+    const doc = new Y.Doc();
 
     return (
-      <>
-        <BubbleMenu editor={editor} />
-        <EditorContent editor={editor} content={defaultContent} ref={ref} />
-      </>
+      <EditorProvider
+        extensions={[
+          ...extensions,
+          // Collaboration.configure({
+          //   document: doc,
+          // }),
+        ]}
+        content={defaultContent}
+        editorProps={{
+          attributes: {
+            class:
+              "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none",
+          },
+        }}
+        autofocus
+        editable
+        injectCSS={false}
+        enableContentCheck
+        onContentError={({ error }) => {
+          toast.error("There was an error loading note content.", {
+            duration: 10000,
+            description:
+              "If you created this note before 22 August 2024, you may need to recreate it. Sorry for the inconvenience.",
+          });
+        }}
+        onUpdate={({ editor }) => {
+          onChange?.(editor.getJSON());
+        }}
+        slotBefore={leading}
+        slotAfter={trailing}
+        {...rest}
+      >
+        {/* <Collaborate content={defaultContent} doc={doc} /> */}
+        <BubbleMenu />
+      </EditorProvider>
     );
   }
 );

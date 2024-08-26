@@ -11,6 +11,9 @@ import { saveNote } from "@/utils/notes/save";
 import { MOBILE_MAX_WIDTH } from "@/components/screen-query";
 import { useMediaQuery } from "usehooks-ts";
 import { cx } from "class-variance-authority";
+import Loader1 from "../icons/loader-1";
+
+import { AnimatePresence, motion } from "framer-motion";
 
 interface ViewerHeaderProps {
   title: string;
@@ -19,6 +22,7 @@ interface ViewerHeaderProps {
 
   lastEdited?: Date;
   lastEditedBy?: string;
+  isSaving?: boolean;
 }
 
 const ViewerHeader = ({
@@ -26,6 +30,7 @@ const ViewerHeader = ({
   title,
   description,
   lastEdited,
+  isSaving,
 }: ViewerHeaderProps) => {
   const isMobile = useMediaQuery(`(max-width: ${MOBILE_MAX_WIDTH}px)`);
 
@@ -82,7 +87,21 @@ const ViewerHeader = ({
           {description && <p className={"text-gray-500"}>description</p>}
         </div>
 
-        <div>
+        <div className="flex items-center h-4">
+          <AnimatePresence>
+            {isSaving && (
+              <motion.div
+                initial={{ opacity: 0, x: -5, width: 0, paddingRight: 0 }}
+                animate={{ opacity: 1, x: 0, width: "auto", paddingRight: 6 }}
+                exit={{ opacity: 0, x: -5, width: 0, paddingRight: 0 }}
+                className="flex items-center justify-center text-accent w-4 h-4"
+              >
+                <div className="animate-spin">
+                  <Loader1 width="12" height="12" strokewidth={2} />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
           {lastEdited ? (
             <p className={"text-xs text-muted-foreground"}>
               Last edited by <span className={"font-semibold"}>you</span>

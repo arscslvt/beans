@@ -1,5 +1,9 @@
 import React from "react";
-import { BubbleMenu as TTBubbleMenu, Editor } from "@tiptap/react";
+import {
+  BubbleMenu as TTBubbleMenu,
+  Editor,
+  useCurrentEditor,
+} from "@tiptap/react";
 import {
   AlignCenter,
   AlignLeft,
@@ -18,7 +22,7 @@ type MarkType = {
   command: (editor: Editor) => void;
 };
 
-export default function BubbleMenu({ editor }: { editor: Editor }) {
+export default function BubbleMenu() {
   const marks: MarkType[] = [
     {
       icon: Bold,
@@ -59,6 +63,10 @@ export default function BubbleMenu({ editor }: { editor: Editor }) {
       command: (editor) => editor.chain().focus().setTextAlign("right"),
     },
   ];
+
+  const { editor } = useCurrentEditor();
+
+  if (!editor) return <></>;
 
   return (
     <TTBubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>

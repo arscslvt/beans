@@ -19,33 +19,16 @@ interface ViewerProps {
 }
 
 function Viewer({ note, source }: ViewerProps) {
-  const isMobile = useMediaQuery(`(max-width: ${MOBILE_MAX_WIDTH}px)`);
-  const editorRef = React.useRef<HTMLDivElement>(null);
-
-  const currentEditor = useCurrentEditor();
-
   const [content, setContent] = React.useState<JSONContent>(
     source?.content as JSONContent
   );
 
-  const { saveNote } = useNote();
+  const { saveNote, isSaving } = useNote();
 
   const handleSaving = async (content: JSONContent) => {
-    if (!editorRef.current) return;
-
     const data = await saveNote(content);
 
     console.log("Saved note source: ", data);
-  };
-
-  const handleTemplate = async (data: JSONContent) => {
-    if (!editorRef.current) return;
-
-    console.log("Current editor: ", currentEditor);
-
-    currentEditor.editor?.setOptions({
-      content: data,
-    });
   };
 
   React.useEffect(() => {
@@ -55,7 +38,16 @@ function Viewer({ note, source }: ViewerProps) {
   }, [source]);
 
   React.useEffect(() => {
-    if (content === source?.content) return;
+    console.log("Content: ", content);
+    console.log("Source: ", source?.content);
+
+    if (!content || !source?.content) return;
+    if (JSON.stringify(content) === JSON.stringify(source.content)) {
+      console.log("Content is the SAME as source content.");
+      return;
+    }
+
+    console.log("Content is DIFFERENT from source content.");
 
     const update = loadash.debounce(handleSaving, 1000);
 
@@ -75,18 +67,19 @@ function Viewer({ note, source }: ViewerProps) {
           source?.last_edited_at ? new Date(source.last_edited_at) : undefined
         }
         note={note}
+        isSaving={isSaving}
       />
-
-      {!source && (
-        <div className="pt-3 pb-3 px-4 md:px-16">
-          <TemplatesList onOuput={handleTemplate} />
-        </div>
-      )}
 
       <div className={cx("px-4 md:px-12 viewer-editor")}>
         <Editor
+          leading={
+            !source && (
+              <div className="pt-3 pb-3 px-4">
+                <TemplatesList />
+              </div>
+            )
+          }
           defaultContent={content as unknown as string}
-          ref={editorRef}
           onChange={(content) => setContent(content)}
         />
       </div>

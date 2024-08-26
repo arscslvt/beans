@@ -84,7 +84,11 @@ export default function Cmdk() {
         {!!notes.list.length && (
           <CommandGroup heading="Notes">
             {notes.list.map((note) => (
-              <CommandItem key={note.id} onSelect={() => openNote(note)}>
+              <CommandItem
+                key={note.id}
+                value={`${note?.title}, ${note?.id}`}
+                onSelect={() => openNote(note)}
+              >
                 {note.title}
               </CommandItem>
             ))}
@@ -95,9 +99,10 @@ export default function Cmdk() {
           <CommandGroup heading="Shared Notes">
             {sharedNotes.list.map((shared, i) => (
               <CommandItem
-                key={i}
+                key={shared.note?.id}
                 onSelect={() => shared.note && openNote(shared.note)}
                 className="flex flex-col items-start group/cm-item"
+                value={`${shared.note?.title}, ${shared.sharedBy?.full_name}, ${shared.note?.id}`}
               >
                 {shared.note?.title}
                 <span className="text-xs font-medium text-muted-foreground group-aria-selected/cm-item:text-accent-foreground/60">
