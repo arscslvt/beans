@@ -34,7 +34,7 @@ To get started with Beans, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/arscslvt/beans.git`
 2. Install the dependencies: `npm install`
-3. Start the development server: `npm run dev` or `bun run dev` (if you have Bun installed — [Install Bun](https://bun.sh/))
+3. Start the development server: `npm run dev` or `bun run dev` (if you want to use Bun — [Install Bun](https://bun.sh/))
 
 ### Setup local Supabase instance
 
