@@ -211,7 +211,7 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
 
     toast.promise(data, {
       loading: "Deleting note...",
-      success: "Note deleted successfully.",
+      success: "Note deleted",
       error: "Couldn't delete note. Please try again later.",
       duration: 4000,
     });

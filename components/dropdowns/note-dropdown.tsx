@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { useNote } from "@/hooks/useNote";
+import { NOTE_ROUTE } from "@/utils/constants/routes";
 
 const NoteDropdown = ({ id, isMine }: DatabaseNote) => {
   const router = useRouter();
@@ -61,7 +62,7 @@ const NoteDropdown = ({ id, isMine }: DatabaseNote) => {
         e.stopPropagation();
       }}
     >
-      <DropdownMenuItem onClick={() => router.push(`notes/${id}`)}>
+      <DropdownMenuItem onClick={() => router.push(`${NOTE_ROUTE}/${id}`)}>
         Edit
       </DropdownMenuItem>
       {!isMine && (

@@ -21,7 +21,7 @@ export default function SidebarLinkDropdown({ note }: { note: DatabaseNote }) {
           variant={"outline"}
           size={"icon"}
           className={
-            "rounded-full shadow-none min-w-5 w-5 h-5 bg-background text-foreground hover:border-accent"
+            "rounded-full shadow-none min-w-5 w-5 h-5 bg-background text-foreground hover:border-accent group-data-[active=true]/sidebar-link:border-accent-foreground group-data-[active=true]/sidebar-link:bg-transparent group-data-[active=true]/sidebar-link:text-accent-foreground focus-visible:ring-0"
           }
         >
           <EllipsisIcon className={"w-3 h-3"} />
