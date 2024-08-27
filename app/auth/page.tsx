@@ -21,6 +21,7 @@ import { ClerkAPIErrorJSON } from "@clerk/types";
 import { toast } from "sonner";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const authSchema = z.object({
   email: z.string().email().min(1, { message: "Email is required" }),
@@ -43,9 +44,6 @@ export default function AuthPage() {
   });
 
   async function onSubmit(values: z.infer<typeof authSchema>) {
-    console.log("Validated");
-    console.log(values);
-
     if (!isLoaded) {
       return console.error("Sign in not loaded");
     }
@@ -58,16 +56,12 @@ export default function AuthPage() {
         strategy: "password",
       });
 
-      // If sign-in process is complete, set the created session as active
-      // and redirect the user
       if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
         console.log("Signed in");
 
         router.replace("/");
       } else {
-        // If the status is not complete, check why. User may need to
-        // complete further steps.
         console.error(JSON.stringify(signInAttempt, null, 2));
       }
     } catch (e: any) {
@@ -128,19 +122,34 @@ export default function AuthPage() {
             />
           </div>
 
-          <div className="w-full flex flex-col gap-2 mt-4">
-            <Button type="submit">Sign-in</Button>
-            <div className="flex flex-col items-center">
-              <Button variant="outline" className="w-full">
-                Continue as a guest
-              </Button>
-              <p className="text-xs mt-2 text-muted-foreground text-center">
-                Continuing as a guest will save your work only on this device.
-                <br />
-                By signing in you agree to our{" "}
-                <span className="text-accent">Terms of Service</span> and{" "}
-                <span className="text-accent">Privacy Policy</span>.
-              </p>
+          <div className="flex flex-col gap-4 divide-y">
+            <div className="w-full flex flex-col gap-2 mt-4">
+              <Button type="submit">Sign-in</Button>
+              <div className="flex flex-col items-center">
+                <Button variant="outline" className="w-full" disabled>
+                  Continue as a guest
+                </Button>
+                <p className="text-xs mt-2 text-muted-foreground text-center">
+                  Continuing as a guest will save your work only on this device.
+                  <br />
+                  By signing in you agree to our{" "}
+                  <span className="text-accent">Terms of Service</span> and{" "}
+                  <span className="text-accent">Privacy Policy</span>.
+                </p>
+              </div>
+            </div>
+
+            <div className="w-full">
+              <div className="text-center text-xs text-muted-foreground mt-4">
+                <p>Don't have an account?</p>
+                <div className="flex pt-2">
+                  <Link href={"/auth/sign-up"} className="w-full">
+                    <Button className="w-full" variant={"secondary"}>
+                      Sign up
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </form>
