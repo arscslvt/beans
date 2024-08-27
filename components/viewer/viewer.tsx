@@ -39,8 +39,8 @@ function Viewer({ note, source }: ViewerProps) {
     console.log("Content: ", content);
     console.log("Source: ", source?.content);
 
-    if (!content || !source?.content) return;
-    if (JSON.stringify(content) === JSON.stringify(source.content)) {
+    if (!content) return;
+    if (JSON.stringify(content) === JSON.stringify(source?.content)) {
       console.log("Content is the SAME as source content.");
       return;
     }
