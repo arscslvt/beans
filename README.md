@@ -1,5 +1,7 @@
 > **Note**: Beans is still in development, and the app is subject to change. The current version is `v1.0.0-beta.1`.
 
+<img width="1224" alt="banner" src="https://github.com/user-attachments/assets/891c01f7-7350-4c99-831e-2ea9c0f10568">
+
 # Beans
 
 Beans is a simple, lightweight, and fast note-taking app. It is designed to be a quick and easy way to jot down notes, ideas, and tasks. \
