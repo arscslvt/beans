@@ -126,9 +126,9 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(
       <EditorProvider
         extensions={[
           ...extensions,
-          // Collaboration.configure({
-          //   document: doc,
-          // }),
+          Collaboration.configure({
+            document: doc,
+          }),
         ]}
         content={defaultContent}
         editorProps={{
@@ -155,7 +155,7 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(
         slotAfter={trailing}
         {...rest}
       >
-        {/* <Collaborate doc={doc} /> */}
+        <Collaborate doc={doc} />
         <BubbleMenu />
       </EditorProvider>
     );
