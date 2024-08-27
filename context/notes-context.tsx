@@ -174,14 +174,20 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
   };
 
   const deleteNote = async (id?: DatabaseNote["id"]) => {
+    const deleteId = id ?? note?.id;
+
+    if (!deleteId) {
+      return toast.error("No note found to delete.");
+    }
+
     toast("You sure?", {
       classNames: {},
       description: "This action is irreversible.",
       action: (
         <Button
           size={"sm"}
-          onClick={() => {
-            requestDeleteNote();
+          onClick={async () => {
+            await requestDeleteNote(deleteId);
             toast.dismiss();
           }}
         >
@@ -200,10 +206,8 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
     });
   };
 
-  const requestDeleteNote = async (id?: DatabaseNote["id"]) => {
-    if (!note) return;
-
-    const data = deleteNoteAPI(id ?? note.id);
+  const requestDeleteNote = async (id: DatabaseNote["id"]) => {
+    const data = deleteNoteAPI(id);
 
     toast.promise(data, {
       loading: "Deleting note...",
@@ -213,7 +217,7 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
     });
 
     setNotes({
-      list: notes.list.filter((n) => n.id !== note.id),
+      list: notes.list.filter((n) => n.id !== id),
       loading: false,
     });
 
@@ -244,7 +248,10 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
     });
 
     createdNote &&
-      setNotes({ list: [createdNote, ...notes.list], loading: false });
+      setNotes({
+        list: [{ ...createdNote, isMine: true }, ...notes.list],
+        loading: false,
+      });
 
     if (error) {
       console.error("Error creating note: ", error);

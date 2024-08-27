@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { DatabaseNote } from "@/types/note.types";
-import { deleteNote, revokeCollaborating } from "@/utils/notes/delete";
+import { revokeCollaborating } from "@/utils/notes/delete";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
@@ -55,14 +55,19 @@ const NoteDropdown = ({ id, isMine }: DatabaseNote) => {
   };
 
   return (
-    <DropdownMenuContent>
+    <DropdownMenuContent
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
       <DropdownMenuItem onClick={() => router.push(`notes/${id}`)}>
         Edit
       </DropdownMenuItem>
       {!isMine && (
         <DropdownMenuItem
           className="justify-start"
-          onClick={() => handleRevokeCollaboration(false)}
+          onClick={() => handleRevokeCollaboration()}
         >
           Stop collaborating
         </DropdownMenuItem>

@@ -155,7 +155,7 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(
         slotAfter={trailing}
         {...rest}
       >
-        {/* <Collaborate content={defaultContent} doc={doc} /> */}
+        {/* <Collaborate doc={doc} /> */}
         <BubbleMenu />
       </EditorProvider>
     );
