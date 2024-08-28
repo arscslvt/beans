@@ -45,8 +45,6 @@ const ViewerHeader = ({
       console.error("Error saving note: ", error);
       return toast.error("Error saving note.");
     }
-
-    console.log("Updated note: ", data?.id, data?.title);
   };
 
   useEffect(() => {

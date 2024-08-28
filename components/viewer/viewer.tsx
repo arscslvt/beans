@@ -24,9 +24,7 @@ function Viewer({ note, source }: ViewerProps) {
   const { saveNote, isSaving } = useNote();
 
   const handleSaving = async (content: JSONContent) => {
-    const data = await saveNote(content);
-
-    console.log("Saved note source: ", data);
+    await saveNote(content);
   };
 
   React.useEffect(() => {
@@ -36,16 +34,10 @@ function Viewer({ note, source }: ViewerProps) {
   }, [source]);
 
   React.useEffect(() => {
-    console.log("Content: ", content);
-    console.log("Source: ", source?.content);
-
     if (!content) return;
     if (JSON.stringify(content) === JSON.stringify(source?.content)) {
-      console.log("Content is the SAME as source content.");
       return;
     }
-
-    console.log("Content is DIFFERENT from source content.");
 
     const update = loadash.debounce(handleSaving, 1000);
 

@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidateTag } from "next/cache";
 import { NoteResponse } from "@/utils/notes/save";
 import { DatabaseNote } from "@/types/note.types";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { DatabaseProfile } from "@/types/profiles.types";
 
 const deleteNote = async (id: DatabaseNote["id"]): Promise<NoteResponse> => {
