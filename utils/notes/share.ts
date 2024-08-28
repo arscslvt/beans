@@ -21,7 +21,7 @@ const shareNoteWith = async (
         tags: ["note-users"],
     });
 
-    const { error } = await supabase.from("user_notes").insert({
+    const { error } = await supabase.from("shared_notes").insert({
         note_id: parseInt(noteId as unknown as string),
         user_id: userId,
     });

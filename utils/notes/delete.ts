@@ -43,7 +43,7 @@ const revokeSharing = async (
     throw new Error("User not authenticated");
   }
 
-  const { data, error } = await supabase.from("user_notes").delete().eq(
+  const { data, error } = await supabase.from("shared_notes").delete().eq(
     "note_id",
     noteId,
   ).eq("user_id", userId ?? auth_uid)
