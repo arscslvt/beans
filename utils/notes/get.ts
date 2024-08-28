@@ -132,11 +132,11 @@ const getSharedNotes = async (
   });
 
   const { data: notes, error } = await supabase
-    .from(`user_notes`)
+    .from("shared_notes")
     .select(
-      `invitedBy:profiles!fk_user_notes_by(*),
-      for:profiles!user_notes_user_id_fkey(*),
-      note:notes(*)`,
+      `invitedBy:profiles!by(*),
+    user_id,
+    note:notes(*)`,
     )
     .or(`by.is.null,by.neq.${userId}`)
     .limit(limit)
@@ -147,18 +147,14 @@ const getSharedNotes = async (
     return { notes: [], error: [error] };
   }
 
-  if (!notes) {
-    return { notes: [], error: null };
-  }
+  // Transform the data to ensure invitedBy is a single object
+  const transformedNotes: SharedNoteResponse[] = notes.map((note) => ({
+    note: note?.note,
+    sharedBy: note.invitedBy[0] || null,
+    isMine: note.user_id === userId,
+  }));
 
-  return {
-    notes: notes.map((n) => ({
-      note: n.note,
-      sharedBy: n.invitedBy,
-      isMine: false,
-    })),
-    error,
-  };
+  return { notes: transformedNotes, error: null };
 };
 
 interface GetSharedWithResponse {
@@ -176,8 +172,8 @@ const getSharedWith = async (
   const { userId } = auth();
 
   const { data: profiles, error } = await supabase
-    .from("user_notes")
-    .select(`collaborator:profiles!user_notes_user_id_fkey(*)`)
+    .from("shared_notes")
+    .select("profiles!by(*)")
     .eq("note_id", noteId)
     .or(`user_id.neq.${userId}`);
 
@@ -190,8 +186,12 @@ const getSharedWith = async (
     return { profiles: null, error: null };
   }
 
+  console.log("shared with profiles", profiles);
+
   return {
-    profiles: profiles.map((p) => p.collaborator as unknown as DatabaseProfile),
+    profiles: profiles.map((p) =>
+      Array.isArray(p.profiles) ? p.profiles[0] as DatabaseProfile : p.profiles
+    ),
     error,
   };
 };

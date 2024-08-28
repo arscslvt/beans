@@ -62,7 +62,15 @@ export type Database = {
           id?: number
           title?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "notes_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -94,62 +102,46 @@ export type Database = {
         }
         Relationships: []
       }
-      source_comments: {
+      shared_notes: {
         Row: {
-          comment_id: number | null
-          content: string
+          by: string | null
           created_at: string
-          edited: boolean | null
-          id: number
-          profile_id: string
-          source_id: number
+          note_id: number
+          user_id: string
         }
         Insert: {
-          comment_id?: number | null
-          content: string
+          by?: string | null
           created_at?: string
-          edited?: boolean | null
-          id?: number
-          profile_id: string
-          source_id: number
+          note_id: number
+          user_id?: string
         }
         Update: {
-          comment_id?: number | null
-          content?: string
+          by?: string | null
           created_at?: string
-          edited?: boolean | null
-          id?: number
-          profile_id?: string
-          source_id?: number
+          note_id?: number
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "note_comments_comment_id_fkey"
-            columns: ["comment_id"]
-            isOneToOne: false
-            referencedRelation: "source_comments"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "note_comments_note_id_fkey"
-            columns: ["source_id"]
-            isOneToOne: false
-            referencedRelation: "notes"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "note_comments_profile_id_fkey"
-            columns: ["profile_id"]
+            foreignKeyName: "fk_user_notes_by"
+            columns: ["by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: "source_comments_source_id_fkey"
-            columns: ["source_id"]
+            foreignKeyName: "user_notes_note_id_fkey"
+            columns: ["note_id"]
             isOneToOne: false
-            referencedRelation: "sources"
+            referencedRelation: "notes"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_notes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -186,6 +178,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "sources_last_edited_by_fkey"
+            columns: ["last_edited_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
             foreignKeyName: "sources_note_id_fkey"
             columns: ["note_id"]
             isOneToOne: false
@@ -197,42 +196,6 @@ export type Database = {
             columns: ["source_ref"]
             isOneToOne: false
             referencedRelation: "sources"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      user_notes: {
-        Row: {
-          by: string | null
-          created_at: string
-          note_id: number
-          user_id: string
-        }
-        Insert: {
-          by?: string | null
-          created_at?: string
-          note_id: number
-          user_id?: string
-        }
-        Update: {
-          by?: string | null
-          created_at?: string
-          note_id?: number
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_user_notes_by"
-            columns: ["by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["user_id"]
-          },
-          {
-            foreignKeyName: "user_notes_note_id_fkey"
-            columns: ["note_id"]
-            isOneToOne: false
-            referencedRelation: "notes"
             referencedColumns: ["id"]
           },
         ]
