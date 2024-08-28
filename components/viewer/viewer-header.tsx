@@ -35,6 +35,12 @@ const ViewerHeader = ({
   const isMobile = useMediaQuery(`(max-width: ${MOBILE_MAX_WIDTH}px)`);
 
   const [_title, setTitle] = React.useState(title);
+  const [_description, setDescription] = React.useState(description);
+
+  React.useEffect(() => {
+    setTitle(title);
+    setDescription(description);
+  }, [title, description]);
 
   const updateNote = async () => {
     const { data, error } = await saveNote(note.id, {

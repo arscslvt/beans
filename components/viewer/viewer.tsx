@@ -12,16 +12,15 @@ import loadash from "lodash";
 import { useNote } from "@/hooks/useNote";
 
 interface ViewerProps {
-  note: DatabaseNote;
   source?: DatabaseSource;
 }
 
-function Viewer({ note, source }: ViewerProps) {
+function Viewer({ source }: ViewerProps) {
   const [content, setContent] = React.useState<JSONContent>(
     source?.content as JSONContent
   );
 
-  const { saveNote, isSaving } = useNote();
+  const { note, saveNote, isSaving } = useNote();
 
   const handleSaving = async (content: JSONContent) => {
     await saveNote(content);
@@ -47,6 +46,8 @@ function Viewer({ note, source }: ViewerProps) {
 
     return () => clearTimeout(interval);
   }, [content]);
+
+  if (!note) return null;
 
   return (
     <div className="relative z-30">

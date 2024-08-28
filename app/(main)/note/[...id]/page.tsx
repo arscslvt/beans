@@ -12,8 +12,6 @@ export default async function NotePage({
   const { note, sources, errors } = await getNoteById(id);
 
   return (
-    <div>
-      {note && <Viewer note={note} source={sources ? sources[0] : undefined} />}
-    </div>
+    <div>{note && <Viewer source={sources ? sources[0] : undefined} />}</div>
   );
 }
