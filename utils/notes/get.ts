@@ -173,7 +173,7 @@ const getSharedWith = async (
 
   const { data: profiles, error } = await supabase
     .from("shared_notes")
-    .select("profiles!by(*)")
+    .select("profiles!shared_notes_user_id_fkey(*)")
     .eq("note_id", noteId)
     .or(`user_id.neq.${userId}`);
 
@@ -189,9 +189,7 @@ const getSharedWith = async (
   console.log("shared with profiles", profiles);
 
   return {
-    profiles: profiles.map((p) =>
-      Array.isArray(p.profiles) ? p.profiles[0] as DatabaseProfile : p.profiles
-    ),
+    profiles: profiles.filter((p) => !!p.profiles).map((p) => p.profiles!),
     error,
   };
 };

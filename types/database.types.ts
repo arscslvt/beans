@@ -123,21 +123,21 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_user_notes_by"
+            foreignKeyName: "shared_notes_by_fkey"
             columns: ["by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: "user_notes_note_id_fkey"
+            foreignKeyName: "shared_notes_note_id_fkey"
             columns: ["note_id"]
             isOneToOne: false
             referencedRelation: "notes"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "user_notes_user_id_fkey"
+            foreignKeyName: "shared_notes_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
