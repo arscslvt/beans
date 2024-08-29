@@ -30,8 +30,8 @@ import {
 import { createNote as createNoteAPI, saveEdits } from "@/utils/notes/save";
 import { DatabaseProfile } from "@/types/profiles.types";
 import { JSONContent } from "@tiptap/react";
-import { createClient } from "@/utils/supabase/client";
 import { useClientAuth } from "./client-auth-context";
+import { useUser } from "@clerk/nextjs";
 
 type ContextNotes = {
   list: DatabaseNote[];
@@ -82,6 +82,7 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
   const router = useRouter();
 
   const { supabase } = useClientAuth();
+  const { user } = useUser();
 
   const fetchNote = async () => {
     const { note } = await getNoteByIdAPI(noteId as unknown as number);
@@ -187,6 +188,15 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
         }
       )
       .subscribe();
+
+    notesChannel.send({
+      type: "broadcast",
+      event: `Client connected to notes channel for note ${note.id}`,
+      payload: {
+        note: note.id,
+        user: user?.id,
+      },
+    });
 
     return () => {
       notesChannel.unsubscribe();
