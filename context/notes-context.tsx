@@ -165,7 +165,7 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
       .on(
         "postgres_changes",
         {
-          event: "*",
+          event: "UPDATE",
           schema: "public",
           table: "notes",
           filter: `id=eq.${note.id}`,
