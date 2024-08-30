@@ -34,6 +34,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      features: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_name: string | null
+          feature_name: string
+          id: string
+          note_id: number | null
+          version: string
+          visibility: Database["public"]["Enums"]["feature_visibility"]
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_name?: string | null
+          feature_name: string
+          id?: string
+          note_id?: number | null
+          version: string
+          visibility?: Database["public"]["Enums"]["feature_visibility"]
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_name?: string | null
+          feature_name?: string
+          id?: string
+          note_id?: number | null
+          version?: string
+          visibility?: Database["public"]["Enums"]["feature_visibility"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whats-new_duplicate_note_id_fkey"
+            columns: ["note_id"]
+            isOneToOne: false
+            referencedRelation: "notes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notes: {
         Row: {
           created_at: string
@@ -43,6 +84,7 @@ export type Database = {
           icon: string | null
           id: number
           title: string
+          visibility: Database["public"]["Enums"]["note_visibility"]
         }
         Insert: {
           created_at?: string
@@ -52,6 +94,7 @@ export type Database = {
           icon?: string | null
           id?: number
           title?: string
+          visibility?: Database["public"]["Enums"]["note_visibility"]
         }
         Update: {
           created_at?: string
@@ -61,6 +104,7 @@ export type Database = {
           icon?: string | null
           id?: number
           title?: string
+          visibility?: Database["public"]["Enums"]["note_visibility"]
         }
         Relationships: [
           {
@@ -79,6 +123,7 @@ export type Database = {
           email: string | null
           full_name: string | null
           handle: string
+          session_update: string | null
           user_id: string
           visible: boolean
         }
@@ -88,6 +133,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           handle: string
+          session_update?: string | null
           user_id?: string
           visible?: boolean
         }
@@ -97,10 +143,19 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           handle?: string
+          session_update?: string | null
           user_id?: string
           visible?: boolean
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_session_update_fkey"
+            columns: ["session_update"]
+            isOneToOne: false
+            referencedRelation: "whats-new"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       shared_notes: {
         Row: {
@@ -200,6 +255,33 @@ export type Database = {
           },
         ]
       }
+      "whats-new": {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_name: string | null
+          id: string
+          note_id: number | null
+          version: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_name?: string | null
+          id?: string
+          note_id?: number | null
+          version: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_name?: string | null
+          id?: string
+          note_id?: number | null
+          version?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -211,7 +293,13 @@ export type Database = {
       }
     }
     Enums: {
+      feature_visibility:
+        | "public"
+        | "public-test"
+        | "unpublished-test"
+        | "unpublished"
       invitation_status: "pending" | "refused" | "accepted"
+      note_visibility: "public" | "private"
     }
     CompositeTypes: {
       [_ in never]: never

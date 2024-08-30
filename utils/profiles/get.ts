@@ -47,4 +47,31 @@ const searchProfiles = async (
   return { profiles: data, errors: [] };
 };
 
-export { searchProfiles };
+const getSessionProfile = async (): Promise<DatabaseProfile | null> => {
+  const { userId } = auth();
+
+  if (!userId) {
+    return null;
+  }
+
+  const { data, error } = await profilesClient
+    .from("profiles")
+    .select()
+    .eq("user_id", userId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching profile: ", error);
+    return null;
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  console.log("Profile: ", data);
+
+  return data;
+};
+
+export { getSessionProfile, searchProfiles };
