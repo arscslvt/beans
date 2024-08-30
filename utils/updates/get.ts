@@ -1,6 +1,6 @@
 "use server";
 
-import { DatabaseWhatsNew } from "@/types/whats-new.types";
+import { DatabaseFeatures } from "@/types/features.types";
 import { createClient } from "../supabase/server";
 import { auth } from "@clerk/nextjs/server";
 
@@ -11,7 +11,7 @@ interface UpdatesProps {
 }
 
 interface UpdatesResponse {
-    updates: DatabaseWhatsNew[] | null;
+    updates: DatabaseFeatures[] | null;
     errors: any[];
 }
 
@@ -43,7 +43,7 @@ const getUpdates = async (
     return { updates: data, errors: [] };
 };
 
-const getUnreadUpdates = async (): Promise<DatabaseWhatsNew[]> => {
+const getUnreadUpdates = async (): Promise<DatabaseFeatures[]> => {
     const supabase = createClient({
         tags: ["updates-list"],
     });
@@ -70,7 +70,7 @@ const getUnreadUpdates = async (): Promise<DatabaseWhatsNew[]> => {
         .order("created_at", { ascending: false });
 
     if (profile_update?.session_update) {
-        const { data } = await supabase.from("whats-new")
+        const { data } = await supabase.from("features")
             .select("created_at")
             .eq("id", profile_update.session_update)
             .maybeSingle();

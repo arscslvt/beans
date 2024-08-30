@@ -1,11 +1,11 @@
 "use server";
 
-import { DatabaseWhatsNew } from "@/types/whats-new.types";
+import { DatabaseFeatures } from "@/types/features.types";
 import { createClient } from "../supabase/server";
 import { auth } from "@clerk/nextjs/server";
 
 const markUpdateAsRead = async (
-    id: DatabaseWhatsNew["id"],
+    id: DatabaseFeatures["id"],
 ): Promise<Boolean> => {
     const supabase = createClient({
         tags: ["updates-list"],

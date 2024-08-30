@@ -1,4 +1,4 @@
-import { DatabaseWhatsNew } from "@/types/whats-new.types";
+import { DatabaseFeatures } from "@/types/features.types";
 import { getUnreadUpdates, getUpdates } from "@/utils/updates/get";
 import React from "react";
 
@@ -20,20 +20,20 @@ interface UpdatesProviderProps {
 }
 
 interface UpdatesContextProps {
-  unreadUpdate: DatabaseWhatsNew | null;
+  unreadUpdate: DatabaseFeatures | null;
 }
 
 const UpdatesContext = React.createContext<UpdatesContextProps>(
   {} as UpdatesContextProps
 );
 
-export default function UpdatesProvider({ children }: UpdatesProviderProps) {
-  const [lastUpdate, setLastUpdate] = React.useState<DatabaseWhatsNew | null>(
+export default function FeaturesProvider({ children }: UpdatesProviderProps) {
+  const [lastUpdate, setLastUpdate] = React.useState<DatabaseFeatures | null>(
     null
   );
 
   const [unreadUpdate, setUnreadUpdate] =
-    React.useState<DatabaseWhatsNew | null>(null);
+    React.useState<DatabaseFeatures | null>(null);
 
   React.useEffect(() => {
     retrieveLastUpdate();
@@ -57,7 +57,7 @@ export default function UpdatesProvider({ children }: UpdatesProviderProps) {
     }
   };
 
-  const markAsRead = async (id: DatabaseWhatsNew["id"]) => {
+  const markAsRead = async (id: DatabaseFeatures["id"]) => {
     const update = await markUpdateAsRead(id);
 
     if (update) {
