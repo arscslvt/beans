@@ -53,7 +53,7 @@ export default function AuthUserButton() {
               {isBetaUser && (
                 <Badge
                   variant={"outline"}
-                  className="text-[9px] px-1 py-0 mb-1 bg-background rounded-full text-muted-foreground"
+                  className="text-[9px] px-1 pl-2 py-0 mb-1 bg-gradient-to-r from-transparent to-30% to-accent/15 rounded-r-full text-accent border-0 -translate-x-1.5"
                 >
                   {profile?.role?.display_name}
                 </Badge>
