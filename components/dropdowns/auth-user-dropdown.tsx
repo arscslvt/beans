@@ -24,21 +24,14 @@ import Bug1 from "../icons/bug-1";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import SignOutDialog from "../dialogs/user/sign-out-dialog";
-import { Button } from "../ui/button";
+import { useClientAuth } from "@/context/client-auth-context";
 
 export default function AuthUserDropdown() {
-  const { signOut } = useAuth();
-
   const [showBetaDialog, setShowBetaDialog] = React.useState(false);
   const [showLogOutConfirmation, setLogOutConfirmation] = React.useState(false);
 
-  const handleSignOut = () => {
-    signOut({
-      redirectUrl: "/auth",
-    });
+  const { isBetaUser } = useClientAuth();
 
-    toast.success("You have been signed out.");
-  };
   return (
     <>
       <DynamicDialog open={showBetaDialog} onOpenChange={setShowBetaDialog}>
@@ -75,19 +68,25 @@ export default function AuthUserDropdown() {
       </DynamicDialog>
 
       <DropdownMenuContent className="min-w-56">
-        <Link href={"https://github.com/arscslvt/beans"} target="_blank">
-          <DropdownMenuItem>
-            <GitHubLogoIcon />
-            Contribute on GitHub
-          </DropdownMenuItem>
-        </Link>
+        {isBetaUser && (
+          <Link href={"https://github.com/arscslvt/beans"} target="_blank">
+            <DropdownMenuItem>
+              <GitHubLogoIcon />
+              Contribute on GitHub
+            </DropdownMenuItem>
+          </Link>
+        )}
         <DropdownMenuGroup>
           <DropdownMenuLabel>Account</DropdownMenuLabel>
 
-          <DropdownMenuItem onClick={() => setShowBetaDialog((prev) => !prev)}>
-            <Bug1 />
-            Beta Program
-          </DropdownMenuItem>
+          {isBetaUser && (
+            <DropdownMenuItem
+              onClick={() => setShowBetaDialog((prev) => !prev)}
+            >
+              <Bug1 />
+              Beta Program
+            </DropdownMenuItem>
+          )}
 
           <DropdownMenuItem
             className="focus:bg-destructive/10 focus:text-destructive"

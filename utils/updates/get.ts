@@ -38,8 +38,6 @@ const getUpdates = async (
         return { updates: null, errors: [] };
     }
 
-    console.log("Updates: ", data);
-
     return { updates: data, errors: [] };
 };
 
@@ -60,8 +58,6 @@ const getUnreadUpdates = async (): Promise<DatabaseFeatures[]> => {
         .eq("user_id", userId)
         .single();
 
-    console.log("Profile last update: ", profile_update);
-
     let profile_session_update_data;
 
     const get_unreads_query = supabase
@@ -77,11 +73,6 @@ const getUnreadUpdates = async (): Promise<DatabaseFeatures[]> => {
 
         if (data) profile_session_update_data = data;
 
-        console.log(
-            "Last profile session update datetime: ",
-            profile_session_update_data,
-        );
-
         const { data: unreads_updates, error } = await get_unreads_query.gt(
             "created_at",
             profile_session_update_data?.created_at,
@@ -91,11 +82,6 @@ const getUnreadUpdates = async (): Promise<DatabaseFeatures[]> => {
     }
 
     const { data: updates, error } = await get_unreads_query.limit(1).single();
-
-    console.log(
-        "Profile session update not found, returning last update: ",
-        updates,
-    );
 
     return updates ? [updates] : [];
 };

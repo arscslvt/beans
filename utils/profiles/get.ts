@@ -1,6 +1,7 @@
 "use server";
 
 import { DatabaseProfile } from "@/types/profiles.types";
+import { DatabaseProfileRoles, DatabaseRole } from "@/types/role.types";
 import { createClient } from "@/utils/supabase/server";
 import { auth } from "@clerk/nextjs/server";
 
@@ -47,31 +48,34 @@ const searchProfiles = async (
   return { profiles: data, errors: [] };
 };
 
-const getSessionProfile = async (): Promise<DatabaseProfile | null> => {
+export interface GetSessionProfileResponse {
+  profile: DatabaseProfileRoles | null;
+  errors: any[];
+}
+
+const getSessionProfile = async (): Promise<GetSessionProfileResponse> => {
   const { userId } = auth();
 
   if (!userId) {
-    return null;
+    return { profile: null, errors: ["User not authenticated"] };
   }
 
   const { data, error } = await profilesClient
     .from("profiles")
-    .select()
+    .select(`*, role:roles(*)`)
     .eq("user_id", userId)
     .single();
 
   if (error) {
     console.error("Error fetching profile: ", error);
-    return null;
+    return { profile: null, errors: [error] };
   }
 
   if (!data) {
-    return null;
+    return { profile: null, errors: [] };
   }
 
-  console.log("Profile: ", data);
-
-  return data;
+  return { profile: data, errors: [] };
 };
 
 export { getSessionProfile, searchProfiles };

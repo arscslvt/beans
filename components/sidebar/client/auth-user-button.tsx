@@ -12,9 +12,11 @@ import AuthUserDropdown from "@/components/dropdowns/auth-user-dropdown";
 import { useSidebar } from "../sidebar";
 import { motion } from "framer-motion";
 import UserAvatar from "@/components/user/user_avatar";
+import { useClientAuth } from "@/context/client-auth-context";
+import { Badge } from "@/components/ui/badge";
 
 export default function AuthUserButton() {
-  const { user } = useUser();
+  const { profile, isBetaUser } = useClientAuth();
 
   const { sidebarMode } = useSidebar();
 
@@ -38,17 +40,25 @@ export default function AuthUserButton() {
               <UserAvatar
                 className={"w-full h-full shadow-sm"}
                 fallback={{
-                  display: user?.firstName?.charAt(0).toUpperCase() ?? "U",
+                  display: profile?.full_name?.charAt(0).toUpperCase() ?? "U",
                 }}
-                src={user?.imageUrl || ""}
-                alt={`${user?.firstName ?? "User"} profile picture`}
+                src={profile?.avatar || ""}
+                alt={`${profile?.full_name ?? "User"} profile picture`}
               />
             </motion.div>
           }
         >
           <div className={"flex items-center pl-2 justify-start text-left"}>
             <div>
-              <h4 className={"font-medium"}>{user?.firstName}</h4>
+              {isBetaUser && (
+                <Badge
+                  variant={"outline"}
+                  className="text-[9px] px-1 py-0 mb-1 bg-background rounded-full text-muted-foreground"
+                >
+                  {profile?.role?.display_name}
+                </Badge>
+              )}
+              <h4 className={"font-medium"}>{profile?.full_name}</h4>
               <p className={"text-xs text-muted-foreground pt-0.5"}>
                 Edit your profile
               </p>

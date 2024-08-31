@@ -1,11 +1,18 @@
 "use client";
 
+import { betaRoles } from "@/lib/defaults/roles";
+import { DatabaseProfile } from "@/types/profiles.types";
+import { DatabaseProfileRoles } from "@/types/role.types";
+import { getSessionProfile } from "@/utils/profiles/get";
 import { useSession } from "@clerk/nextjs";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import React, { useMemo } from "react";
 
 interface ClientAuthContext {
   supabase: SupabaseClient;
+  profile: DatabaseProfileRoles | null;
+  isBetaUser: boolean;
+  loading: boolean;
 }
 
 const ClientAuthContext = React.createContext<ClientAuthContext>(
@@ -18,6 +25,12 @@ export default function ClientAuthProvider({
   children: React.ReactNode;
 }) {
   const { session } = useSession();
+
+  const [profile, setProfile] = React.useState<DatabaseProfileRoles | null>(
+    null
+  );
+
+  const [loading, setLoading] = React.useState(true);
 
   function createClerkSupabaseClient() {
     return createClient(
@@ -48,12 +61,36 @@ export default function ClientAuthProvider({
 
   const supabase = useMemo(() => createClerkSupabaseClient(), [session]);
 
+  const isBetaUser = useMemo(() => {
+    return betaRoles.includes(profile?.role?.id || "");
+  }, [profile]);
+
+  const retrieveProfile = async () => {
+    console.log("Retrieving profile");
+
+    const { profile } = await getSessionProfile();
+    profile && setProfile(profile);
+  };
+
+  React.useEffect(() => {
+    if (profile) {
+      return setLoading(false);
+    }
+    setLoading(true);
+  }, [profile]);
+
+  React.useEffect(() => {
+    session && retrieveProfile();
+  }, [session]);
+
   if (!session) {
     return <></>;
   }
 
   return (
-    <ClientAuthContext.Provider value={{ supabase }}>
+    <ClientAuthContext.Provider
+      value={{ supabase, profile, loading, isBetaUser }}
+    >
       {children}
     </ClientAuthContext.Provider>
   );
