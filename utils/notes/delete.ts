@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidateTag } from "next/cache";
 import { NoteResponse } from "@/utils/notes/save";
 import { DatabaseNote } from "@/types/note.types";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { DatabaseProfile } from "@/types/profiles.types";
 
 const deleteNote = async (id: DatabaseNote["id"]): Promise<NoteResponse> => {
@@ -43,7 +43,7 @@ const revokeSharing = async (
     throw new Error("User not authenticated");
   }
 
-  const { data, error } = await supabase.from("user_notes").delete().eq(
+  const { data, error } = await supabase.from("shared_notes").delete().eq(
     "note_id",
     noteId,
   ).eq("user_id", userId ?? auth_uid)

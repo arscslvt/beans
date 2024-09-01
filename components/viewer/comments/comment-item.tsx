@@ -2,10 +2,9 @@ import UserAvatar from "@/components/user/user_avatar";
 import { DatabaseSourceComments } from "@/types/source_comments.types";
 import React from "react";
 
-export default function CommentItem({
-  comment,
-}: {
-  comment: DatabaseSourceComments;
+export default function CommentItem({}: // comment,
+{
+  // comment: DatabaseSourceComments;
 }) {
   return (
     <div className="bg-muted/40 rounded-md px-2 py-2 flex items-start gap-2 border">
@@ -24,9 +23,7 @@ export default function CommentItem({
             @anya
           </span>
         </div>
-        <div className="text-sm">
-          <p>{comment.content}</p>
-        </div>
+        <div className="text-sm">{/* <p>{comment.content}</p> */}</div>
       </div>
     </div>
   );

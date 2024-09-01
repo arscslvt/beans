@@ -38,8 +38,6 @@ export default function Commands({ items, command, open }: CommandMenu) {
       } else if (e.key === "ArrowUp") {
         upHandler(e);
       } else if (e.key === "Enter") {
-        console.log("Enter pressed");
-
         handleSelect(items[selectedIndex]);
         return false;
       }

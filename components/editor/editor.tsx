@@ -1,14 +1,10 @@
 "use client";
 
-import React, { forwardRef, useMemo } from "react";
+import React, { forwardRef } from "react";
 import {
-  useEditor,
-  EditorContent,
   ReactNodeViewRenderer,
   JSONContent,
-  Content,
   EditorProvider,
-  Editor as EditorType,
 } from "@tiptap/react";
 
 import "./styles/default.css";
@@ -46,11 +42,9 @@ import suggestion from "./extensions/features/command/suggestion";
 import BubbleMenu from "./extensions/features/bubble-menu/bubble-menu";
 import codeblock from "@/components/editor/components/codeblock";
 
-import Collaboration from "@tiptap/extension-collaboration";
 import * as Y from "yjs";
 
 import { toast } from "sonner";
-import Collaborate from "./tools/collaborate";
 import { useNote } from "@/hooks/useNote";
 
 interface EditorProps {
@@ -73,7 +67,7 @@ const extensions = [
   }),
   Document,
   Dropcursor,
-  // History,
+  History,
   TextAlign.configure({
     types: ["heading", "paragraph"],
   }),

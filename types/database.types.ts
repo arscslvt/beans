@@ -34,6 +34,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      features: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_name: string | null
+          feature_name: string
+          id: string
+          note_id: number | null
+          version: string
+          visibility: Database["public"]["Enums"]["feature_visibility"]
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_name?: string | null
+          feature_name: string
+          id?: string
+          note_id?: number | null
+          version: string
+          visibility?: Database["public"]["Enums"]["feature_visibility"]
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_name?: string | null
+          feature_name?: string
+          id?: string
+          note_id?: number | null
+          version?: string
+          visibility?: Database["public"]["Enums"]["feature_visibility"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whats-new_duplicate_note_id_fkey"
+            columns: ["note_id"]
+            isOneToOne: false
+            referencedRelation: "notes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notes: {
         Row: {
           created_at: string
@@ -43,6 +84,7 @@ export type Database = {
           icon: string | null
           id: number
           title: string
+          visibility: Database["public"]["Enums"]["note_visibility"]
         }
         Insert: {
           created_at?: string
@@ -52,6 +94,7 @@ export type Database = {
           icon?: string | null
           id?: number
           title?: string
+          visibility?: Database["public"]["Enums"]["note_visibility"]
         }
         Update: {
           created_at?: string
@@ -61,8 +104,17 @@ export type Database = {
           icon?: string | null
           id?: number
           title?: string
+          visibility?: Database["public"]["Enums"]["note_visibility"]
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "notes_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -71,6 +123,8 @@ export type Database = {
           email: string | null
           full_name: string | null
           handle: string
+          role: string
+          session_update: string | null
           user_id: string
           visible: boolean
         }
@@ -80,6 +134,8 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           handle: string
+          role?: string
+          session_update?: string | null
           user_id?: string
           visible?: boolean
         }
@@ -89,67 +145,86 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           handle?: string
+          role?: string
+          session_update?: string | null
           user_id?: string
           visible?: boolean
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_role_fkey"
+            columns: ["role"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profiles_session_update_fkey"
+            columns: ["session_update"]
+            isOneToOne: false
+            referencedRelation: "features"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      source_comments: {
+      roles: {
         Row: {
-          comment_id: number | null
-          content: string
-          created_at: string
-          edited: boolean | null
-          id: number
-          profile_id: string
-          source_id: number
+          description: string | null
+          display_name: string
+          id: string
         }
         Insert: {
-          comment_id?: number | null
-          content: string
-          created_at?: string
-          edited?: boolean | null
-          id?: number
-          profile_id: string
-          source_id: number
+          description?: string | null
+          display_name: string
+          id?: string
         }
         Update: {
-          comment_id?: number | null
-          content?: string
+          description?: string | null
+          display_name?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      shared_notes: {
+        Row: {
+          by: string | null
+          created_at: string
+          note_id: number
+          user_id: string
+        }
+        Insert: {
+          by?: string | null
           created_at?: string
-          edited?: boolean | null
-          id?: number
-          profile_id?: string
-          source_id?: number
+          note_id: number
+          user_id?: string
+        }
+        Update: {
+          by?: string | null
+          created_at?: string
+          note_id?: number
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "note_comments_comment_id_fkey"
-            columns: ["comment_id"]
-            isOneToOne: false
-            referencedRelation: "source_comments"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "note_comments_note_id_fkey"
-            columns: ["source_id"]
-            isOneToOne: false
-            referencedRelation: "notes"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "note_comments_profile_id_fkey"
-            columns: ["profile_id"]
+            foreignKeyName: "shared_notes_by_fkey"
+            columns: ["by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: "source_comments_source_id_fkey"
-            columns: ["source_id"]
+            foreignKeyName: "shared_notes_note_id_fkey"
+            columns: ["note_id"]
             isOneToOne: false
-            referencedRelation: "sources"
+            referencedRelation: "notes"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shared_notes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -186,6 +261,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "sources_last_edited_by_fkey"
+            columns: ["last_edited_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
             foreignKeyName: "sources_note_id_fkey"
             columns: ["note_id"]
             isOneToOne: false
@@ -201,54 +283,28 @@ export type Database = {
           },
         ]
       }
-      user_notes: {
-        Row: {
-          by: string | null
-          created_at: string
-          note_id: number
-          user_id: string
-        }
-        Insert: {
-          by?: string | null
-          created_at?: string
-          note_id: number
-          user_id?: string
-        }
-        Update: {
-          by?: string | null
-          created_at?: string
-          note_id?: number
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_user_notes_by"
-            columns: ["by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["user_id"]
-          },
-          {
-            foreignKeyName: "user_notes_note_id_fkey"
-            columns: ["note_id"]
-            isOneToOne: false
-            referencedRelation: "notes"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      get_profile_role: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       requesting_user_id: {
         Args: Record<PropertyKey, never>
         Returns: string
       }
     }
     Enums: {
+      feature_visibility:
+        | "public"
+        | "public-test"
+        | "unpublished-test"
+        | "unpublished"
       invitation_status: "pending" | "refused" | "accepted"
+      note_visibility: "public" | "private"
     }
     CompositeTypes: {
       [_ in never]: never

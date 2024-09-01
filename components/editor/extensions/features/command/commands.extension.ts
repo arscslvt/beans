@@ -9,7 +9,6 @@ export default Extension.create({
             suggestion: {
                 char: "/",
                 command: ({ editor, range, props }) => {
-                    console.log("Slash command detected");
                     props.command({ editor, range });
                     editor.commands.focus();
                 },

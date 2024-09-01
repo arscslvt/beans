@@ -17,7 +17,6 @@ export default function Collaborate({ content, doc }: CollaborateProps) {
   React.useEffect(() => {
     if (!note) return;
     const docname = `note-${note.id}-${note.created_by}`;
-    console.log("Document name: ", docname);
 
     const provider = new TiptapCollabProvider({
       name: `note-${note.id}-${note.created_by}`, // Unique document identifier for syncing. This is your document name.

@@ -30,7 +30,8 @@ import {
 import { createNote as createNoteAPI, saveEdits } from "@/utils/notes/save";
 import { DatabaseProfile } from "@/types/profiles.types";
 import { JSONContent } from "@tiptap/react";
-import { DatabaseSource } from "@/types/source.types";
+import { useClientAuth } from "./client-auth-context";
+import { useUser } from "@clerk/nextjs";
 
 type ContextNotes = {
   list: DatabaseNote[];
@@ -79,6 +80,9 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
   const { id: noteId } = useParams<{ id: string }>();
 
   const router = useRouter();
+
+  const { supabase } = useClientAuth();
+  const { user } = useUser();
 
   const fetchNote = async () => {
     const { note } = await getNoteByIdAPI(noteId as unknown as number);
@@ -153,6 +157,52 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
     fetchNote();
   }, [noteId]);
 
+  React.useEffect(() => {
+    if (!note || !supabase) return;
+
+    const notesChannel = supabase
+      .channel("notes")
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "notes",
+          filter: `id=eq.${note.id}`,
+        },
+        (payload) => {
+          console.log("Change received!", payload);
+
+          const newNote = payload.new as DatabaseNote;
+
+          const updatedNote = {
+            ...note,
+            title: newNote.title,
+            description: newNote.description,
+            emoji: newNote.emoji,
+            icon: newNote.icon,
+          };
+
+          setNote(updatedNote);
+          updateNotesState(note.id, updatedNote);
+        }
+      )
+      .subscribe();
+
+    notesChannel.send({
+      type: "broadcast",
+      event: `Client connected to notes channel for note ${note.id}`,
+      payload: {
+        note: note.id,
+        user: user?.id,
+      },
+    });
+
+    return () => {
+      notesChannel.unsubscribe();
+    };
+  }, [note, supabase]);
+
   const saveNote = async (content: JSONContent): Promise<void> => {
     if (!note) throw new Error("No note found.");
 
@@ -171,6 +221,25 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
     }
 
     setIsSaving(false);
+  };
+
+  const updateNotesState = (
+    noteId: DatabaseNote["id"],
+    note: Partial<DatabaseNote>
+  ) => {
+    setNotes({
+      list: notes.list.map((n) => {
+        if (n.id === noteId) {
+          return {
+            ...n,
+            ...note,
+          };
+        }
+
+        return n;
+      }),
+      loading: false,
+    });
   };
 
   const deleteNote = async (id?: DatabaseNote["id"]) => {

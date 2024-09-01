@@ -30,7 +30,6 @@ function ShareNoteDialog({ noteId }: { noteId: DatabaseNote["id"] }) {
 
   const handleSearching = React.useCallback(async () => {
     const { profiles, errors } = await searchProfiles({ search });
-    console.log("Profiles: ", profiles, errors);
 
     return profiles ?? [];
   }, [search]);
@@ -66,8 +65,6 @@ function ShareNoteDialog({ noteId }: { noteId: DatabaseNote["id"] }) {
   }, [search, profiles]);
 
   const handleSelectProfile = async (profile: DatabaseProfile) => {
-    console.log("Selected Profile: ", profile);
-
     const { error } = await shareNoteWith({
       noteId,
       userId: profile.user_id,

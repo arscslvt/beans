@@ -58,7 +58,6 @@ export default function AuthPage() {
 
       if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
-        console.log("Signed in");
 
         router.replace("/");
       } else {
