@@ -36,6 +36,7 @@ import Typography from "@tiptap/extension-typography";
 import History from "@tiptap/extension-history";
 import TextAlign from "@tiptap/extension-text-align";
 import HardBreak from "@tiptap/extension-hard-break";
+import Collaboration from "@tiptap/extension-collaboration";
 
 import Command from "@/components/editor/extensions/features/command/commands.extension";
 import suggestion from "./extensions/features/command/suggestion";
@@ -46,6 +47,7 @@ import * as Y from "yjs";
 
 import { toast } from "sonner";
 import { useNote } from "@/hooks/useNote";
+import Collaborate from "./tools/collaborate";
 
 interface EditorProps {
   readonly leading?: React.ReactNode;
