@@ -1,13 +1,14 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./context/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -54,34 +55,32 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
 
-        'accent-shades': {
-          '50': '#fff3ed',
-          '100': '#ffe4d4',
-          '200': '#ffc6a8',
-          '300': '#ff9e71',
-          '400': '#ff6633',
-          '500': '#fe4311',
-          '600': '#ef2907',
-          '700': '#c61908',
-          '800': '#9d170f',
-          '900': '#7e1610',
-          '950': '#440706',
+        "accent-shades": {
+          "50": "#fff3ed",
+          "100": "#ffe4d4",
+          "200": "#ffc6a8",
+          "300": "#ff9e71",
+          "400": "#ff6633",
+          "500": "#fe4311",
+          "600": "#ef2907",
+          "700": "#c61908",
+          "800": "#9d170f",
+          "900": "#7e1610",
+          "950": "#440706",
         },
-        'blue-gem': {
-          '50': '#f2f3ff',
-          '100': '#e8e9ff',
-          '200': '#d3d4ff',
-          '300': '#b1b0ff',
-          '400': '#8a84ff',
-          '500': '#6452ff',
-          '600': '#502ef9',
-          '700': '#411ce5',
-          '800': '#3717c0',
-          '900': '#281286',
-          '950': '#180a6b',
+        "blue-gem": {
+          "50": "#f2f3ff",
+          "100": "#e8e9ff",
+          "200": "#d3d4ff",
+          "300": "#b1b0ff",
+          "400": "#8a84ff",
+          "500": "#6452ff",
+          "600": "#502ef9",
+          "700": "#411ce5",
+          "800": "#3717c0",
+          "900": "#281286",
+          "950": "#180a6b",
         },
-
-
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -105,6 +104,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;

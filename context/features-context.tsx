@@ -2,7 +2,7 @@ import { DatabaseFeatures } from "@/types/features.types";
 import { getUnreadUpdates, getUpdates } from "@/utils/updates/get";
 import React from "react";
 
-import { delay } from "lodash";
+import { delay, uniq } from "lodash";
 import {
   DynamicDialog,
   DynamicDialogClose,
@@ -89,6 +89,32 @@ export default function FeaturesProvider({ children }: UpdatesProviderProps) {
                 </DynamicDialogDescription>
               )}
             </DynamicDialogHeader>
+
+            {unreadUpdate?.whats_new && (
+              <div className="flex flex-col overflow-y-auto overflow-clip max-h-40">
+                <div className="sticky top-0 bg-gradient-to-b from-35% from-background to-transparent pb-3">
+                  <h2 className="font-medium text-sm">What's new?</h2>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {unreadUpdate.whats_new.map((item, i) => (
+                    <div key={i} className="flex">
+                      <div className="flex flex-col flex-1">
+                        <div className="flex">
+                          <div className="w-1.5 h-full flex flex-col justify-center mr-1.5 mb-1">
+                            <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                          </div>
+                          <h4 className="text-sm font-medium">{item.title}</h4>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          {item.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <DynamicDialogFooter>
               <DynamicDialogClose variant={"default"}>
                 Great!

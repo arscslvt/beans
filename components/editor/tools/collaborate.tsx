@@ -20,7 +20,10 @@ export default function Collaborate({ content, doc }: CollaborateProps) {
 
     const provider = new TiptapCollabProvider({
       name: `note-${note.id}-${note.created_by}`, // Unique document identifier for syncing. This is your document name.
-      appId: process.env.NEXT_PUBLIC_TIPTAP_APP_ID ?? "", // Your Cloud Dashboard AppID or `baseURL` for on-premises
+      // appId: process.env.NEXT_PUBLIC_TIPTAP_APP_ID ?? "", // Your Cloud Dashboard AppID or `baseURL` for on-premises
+      baseUrl:
+        `${process.env.NEXT_PUBLIC_COLLABORATION_SERVER_URL}/${docname}` ??
+        "no-url",
       token: process.env.NEXT_PUBLIC_TIPTAP_JWT ?? "notoken", // Your JWT token
       document: doc,
 

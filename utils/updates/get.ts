@@ -38,7 +38,7 @@ const getUpdates = async (
         return { updates: null, errors: [] };
     }
 
-    return { updates: data, errors: [] };
+    return { updates: data as DatabaseFeatures[], errors: [] };
 };
 
 const getUnreadUpdates = async (): Promise<DatabaseFeatures[]> => {
@@ -78,12 +78,12 @@ const getUnreadUpdates = async (): Promise<DatabaseFeatures[]> => {
             profile_session_update_data?.created_at,
         );
 
-        return unreads_updates ?? [];
+        return unreads_updates as DatabaseFeatures[] ?? [];
     }
 
     const { data: updates, error } = await get_unreads_query.limit(1).single();
 
-    return updates ? [updates] : [];
+    return updates ? [updates] as DatabaseFeatures[] : [];
 };
 
 export { getUnreadUpdates, getUpdates };

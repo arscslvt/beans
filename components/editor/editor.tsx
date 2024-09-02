@@ -17,6 +17,8 @@ import Dropcursor from "@tiptap/extension-dropcursor";
 import BulletList from "@tiptap/extension-bullet-list";
 import ListItem from "@tiptap/extension-list-item";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
+import Collaboration from "@tiptap/extension-collaboration";
+import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 
 import css from "highlight.js/lib/languages/css";
 import js from "highlight.js/lib/languages/javascript";
@@ -46,6 +48,9 @@ import * as Y from "yjs";
 
 import { toast } from "sonner";
 import { useNote } from "@/hooks/useNote";
+import Collaborate from "./tools/collaborate";
+import { HocuspocusProvider } from "@hocuspocus/provider";
+import { useClientAuth } from "@/context/client-auth-context";
 
 interface EditorProps {
   readonly leading?: React.ReactNode;
@@ -67,7 +72,6 @@ const extensions = [
   }),
   Document,
   Dropcursor,
-  History,
   TextAlign.configure({
     types: ["heading", "paragraph"],
   }),
@@ -109,16 +113,49 @@ const extensions = [
 export const Editor = forwardRef<HTMLDivElement, EditorProps>(
   ({ defaultContent, onChange, leading, trailing, ...rest }, ref) => {
     const { note } = useNote();
+    const { profile } = useClientAuth();
 
-    if (!note) {
+    if (!note || !profile) {
       return null;
     }
 
-    const doc = new Y.Doc();
+    const ydoc = new Y.Doc();
+
+    const provider = new HocuspocusProvider({
+      url: " ws://0.0.0.0:3008",
+      name: `note-${note.id}`,
+      document: ydoc,
+    });
+
+    const availbleColors = [
+      "#9333ea",
+      "#db2777",
+      "#db2777",
+      "#0891b2",
+      "#059669",
+      "#ca8a04",
+      "#ea580c",
+      "#dc2626",
+    ];
 
     return (
       <EditorProvider
-        extensions={[...extensions]}
+        extensions={[
+          Collaboration.configure({
+            document: ydoc,
+          }),
+          CollaborationCursor.configure({
+            provider,
+            user: {
+              name: profile?.handle,
+              color:
+                availbleColors[
+                  Math.floor(Math.random() * availbleColors.length)
+                ],
+            },
+          }),
+          ...extensions,
+        ]}
         content={defaultContent}
         editorProps={{
           attributes: {
@@ -144,6 +181,7 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(
         slotAfter={trailing}
         {...rest}
       >
+        {/* <Collaborate doc={doc} /> */}
         <BubbleMenu />
       </EditorProvider>
     );
