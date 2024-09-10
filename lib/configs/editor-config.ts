@@ -35,7 +35,6 @@ import * as Y from "yjs";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 
 import * as YWS from "y-websocket";
-import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 
 const lowlight = createLowlight(common);
 
@@ -59,7 +58,8 @@ export const collaborationProvider = (
         defaultContent: JSONContent;
     },
 ) => new HocuspocusProvider({
-    url: " ws://0.0.0.0:3008",
+    url: process.env.NEXT_PUBLIC_COLLABORATION_SERVER_URL ??
+        "ws://localhost:1234",
     name: identifier,
     document: ydoc,
     parameters: params,
@@ -69,7 +69,12 @@ export const wsProvider = ({
     identifier,
     ydoc,
 }: CollaborationProvider) =>
-    new YWS.WebsocketProvider("ws://localhost:1234", identifier, ydoc);
+    new YWS.WebsocketProvider(
+        process.env.NEXT_PUBLIC_COLLABORATION_SERVER_URL ??
+            "ws://localhost:1234",
+        identifier,
+        ydoc,
+    );
 
 const defaultExtensions: Extensions = [
     Placeholder.configure({
