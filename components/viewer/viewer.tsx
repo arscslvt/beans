@@ -3,10 +3,8 @@
 import { DatabaseSource } from "@/types/source.types";
 import React from "react";
 import ViewerHeader from "@/components/viewer/viewer-header";
-import { DatabaseNote } from "@/types/note.types";
 import { cx } from "class-variance-authority";
 import TemplatesList from "./template/template-list";
-import Editor from "../editor/editor";
 import { JSONContent } from "@tiptap/react";
 import loadash from "lodash";
 import { useNote } from "@/hooks/useNote";
