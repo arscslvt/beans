@@ -1,11 +1,11 @@
 "use client";
 
 import { betaRoles } from "@/lib/defaults/roles";
-import { DatabaseProfile } from "@/types/profiles.types";
 import { DatabaseProfileRoles } from "@/types/role.types";
 import { getSessionProfile } from "@/utils/profiles/get";
+import { createReactSupabaseClient } from "@/utils/supabase/client.react";
 import { useSession } from "@clerk/nextjs";
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { SupabaseClient } from "@supabase/supabase-js";
 import React, { useMemo } from "react";
 
 interface ClientAuthContext {
@@ -32,34 +32,7 @@ export default function ClientAuthProvider({
 
   const [loading, setLoading] = React.useState(true);
 
-  function createClerkSupabaseClient() {
-    return createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_KEY!,
-      {
-        global: {
-          // Get the custom Supabase token from Clerk
-          fetch: async (url, options = {}) => {
-            const clerkToken = await session?.getToken({
-              template: "supabase",
-            });
-
-            // Insert the Clerk Supabase token into the headers
-            const headers = new Headers(options?.headers);
-            headers.set("Authorization", `Bearer ${clerkToken}`);
-
-            // Now call the default fetch
-            return fetch(url, {
-              ...options,
-              headers,
-            });
-          },
-        },
-      }
-    );
-  }
-
-  const supabase = useMemo(() => createClerkSupabaseClient(), [session]);
+  const supabase = useMemo(() => createReactSupabaseClient(session), [session]);
 
   const isBetaUser = useMemo(() => {
     return betaRoles.includes(profile?.role?.id || "");
@@ -81,7 +54,7 @@ export default function ClientAuthProvider({
     session && retrieveProfile();
   }, [session]);
 
-  if (!session) {
+  if (!supabase) {
     return <></>;
   }
 
