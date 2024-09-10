@@ -10,6 +10,8 @@ import Editor from "../editor/editor";
 import { JSONContent } from "@tiptap/react";
 import loadash from "lodash";
 import { useNote } from "@/hooks/useNote";
+import Loader from "@/components/loader/loader";
+import EditorProvider from "@/context/editor-context";
 
 interface ViewerProps {
   source?: DatabaseSource;
@@ -20,7 +22,7 @@ function Viewer({ source }: ViewerProps) {
     source?.content as JSONContent
   );
 
-  const { note, saveNote, isSaving } = useNote();
+  const { note, saveNote, isSaving, withCollaboration } = useNote();
 
   const handleSaving = async (content: JSONContent) => {
     await saveNote(content);
@@ -47,7 +49,12 @@ function Viewer({ source }: ViewerProps) {
     return () => clearTimeout(interval);
   }, [content]);
 
-  if (!note) return null;
+  if (!note)
+    return (
+      <div className="flex-1 flex justify-center items-center">
+        <Loader />
+      </div>
+    );
 
   return (
     <div className="relative z-30">
@@ -61,17 +68,22 @@ function Viewer({ source }: ViewerProps) {
         isSaving={isSaving}
       />
 
-      <div className={cx("px-4 md:px-12 viewer-editor")}>
-        <Editor
-          leading={
-            !source && (
-              <div className="pt-3 pb-3 px-4">
-                <TemplatesList />
-              </div>
-            )
-          }
-          defaultContent={content as unknown as string}
-          onChange={(content) => setContent(content)}
+      <div
+        className={cx("px-4 md:px-12 viewer-editor")}
+        key={`note-${note.id}`}
+      >
+        <EditorProvider
+          // leading={
+          //   !source && (
+          //     <div className="pt-3 pb-3 px-4">
+          //       <TemplatesList />
+          //     </div>
+          //   )
+          // }
+          withCollaboration={withCollaboration}
+          documentName={`note-${note.id}`}
+          defaultContent={content}
+          onUpdate={(content) => setContent(content.getJSON())}
         />
       </div>
     </div>

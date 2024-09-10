@@ -66,8 +66,6 @@ export default function ClientAuthProvider({
   }, [profile]);
 
   const retrieveProfile = async () => {
-    console.log("Retrieving profile");
-
     const { profile } = await getSessionProfile();
     profile && setProfile(profile);
   };

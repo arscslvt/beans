@@ -43,8 +43,6 @@ const searchProfiles = async (
     return { profiles: null, errors: [] };
   }
 
-  console.log("Profiles: ", data);
-
   return { profiles: data, errors: [] };
 };
 

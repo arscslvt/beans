@@ -5,6 +5,7 @@ import {
   ReactNodeViewRenderer,
   JSONContent,
   EditorProvider,
+  Content,
 } from "@tiptap/react";
 
 import "./styles/default.css";
@@ -48,14 +49,13 @@ import * as Y from "yjs";
 
 import { toast } from "sonner";
 import { useNote } from "@/hooks/useNote";
-import Collaborate from "./tools/collaborate";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 import { useClientAuth } from "@/context/client-auth-context";
 
 interface EditorProps {
   readonly leading?: React.ReactNode;
   readonly trailing?: React.ReactNode;
-  readonly defaultContent?: string;
+  readonly defaultContent?: JSONContent;
   readonly onChange?: (content: JSONContent) => void;
 }
 
@@ -112,7 +112,7 @@ const extensions = [
 
 export const Editor = forwardRef<HTMLDivElement, EditorProps>(
   ({ defaultContent, onChange, leading, trailing, ...rest }, ref) => {
-    const { note } = useNote();
+    const { note, withCollaboration } = useNote();
     const { profile } = useClientAuth();
 
     if (!note || !profile) {
@@ -120,6 +120,7 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(
     }
 
     const ydoc = new Y.Doc();
+    // ydoc.getArray("content").insert(0, defaultContent?.content ?? []);
 
     const provider = new HocuspocusProvider({
       url: " ws://0.0.0.0:3008",
@@ -138,11 +139,11 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(
       "#dc2626",
     ];
 
-    return (
-      <EditorProvider
-        extensions={[
+    const collaborativeExtensions = withCollaboration
+      ? [
           Collaboration.configure({
             document: ydoc,
+            field: "content",
           }),
           CollaborationCursor.configure({
             provider,
@@ -154,8 +155,14 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(
                 ],
             },
           }),
-          ...extensions,
-        ]}
+        ]
+      : [];
+
+    return (
+      <EditorProvider
+        extensions={[...collaborativeExtensions, ...extensions].filter(
+          (item) => item !== null
+        )}
         content={defaultContent}
         editorProps={{
           attributes: {

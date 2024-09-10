@@ -1,6 +1,5 @@
 /* HTML: <div class="loader"></div> */
 .loader {
-  width: 2.5rem;
   aspect-ratio: 1.154;
   display: grid;
   color: hsl(var(--accent));

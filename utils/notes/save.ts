@@ -82,8 +82,6 @@ const saveEdits = async (
         });
     }
 
-    console.log("Found last source: ", lastSource);
-
     const now = new Date();
     const fiveHoursDistance = 5 * 60 * 60 * 1000;
 

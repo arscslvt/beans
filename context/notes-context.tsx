@@ -49,6 +49,7 @@ interface NoteContextProps {
   sharedNotes: ContextSharedNotes;
   isSaving: boolean;
   withCollaboration: boolean;
+  isLoading: boolean;
   newNote: () => void;
   saveNote: (content: JSONContent) => Promise<void>;
   deleteNote: (id?: DatabaseNote["id"]) => void;
@@ -70,6 +71,7 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
     loading: true,
   });
 
+  const [isLoading, setIsLoading] = React.useState(true);
   const [isSaving, setIsSaving] = React.useState(false);
 
   const [note, setNote] = React.useState<DatabaseNote | null>(null);
@@ -85,14 +87,25 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
   const { supabase } = useClientAuth();
   const { user } = useUser();
 
-  const withCollaboration = useMemo(() => {
-    return note?.created_by !== user?.id;
-  }, [note, user]);
+  const [withCollaboration, setWithCollaboration] = React.useState(false);
 
   const fetchNote = async () => {
-    const { note } = await getNoteByIdAPI(noteId as unknown as number);
-    setNote(note ?? null);
+    setIsLoading(true);
+    try {
+      const { note, isShared } = await getNoteByIdAPI(
+        noteId as unknown as number
+      );
+      setNote(note ?? null);
+      setWithCollaboration(isShared ?? false);
+    } catch (e) {
+      console.error("Error fetching note: ", e);
+      setIsLoading(false);
+    }
   };
+
+  React.useEffect(() => {
+    if (note) return setIsLoading(false);
+  }, [note]);
 
   /**
    * Fetch all notes of authenticated user from the database
@@ -387,6 +400,7 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
         notes,
         sharedNotes,
         isSaving,
+        isLoading,
         withCollaboration,
         newNote,
         saveNote,

@@ -12,6 +12,8 @@ export default async function NotePage({
   const { note, sources, errors } = await getNoteById(id);
 
   return (
-    <div>{note && <Viewer source={sources ? sources[0] : undefined} />}</div>
+    <div className="flex-1 flex flex-col">
+      {note && <Viewer source={sources ? sources[0] : undefined} />}
+    </div>
   );
 }
