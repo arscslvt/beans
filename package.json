@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start && HOST=localhost PORT=3008 npx y-websocket",
     "lint": "next lint"
   },
   "dependencies": {
