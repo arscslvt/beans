@@ -14,6 +14,7 @@ import { cx } from "class-variance-authority";
 import Loader1 from "../icons/loader-1";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { useNote } from "@/hooks/useNote";
 
 interface ViewerHeaderProps {
   title: string;
@@ -32,7 +33,7 @@ const ViewerHeader = ({
   lastEdited,
   isSaving,
 }: ViewerHeaderProps) => {
-  const isMobile = useMediaQuery(`(max-width: ${MOBILE_MAX_WIDTH}px)`);
+  const { withCollaboration } = useNote();
 
   const [_title, setTitle] = React.useState(title);
   const [_description, setDescription] = React.useState(description);
@@ -108,9 +109,15 @@ const ViewerHeader = ({
           </AnimatePresence>
           {lastEdited ? (
             <p className={"text-xs text-muted-foreground"}>
-              Last edited by <span className={"font-semibold"}>you</span>
+              {withCollaboration ? (
+                <span>Saved </span>
+              ) : (
+                <span>
+                  Last edited by <span className={"font-semibold"}>you</span> —
+                </span>
+              )}
               {lastEdited
-                ? ` — ${formatDistanceToNow(new Date(lastEdited), {
+                ? `${formatDistanceToNow(new Date(lastEdited), {
                     addSuffix: true,
                   })}`
                 : ""}

@@ -163,7 +163,8 @@ interface DynamicDialogContentProps {
 const DynamicDialogContent = ({ children }: DynamicDialogContentProps) => {
   const isDesktop = useMediaQuery(TRIGGER_SIZE);
 
-  if (isDesktop) return <DialogContent>{children}</DialogContent>;
+  if (isDesktop)
+    return <DialogContent className="max-h-[80%]">{children}</DialogContent>;
 
   return <DrawerContent>{children}</DrawerContent>;
 };

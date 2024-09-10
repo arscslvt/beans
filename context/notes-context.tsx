@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 
 import { Button } from "@/components/ui/button";
 import { DatabaseNote } from "@/types/note.types";
@@ -48,6 +48,8 @@ interface NoteContextProps {
   notes: ContextNotes;
   sharedNotes: ContextSharedNotes;
   isSaving: boolean;
+  withCollaboration: boolean;
+  isLoading: boolean;
   newNote: () => void;
   saveNote: (content: JSONContent) => Promise<void>;
   deleteNote: (id?: DatabaseNote["id"]) => void;
@@ -69,6 +71,7 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
     loading: true,
   });
 
+  const [isLoading, setIsLoading] = React.useState(true);
   const [isSaving, setIsSaving] = React.useState(false);
 
   const [note, setNote] = React.useState<DatabaseNote | null>(null);
@@ -84,10 +87,25 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
   const { supabase } = useClientAuth();
   const { user } = useUser();
 
+  const [withCollaboration, setWithCollaboration] = React.useState(false);
+
   const fetchNote = async () => {
-    const { note } = await getNoteByIdAPI(noteId as unknown as number);
-    setNote(note ?? null);
+    setIsLoading(true);
+    try {
+      const { note, isShared } = await getNoteByIdAPI(
+        noteId as unknown as number
+      );
+      setNote(note ?? null);
+      setWithCollaboration(isShared ?? false);
+    } catch (e) {
+      console.error("Error fetching note: ", e);
+      setIsLoading(false);
+    }
   };
+
+  React.useEffect(() => {
+    if (note) return setIsLoading(false);
+  }, [note]);
 
   /**
    * Fetch all notes of authenticated user from the database
@@ -165,7 +183,7 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
       .on(
         "postgres_changes",
         {
-          event: "UPDATE",
+          event: "*",
           schema: "public",
           table: "notes",
           filter: `id=eq.${note.id}`,
@@ -382,6 +400,8 @@ function NoteProvider({ children }: { children: Readonly<React.ReactNode> }) {
         notes,
         sharedNotes,
         isSaving,
+        isLoading,
+        withCollaboration,
         newNote,
         saveNote,
         deleteNote,

@@ -91,7 +91,11 @@ const getNoteById = async (
     errors.push(sources_error);
   }
 
-  const isShared = note.created_by !== auth().userId;
+  const { data: hasCollaboration, error: collabError } = await supabase.from(
+    "shared_notes",
+  ).select("*").eq("note_id", note.id).limit(1).maybeSingle();
+
+  const isShared = !!hasCollaboration;
 
   return {
     note: {
@@ -185,8 +189,6 @@ const getSharedWith = async (
   if (!profiles) {
     return { profiles: null, error: null };
   }
-
-  console.log("shared with profiles", profiles);
 
   return {
     profiles: profiles.filter((p) => !!p.profiles).map((p) => p.profiles!),

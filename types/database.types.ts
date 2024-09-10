@@ -44,6 +44,7 @@ export type Database = {
           note_id: number | null
           version: string
           visibility: Database["public"]["Enums"]["feature_visibility"]
+          whats_new: Json[] | null
         }
         Insert: {
           created_at?: string | null
@@ -54,6 +55,7 @@ export type Database = {
           note_id?: number | null
           version: string
           visibility?: Database["public"]["Enums"]["feature_visibility"]
+          whats_new?: Json[] | null
         }
         Update: {
           created_at?: string | null
@@ -64,6 +66,7 @@ export type Database = {
           note_id?: number | null
           version?: string
           visibility?: Database["public"]["Enums"]["feature_visibility"]
+          whats_new?: Json[] | null
         }
         Relationships: [
           {

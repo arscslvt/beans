@@ -1,6 +1,13 @@
 import React from "react";
 import "./loader.css";
 
-export default function Loader() {
-  return <div className="loader" />;
+export default function Loader({ size }: { size?: number }) {
+  return (
+    <div
+      className="loader"
+      style={{
+        width: size ?? 32,
+      }}
+    />
+  );
 }
