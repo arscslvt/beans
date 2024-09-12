@@ -97,6 +97,10 @@ export default function EditorProvider({
   useEffect(() => {
     if (!collaborationProvider || !withCollaboration) return;
     collaborationProvider.connect();
+
+    collaborationProvider.on("error", (error: any) => {
+      console.error(error);
+    });
   }, [collaborationProvider]);
 
   if (!editor) return null;
