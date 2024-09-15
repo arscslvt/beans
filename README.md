@@ -72,6 +72,31 @@ NEXT_PUBLIC_SUPABASE_KEY=eyJh...... (service_role key)
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJh...... (anon key)
 ```
 
+#### Load initial schema
+
+You'll find a .sql file in the `/supabase` folder. You can use this file to load the initial schema into your local Supabase instance.
+
+By executing the following command:
+
+```bash
+supabase db reset
+```
+
+you'll reset the database and load the initial schema.
+
+### Authentication
+
+Beans uses Clerk for authentication. To set up Clerk for development, follow these steps:
+
+### Use Beans Clerk developer API keys
+
+```bash
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_YWR2YW5jZWQtYmFzaWxpc2stMTEuY2xlcmsuYWNjb3VudHMuZGV2JA
+CLERK_SECRET_KEY=sk_test_rra0z2gsjtvu4iPIWEKrbIKjO6ya5xIqzP9AYdnTOy
+```
+
+> These keys are for development purposes only. Do not use them in production.
+
 ### Contributing
 
 If you would like to contribute to Beans, please follow these guidelines:
