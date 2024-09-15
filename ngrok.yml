@@ -1,0 +1,9 @@
+version: 2
+authtoken: 2kWBJz8w58mbqUXJzYnUbp113Lh_3PCY33nKcdYAgoJmdv3hk
+tunnels:
+  first:
+    proto: http
+    addr: 3000
+  second:
+    proto: http
+    addr: 3008
