@@ -10,11 +10,14 @@ import SidebarLink from "../sidebar-link";
 import SidebarLinkDropdown from "../client/siderbar-link-dropdown";
 import { useNote } from "@/hooks/useNote";
 import { NOTE_ROUTE } from "@/utils/constants/routes";
+import { useSidebar } from "../sidebar";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface SidebarNotesProps extends SidebarGroupProps {}
 
 export default function SidebarNotes({ ...props }: SidebarNotesProps) {
   const { notes } = useNote();
+  const { sidebarMode } = useSidebar();
 
   if (notes.loading) {
     return <SidebarLoadingFallback />;
@@ -27,12 +30,22 @@ export default function SidebarNotes({ ...props }: SidebarNotesProps) {
           <span className={"text-accent"}>
             <Scribble1 width={"1.3em"} height={"1.3em"} strokewidth={1.6} />
           </span>
-          <div className={"text-xs"}>
+          <motion.div
+            className={"text-xs"}
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: sidebarMode === "maximized" ? 1 : 0,
+              transition: {
+                duration: sidebarMode === "maximized" ? 0.3 : 0,
+                delay: sidebarMode === "maximized" ? 0.3 : 0,
+              },
+            }}
+          >
             <p className={"font-medium"}>No notes</p>
             <p className={"text-muted-foreground pr-0.5"}>
               Create a note by clicking the button above.
             </p>
-          </div>
+          </motion.div>
         </div>
       )}
       {notes?.list.map((note) => (

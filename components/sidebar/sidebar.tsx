@@ -112,7 +112,11 @@ export default function Sidebar({ children }: { children?: React.ReactNode }) {
           <NewNoteButton shine={!notes.list.length && !notes.loading} />
         </SidebarGroup>
 
-        <div className={"flex flex-col gap-2 relative flex-1 overflow-y-auto"}>
+        <div
+          className={
+            "flex flex-col gap-2 relative flex-1 overflow-y-auto overflow-x-hidden"
+          }
+        >
           <AnimatePresence>
             {sidebarMode === "maximized" && (
               <motion.div

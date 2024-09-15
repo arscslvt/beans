@@ -100,7 +100,7 @@ const getNoteById = async (
   return {
     note: {
       ...note,
-      isMine: !isShared,
+      isMine: true,
     },
     sources,
     errors,
