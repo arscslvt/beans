@@ -41,13 +41,14 @@ export default function EditorProvider({
   defaultContent,
   onUpdate,
   documentName,
-  withCollaboration,
+  withCollaboration = false,
 }: EditorProviderProps) {
   const ydoc = new Y.Doc();
   const { profile } = useClientAuth();
 
   const collaborationProvider = useMemo(
     () =>
+      withCollaboration &&
       wsProvider({
         identifier: documentName,
         ydoc,
@@ -101,7 +102,7 @@ export default function EditorProvider({
     collaborationProvider.on("error", (error: any) => {
       console.error(error);
     });
-  }, [collaborationProvider]);
+  }, [collaborationProvider, withCollaboration]);
 
   if (!editor) return null;
   return (

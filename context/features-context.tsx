@@ -1,5 +1,5 @@
 import { DatabaseFeatures } from "@/types/features.types";
-import { getUnreadUpdates, getUpdates } from "@/utils/updates/get";
+import { getFeatures, getUnreadUpdates, getUpdates } from "@/utils/updates/get";
 import React from "react";
 
 import { delay, uniq } from "lodash";
@@ -19,21 +19,29 @@ interface UpdatesProviderProps {
   children: React.ReactNode;
 }
 
-interface UpdatesContextProps {
+interface FeaturesContextProps {
+  loading: boolean;
+  features: DatabaseFeatures["feature_name"][];
   unreadUpdate: DatabaseFeatures | null;
 }
 
-const UpdatesContext = React.createContext<UpdatesContextProps>(
-  {} as UpdatesContextProps
+export const FeaturesContext = React.createContext<FeaturesContextProps>(
+  {} as FeaturesContextProps
 );
 
 export default function FeaturesProvider({ children }: UpdatesProviderProps) {
+  const [features, setFeatures] = React.useState<
+    DatabaseFeatures["feature_name"][]
+  >([]);
+
   const [lastUpdate, setLastUpdate] = React.useState<DatabaseFeatures | null>(
     null
   );
 
   const [unreadUpdate, setUnreadUpdate] =
     React.useState<DatabaseFeatures | null>(null);
+
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     retrieveLastUpdate();
@@ -42,6 +50,17 @@ export default function FeaturesProvider({ children }: UpdatesProviderProps) {
       retrieveUpdates();
     }, 2000);
   }, []);
+
+  React.useEffect(() => {
+    retrieveFeatures();
+  }, []);
+
+  const retrieveFeatures = async () => {
+    const features = await getFeatures();
+    setFeatures(uniq(features));
+
+    setLoading(false);
+  };
 
   const retrieveUpdates = async () => {
     const updates = await getUnreadUpdates();
@@ -66,7 +85,7 @@ export default function FeaturesProvider({ children }: UpdatesProviderProps) {
   };
 
   return (
-    <UpdatesContext.Provider value={{ unreadUpdate }}>
+    <FeaturesContext.Provider value={{ unreadUpdate, features, loading }}>
       {unreadUpdate && (
         <DynamicDialog
           open
@@ -124,6 +143,6 @@ export default function FeaturesProvider({ children }: UpdatesProviderProps) {
         </DynamicDialog>
       )}
       {children}
-    </UpdatesContext.Provider>
+    </FeaturesContext.Provider>
   );
 }

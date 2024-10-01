@@ -1,6 +1,6 @@
 "use server";
 
-import { DatabaseFeatures } from "@/types/features.types";
+import { DatabaseFeatures, DatabaseUserFeatures } from "@/types/features.types";
 import { createClient } from "../supabase/server";
 import { auth } from "@clerk/nextjs/server";
 
@@ -86,4 +86,33 @@ const getUnreadUpdates = async (): Promise<DatabaseFeatures[]> => {
     return updates ? [updates] as DatabaseFeatures[] : [];
 };
 
-export { getUnreadUpdates, getUpdates };
+const getFeatures = async (): Promise<DatabaseFeatures["feature_name"][]> => {
+    const supabase = createClient({
+        tags: ["features-list"],
+    });
+
+    const { userId } = auth();
+
+    if (!userId) {
+        return [];
+    }
+
+    const { data, error } = await supabase
+        .from("user_features")
+        .select(`
+                features (feature_name)
+            `)
+        .eq("user_id", userId)
+        .is("enabled", true);
+
+    if (error) {
+        console.error("Error fetching features: ", error);
+        return [];
+    }
+
+    const features = data.map((feature) => feature.features?.feature_name);
+
+    return features as DatabaseFeatures["feature_name"][];
+};
+
+export { getFeatures, getUnreadUpdates, getUpdates };

@@ -13,3 +13,7 @@ export type DatabaseFeatures =
     & {
         whats_new?: WhatsNew[] | null;
     };
+
+export type DatabaseUserFeatures =
+    & Database["public"]["Tables"]["user_features"]["Row"]
+    & {};

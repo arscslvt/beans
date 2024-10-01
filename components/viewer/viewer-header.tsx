@@ -86,7 +86,7 @@ const ViewerHeader = ({
               }
             }}
             autoSize
-            defaultHeight={36}
+            defaultHeight={22}
             maxRows={2}
           />
           {description && <p className={"text-gray-500"}>description</p>}

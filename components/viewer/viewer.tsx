@@ -10,6 +10,7 @@ import loadash from "lodash";
 import { useNote } from "@/hooks/useNote";
 import Loader from "@/components/loader/loader";
 import EditorProvider from "@/context/editor-context";
+import { useFeatures } from "@/hooks/useFeatures";
 
 interface ViewerProps {
   source?: DatabaseSource;
@@ -21,6 +22,18 @@ function Viewer({ source }: ViewerProps) {
   );
 
   const { note, saveNote, isSaving, withCollaboration } = useNote();
+  const { features, loading } = useFeatures();
+
+  const [enableCollaboration, setEnableCollaboration] = React.useState(false);
+
+  React.useEffect(() => {
+    if (loading) return;
+    setEnableCollaboration(
+      withCollaboration && features.includes("collaborate")
+    );
+
+    console.log(withCollaboration && features.includes("collaborate"));
+  }, [loading, features, withCollaboration]);
 
   const handleSaving = async (content: JSONContent) => {
     await saveNote(content);
@@ -70,19 +83,21 @@ function Viewer({ source }: ViewerProps) {
         className={cx("px-4 md:px-12 viewer-editor")}
         key={`note-${note.id}`}
       >
-        <EditorProvider
-          // leading={
-          //   !source && (
-          //     <div className="pt-3 pb-3 px-4">
-          //       <TemplatesList />
-          //     </div>
-          //   )
-          // }
-          withCollaboration={withCollaboration}
-          documentName={`note-${note.id}`}
-          defaultContent={content}
-          onUpdate={(content) => setContent(content.getJSON())}
-        />
+        {!loading && (
+          <EditorProvider
+            // leading={
+            //   !source && (
+            //     <div className="pt-3 pb-3 px-4">
+            //       <TemplatesList />
+            //     </div>
+            //   )
+            // }
+            withCollaboration={enableCollaboration}
+            documentName={`note-${note.id}`}
+            defaultContent={content}
+            onUpdate={(content) => setContent(content.getJSON())}
+          />
+        )}
       </div>
     </div>
   );
